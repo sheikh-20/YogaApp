@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">YogaApp</string>
+    <string name="app_name">YogazzZ</string>
+    <string name="continue_with_facebook">Continue with Facebook</string>
+    <string name="continue_with_google">Continue with Google</string>
+    <string name="continue_with_github">Continue with Github</string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="sign_up">Sign up</string>
+    <string name="signin">SignIn</string>
+    <string name="continues">Continue</string>
 </resources>
