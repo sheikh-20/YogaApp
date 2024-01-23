@@ -1,14 +1,17 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.android.kotlin)
+    kotlin("kapt")
+    alias(libs.plugins.android.dagger.hilt)
+    alias(libs.plugins.android.kotlin.serialize)
 }
 
 android {
-    namespace = "com.application.yogaapp"
+    namespace = "com.bitvolper.yogazzz"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.application.yogaapp"
+        applicationId = "com.bitvolper.yogazzz"
         minSdk = 21
         targetSdk = 34
         versionCode = 1
@@ -72,4 +75,19 @@ dependencies {
 
     // ViewModel with ktx
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
+
+    // Material icon extended
+    implementation(libs.material.icon.extended)
+
+    // Dagger - Hilt
+    implementation(libs.dagger.hilt)
+    kapt(libs.dagger.hilt.compiler)
+    implementation(libs.nav.compose)
+
+    // Pager
+    implementation(libs.pager.indicator)
+    implementation(libs.pager)
+
+    // Timber for log
+    implementation(libs.timber)
 }
