@@ -9,10 +9,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.bitvolper.yogazzz.base.BaseActivity
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.presentation.viewmodel.OnboardingViewModel
 
-class HomeActivity : ComponentActivity() {
+class HomeActivity : BaseActivity() {
 
 
     private val onboardingViewModel: OnboardingViewModel by viewModels()
@@ -25,6 +26,7 @@ class HomeActivity : ComponentActivity() {
                 onboardingViewModel.loading.value
             }
         }
+        setTransparentStatusBar()
 
         setContent {
             YogaAppTheme {
