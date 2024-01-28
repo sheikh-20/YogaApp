@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Bookmark
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.rounded.Bookmark
+import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material.icons.rounded.Spa
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -34,75 +35,183 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.bitvolper.yogazzz.R
+import com.bitvolper.yogazzz.presentation.home.account.AccountScreen
+import com.bitvolper.yogazzz.presentation.home.discover.DiscoverScreen
+import com.bitvolper.yogazzz.presentation.home.history.HistoryScreen
+import com.bitvolper.yogazzz.presentation.home.reports.ReportsScreen
 
 @Composable
 fun HomeApp(modifier: Modifier = Modifier, navController: NavHostController = rememberNavController()) {
     Scaffold(
         topBar = {
-            HomeTopAppBar()
+            HomeTopAppBar(navController = navController)
         },
         bottomBar = {
             HomeBottomBarNavigation(navController = navController)
         }
     ) { paddingValues ->
-        HomeScreen(paddingValues = paddingValues)
+
+        NavHost(
+            navController = navController, startDestination = BottomNavigationScreens.Home.route) {
+
+            composable(route = BottomNavigationScreens.Home.route) {
+                HomeScreen(paddingValues = paddingValues)
+            }
+
+            composable(route = BottomNavigationScreens.Discover.route) {
+                DiscoverScreen(paddingValues = paddingValues)
+            }
+
+            composable(route = BottomNavigationScreens.Reports.route) {
+                ReportsScreen(paddingValues = paddingValues)
+            }
+
+            composable(route = BottomNavigationScreens.History.route) {
+                HistoryScreen(paddingValues = paddingValues)
+            }
+
+            composable(route = BottomNavigationScreens.Account.route) {
+                AccountScreen(paddingValues = paddingValues)
+            }
+        }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun HomeTopAppBar() {
+private fun HomeTopAppBar(navController: NavHostController,) {
 
-    CenterAlignedTopAppBar(
-        title = {
-            Text(
-                text = stringResource(id = R.string.app_name),
-                fontWeight = FontWeight.SemiBold)
+    when (navController.currentBackStackEntryAsState().value?.destination?.route) {
+        BottomNavigationScreens.Home.route -> {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(id = R.string.app_name),
+                        fontWeight = FontWeight.SemiBold)
                 },
-        navigationIcon = {
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(imageVector = Icons.Rounded.Spa, contentDescription = null)
-            }
-        },
-        actions = {
-            IconButton(onClick = { /*TODO*/ },
-                modifier = Modifier
-                    .padding(horizontal = 4.dp)
-                    .shadow(
-                        elevation = 8.dp,
-                        ambientColor = Color.Transparent,
-                        spotColor = Color.Transparent
-                    )
-                    .background(
-                        shape = RoundedCornerShape(50),
-                        color = MaterialTheme.colorScheme.surface
-                    )
-                    .border(width = 1.dp, color = Color.DarkGray, shape = RoundedCornerShape(50))) {
-                Icon(imageVector = Icons.Outlined.Notifications, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
-            }
-            
-            IconButton(onClick = { /*TODO*/ },
-                modifier = Modifier
-                    .padding(horizontal = 4.dp)
-                    .shadow(
-                        elevation = 8.dp,
-                        ambientColor = Color.Transparent,
-                        spotColor = Color.Transparent
-                    )
-                    .background(
-                        shape = RoundedCornerShape(50),
-                        color = MaterialTheme.colorScheme.surface
-                    )
-                    .border(width = 1.dp, color = Color.DarkGray, shape = RoundedCornerShape(50))
-                   ) {
-                Icon(imageVector = Icons.Outlined.Bookmark, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
-            }
+                navigationIcon = {
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(imageVector = Icons.Rounded.Spa, contentDescription = null)
+                    }
+                },
+                actions = {
+                    IconButton(onClick = { /*TODO*/ },
+                        modifier = Modifier
+                            .padding(horizontal = 4.dp)
+                            .shadow(
+                                elevation = 8.dp,
+                                ambientColor = Color.Transparent,
+                                spotColor = Color.Transparent
+                            )
+                            .background(
+                                shape = RoundedCornerShape(50),
+                                color = MaterialTheme.colorScheme.surface
+                            )
+                            .border(width = 1.dp, color = Color.DarkGray, shape = RoundedCornerShape(50))) {
+                        Icon(imageVector = Icons.Outlined.Notifications, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
+                    }
+
+                    IconButton(onClick = { /*TODO*/ },
+                        modifier = Modifier
+                            .padding(horizontal = 4.dp)
+                            .shadow(
+                                elevation = 8.dp,
+                                ambientColor = Color.Transparent,
+                                spotColor = Color.Transparent
+                            )
+                            .background(
+                                shape = RoundedCornerShape(50),
+                                color = MaterialTheme.colorScheme.surface
+                            )
+                            .border(width = 1.dp, color = Color.DarkGray, shape = RoundedCornerShape(50))
+                    ) {
+                        Icon(imageVector = Icons.Outlined.Bookmark, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
+                    }
+                }
+            )
+        }
+        BottomNavigationScreens.Discover.route -> {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        text = "Discover",
+                        fontWeight = FontWeight.SemiBold)
+                },
+                navigationIcon = {
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(imageVector = Icons.Rounded.Spa, contentDescription = null)
+                    }
+                },
+                actions = {
+                    IconButton(onClick = { /*TODO*/ },
+                        modifier = Modifier.padding(horizontal = 4.dp)) {
+                        Icon(imageVector = Icons.Rounded.MoreVert, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
+                    }
+                }
+            )
+        }
+        BottomNavigationScreens.Reports.route -> {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        text = "Reports",
+                        fontWeight = FontWeight.SemiBold)
+                },
+                navigationIcon = {
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(imageVector = Icons.Rounded.Spa, contentDescription = null)
+                    }
+                },
+                actions = {
+                    IconButton(onClick = { /*TODO*/ },
+                        modifier = Modifier.padding(horizontal = 4.dp)) {
+                        Icon(imageVector = Icons.Rounded.MoreVert, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
+                    }
+                }
+            )
         }
 
-        )
+        BottomNavigationScreens.History.route -> {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        text = "History",
+                        fontWeight = FontWeight.SemiBold)
+                },
+                navigationIcon = {
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(imageVector = Icons.Rounded.Spa, contentDescription = null)
+                    }
+                },
+                actions = {
+                    IconButton(onClick = { /*TODO*/ },
+                        modifier = Modifier.padding(horizontal = 4.dp)) {
+                        Icon(imageVector = Icons.Rounded.MoreVert, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
+                    }
+                }
+            )
+        }
+
+        BottomNavigationScreens.Account.route -> {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        text = "Account",
+                        fontWeight = FontWeight.SemiBold)
+                },
+                navigationIcon = {
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(imageVector = Icons.Rounded.Spa, contentDescription = null)
+                    }
+                }
+            )
+        }
+    }
 }
 
 @Composable
