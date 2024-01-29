@@ -1,5 +1,6 @@
 package com.bitvolper.yogazzz.presentation.home.account
 
+import android.app.Activity
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -44,12 +45,22 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitvolper.yogazzz.R
+import com.bitvolper.yogazzz.presentation.accountsecurity.AccountSecurityActivity
+import com.bitvolper.yogazzz.presentation.analytics.AnalyticsActivity
+import com.bitvolper.yogazzz.presentation.appearance.AppearanceActivity
+import com.bitvolper.yogazzz.presentation.billing.BillingSubscriptionActivity
+import com.bitvolper.yogazzz.presentation.mybody.MyBodyActivity
+import com.bitvolper.yogazzz.presentation.notifications.NotificationsActivity
+import com.bitvolper.yogazzz.presentation.subscription.SubscriptionActivity
+import com.bitvolper.yogazzz.presentation.support.SupportActivity
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
+import com.bitvolper.yogazzz.presentation.userprofile.UserProfileActivity
 
 @Composable
 fun AccountScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = PaddingValues()) {
@@ -57,6 +68,8 @@ fun AccountScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = 
     val interactionSource = remember {
         MutableInteractionSource()
     }
+
+    val context = LocalContext.current
 
     Column(modifier = modifier
         .fillMaxSize()
@@ -67,52 +80,65 @@ fun AccountScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = 
         ),
         verticalArrangement = Arrangement.spacedBy(8.dp)) {
 
-        ProfileViewCompose()
+        ProfileViewCompose(
+            onClick = {
+                UserProfileActivity.startActivity(context as Activity)
+            }
+        )
 
-        SubscriptionCompose()
+        SubscriptionCompose {
+            SubscriptionActivity.startActivity(context as Activity)
+        }
 
-        Card {
-            Column(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                AccountContentCompose(title = "My Body", icon = Icons.Rounded.Person)
+        Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+            AccountContentCompose(title = "My Body", icon = Icons.Rounded.Person) {
+                MyBodyActivity.startActivity(context as Activity)
+            }
 
-                AccountContentCompose(title = "Notifications", icon = Icons.Rounded.Notifications)
+            AccountContentCompose(title = "Notifications", icon = Icons.Rounded.Notifications) {
+                NotificationsActivity.startActivity(context as Activity)
+            }
 
-                AccountContentCompose(title = "Account & Security", icon = Icons.Rounded.Security)
+            AccountContentCompose(title = "Account & Security", icon = Icons.Rounded.Security) {
+                AccountSecurityActivity.startActivity(context as Activity)
+            }
 
-                AccountContentCompose(title = "Billing & Subscription", icon = Icons.Rounded.StarBorder)
+            AccountContentCompose(title = "Billing & Subscription", icon = Icons.Rounded.StarBorder) {
+                BillingSubscriptionActivity.startActivity(context as Activity)
+            }
 
-                AccountContentCompose(title = "App Appearance", icon = Icons.Rounded.RemoveRedEye)
+            AccountContentCompose(title = "App Appearance", icon = Icons.Rounded.RemoveRedEye) {
+                AppearanceActivity.startActivity(context as Activity)
+            }
 
-                AccountContentCompose(title = "Data & Analytics", icon = Icons.Rounded.Analytics)
+            AccountContentCompose(title = "Data & Analytics", icon = Icons.Rounded.Analytics) {
+                AnalyticsActivity.startActivity(context as Activity)
+            }
 
-                AccountContentCompose(title = "Help & Support", icon = Icons.Rounded.SupportAgent)
+            AccountContentCompose(title = "Help & Support", icon = Icons.Rounded.SupportAgent) {
+                SupportActivity.startActivity(context as Activity)
+            }
 
-                Row(modifier = modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Icon(imageVector = Icons.Rounded.Logout, contentDescription = null, tint = Color.Red)
+            Row(modifier = modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+                Icon(imageVector = Icons.Rounded.Logout, contentDescription = null, tint = Color.Red)
 
-                    Spacer(modifier = modifier.width(8.dp))
+                Spacer(modifier = modifier.width(8.dp))
 
-                    Text(
-                        text = "Logout",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        modifier = modifier
-                            .weight(1f)
-                            .clickable(
-                                onClick = { },
-                                interactionSource = interactionSource,
-                                indication = null
-                            ),
-                        color = Color.Red
-                    )
-                }
+                Text(
+                    text = "Logout",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = modifier
+                        .weight(1f)
+                        .clickable(
+                            onClick = { },
+                            interactionSource = interactionSource,
+                            indication = null
+                        ),
+                    color = Color.Red
+                )
             }
         }
     }
@@ -120,16 +146,18 @@ fun AccountScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = 
 
 @Preview(showBackground = true)
 @Composable
-private fun ProfileViewCompose(modifier: Modifier = Modifier, userName: String = "Sheikh", gmail: String = "sheik@gmail.com") {
+private fun ProfileViewCompose(modifier: Modifier = Modifier, userName: String = "Sheikh", gmail: String = "sheik@gmail.com", onClick: () -> Unit = {}) {
 
-    Card {
         Row(modifier = modifier
+            .clickable(onClick = onClick, interactionSource = remember {
+                MutableInteractionSource()
+            }, indication = null)
             .fillMaxWidth()
-            .padding(8.dp), horizontalArrangement = Arrangement.spacedBy(16.dp), verticalAlignment = Alignment.CenterVertically) {
+            .padding(vertical = 8.dp), horizontalArrangement = Arrangement.spacedBy(16.dp), verticalAlignment = Alignment.CenterVertically) {
             Image(painter = painterResource(id = R.drawable.profile_pic),
                 contentDescription = null,
                 modifier = modifier
-                    .size(50.dp)
+                    .size(60.dp)
                     .clip(RoundedCornerShape(50)),
                 contentScale = ContentScale.Crop)
 
@@ -146,7 +174,6 @@ private fun ProfileViewCompose(modifier: Modifier = Modifier, userName: String =
                 Icon(imageVector =  Icons.Rounded.ArrowForwardIos, contentDescription = null)
             }
         }
-    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -171,18 +198,21 @@ private fun SubscriptionCompose(modifier: Modifier = Modifier, onClick: () -> Un
                 Text(text = "Enjoy all the benefits and explore more possibilities", style = MaterialTheme.typography.bodySmall)
             }
 
-            Icon(imageVector = Icons.Rounded.ArrowForwardIos, contentDescription = null)
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(imageVector = Icons.Rounded.ArrowForwardIos, contentDescription = null)
+            }
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
 private fun AccountContentCompose(modifier: Modifier = Modifier, icon: ImageVector = Icons.Outlined.Edit, title: String = "Edit Store Details", onClick: () -> Unit = { }) {
     Row(modifier = modifier
         .fillMaxWidth()
-        .clickable(onClick = onClick)
+        .clickable(onClick = onClick, interactionSource = remember {
+            MutableInteractionSource()
+        }, indication = null)
         .padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
         Icon(imageVector = icon, contentDescription = null)
 
