@@ -1,5 +1,6 @@
 package com.bitvolper.yogazzz.presentation.home
 
+import android.app.Activity
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
@@ -30,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -41,8 +43,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.presentation.home.account.AccountScreen
+import com.bitvolper.yogazzz.presentation.home.bookmark.BookmarkActivity
 import com.bitvolper.yogazzz.presentation.home.discover.DiscoverScreen
 import com.bitvolper.yogazzz.presentation.home.history.HistoryScreen
+import com.bitvolper.yogazzz.presentation.home.notification.NotificationActivity
 import com.bitvolper.yogazzz.presentation.home.reports.ReportsScreen
 
 @Composable
@@ -86,6 +90,8 @@ fun HomeApp(modifier: Modifier = Modifier, navController: NavHostController = re
 @Composable
 private fun HomeTopAppBar(navController: NavHostController,) {
 
+    val context = LocalContext.current
+
     when (navController.currentBackStackEntryAsState().value?.destination?.route) {
         BottomNavigationScreens.Home.route -> {
             CenterAlignedTopAppBar(
@@ -100,7 +106,7 @@ private fun HomeTopAppBar(navController: NavHostController,) {
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /*TODO*/ },
+                    IconButton(onClick = { NotificationActivity.startActivity(context as Activity) },
                         modifier = Modifier
                             .padding(horizontal = 4.dp)
                             .shadow(
@@ -116,7 +122,7 @@ private fun HomeTopAppBar(navController: NavHostController,) {
                         Icon(imageVector = Icons.Outlined.Notifications, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
                     }
 
-                    IconButton(onClick = { /*TODO*/ },
+                    IconButton(onClick = { BookmarkActivity.startActivity(context as Activity) },
                         modifier = Modifier
                             .padding(horizontal = 4.dp)
                             .shadow(
