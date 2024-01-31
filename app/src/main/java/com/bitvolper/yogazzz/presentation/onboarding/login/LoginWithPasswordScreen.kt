@@ -3,15 +3,20 @@ package com.bitvolper.yogazzz.presentation.onboarding.login
 import android.app.Activity
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
@@ -43,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.di.model.Login
 import com.bitvolper.yogazzz.presentation.onboarding.component.EmailComponent
+import com.bitvolper.yogazzz.presentation.onboarding.component.LoginComponent
 import com.bitvolper.yogazzz.presentation.onboarding.component.PasswordComponent
 import com.bitvolper.yogazzz.presentation.onboarding.component.SocialLoginComponent
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
@@ -88,101 +94,99 @@ fun LoginWithPasswordScreen(modifier: Modifier = Modifier,
         }
     }
 
-    Column(modifier = modifier
+
+    Box(modifier = modifier
         .fillMaxSize()
-        .padding(top = 16.dp, bottom = 32.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween) {
+        .padding(bottom = 16.dp)) {
 
-        Text(
-            text = "Welcome back",
-            style = MaterialTheme.typography.headlineLarge,
-            fontWeight = FontWeight.Medium,
-            textAlign = TextAlign.Start,
-            modifier = modifier
+        Column(modifier = modifier
+            .padding(top = 16.dp, bottom = 100.dp)
+            .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp)) {
+
+            Text(
+                text = "Welcome back \uD83D\uDC4B",
+                style = MaterialTheme.typography.headlineLarge,
+                fontWeight = FontWeight.Medium,
+                textAlign = TextAlign.Start,
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            )
+
+            Text(
+                text = "Please enter your email and password to sign in.",
+                style = MaterialTheme.typography.bodyLarge,
+                textAlign = TextAlign.Start,
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            )
+
+            Column(modifier = modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text(text = "Email")
+
+                    EmailComponent(
+                        email = email,
+                        onEmailUpdate = { email = it },
+                        focusManager = focusManager)
+                }
+
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(text = "Password")
+
+                    PasswordComponent(
+                        password = password,
+                        onPasswordUpdate = { password = it },
+                        focusManager = focusManager
+                    )
+                }
+
+                Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start) {
+                    Checkbox(checked = false, onCheckedChange = {})
+                    Text(text = "Remember me", style = MaterialTheme.typography.labelLarge)
+
+                    Spacer(modifier = modifier.weight(1f))
+
+                    TextButton(onClick = { /*TODO*/ }) {
+                        Text(text = "Forgot Password")
+                    }
+                }
+            }
+
+            Row(modifier = modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-        )
+                .wrapContentWidth(align = Alignment.CenterHorizontally)
+                .padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Divider(modifier = modifier.weight(1f), color = Color.LightGray)
+                Text(text = "or", style = MaterialTheme.typography.titleMedium)
+                Divider(modifier = modifier.weight(1f), color = Color.LightGray)
+            }
 
-        Text(
-            text = "Please enter your email and password to sign in.",
-            style = MaterialTheme.typography.bodyLarge,
-            textAlign = TextAlign.Start,
-            modifier = modifier
+            Column(modifier = modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-        )
+                .padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                LoginComponent(icon = R.drawable.ic_google, text = R.string.continue_with_google) {
 
-        Column(modifier = modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                }
+                LoginComponent(icon = R.drawable.ic_facebook, text = R.string.continue_with_facebook) {
 
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(text = "Email")
+                }
+                LoginComponent(icon = R.drawable.ic_github, text = R.string.continue_with_github) {
 
-                EmailComponent(
-                    email = email,
-                    onEmailUpdate = { email = it },
-                    focusManager = focusManager)
-            }
-
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(text = "Password")
-
-                PasswordComponent(
-                    password = password,
-                    onPasswordUpdate = { password = it },
-                    focusManager = focusManager
-                )
-            }
-
-            Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start) {
-                Checkbox(checked = false, onCheckedChange = {})
-                Text(text = "Remember me", style = MaterialTheme.typography.labelLarge)
+                }
             }
         }
 
-        Divider(modifier = modifier.fillMaxWidth())
 
-        TextButton(onClick = onResetPasswordClick) {
-            Text(text = "Forgot the password?", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
-        }
-
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(text = "Don't have an account?")
-            TextButton(onClick = {    }) {
-                Text(text = "Sign up", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
-            }
-        }
-
-        Row(modifier = modifier
-            .fillMaxWidth()
-            .wrapContentWidth(align = Alignment.CenterHorizontally)
-            .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Divider(modifier = modifier.weight(1f), color = Color.LightGray)
-            Text(text = "or continue with", style = MaterialTheme.typography.titleMedium)
-            Divider(modifier = modifier.weight(1f), color = Color.LightGray)
-        }
-
-        Row(modifier = modifier
-            .fillMaxWidth()
-            .wrapContentWidth(align = Alignment.CenterHorizontally),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            SocialLoginComponent(
-                icon = R.drawable.ic_facebook,
-                onClick = {   })
-
-            SocialLoginComponent(
-                icon = R.drawable.ic_google,
-                onClick = {   })
-
-            SocialLoginComponent(
-                icon = R.drawable.ic_github,
-                onClick = {   })
-        }
-
-        Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+        Column(modifier = modifier
+            .fillMaxSize()
+            .wrapContentSize(align = Alignment.BottomCenter), verticalArrangement = Arrangement.spacedBy(20.dp)) {
 
             Divider(modifier = modifier.fillMaxWidth())
 
@@ -196,14 +200,13 @@ fun LoginWithPasswordScreen(modifier: Modifier = Modifier,
                     )
                     .fillMaxWidth()
                     .requiredHeight(50.dp)
-                    .padding(horizontal = 16.dp),
-                colors = ButtonDefaults.filledTonalButtonColors(containerColor = Color.Red)) {
+                    .padding(horizontal = 16.dp),) {
 
 
                 if (isLoading) {
                     CircularProgressIndicator(modifier = modifier.size(30.dp), strokeWidth = 2.dp, trackColor = Color.White)
                 } else {
-                    Text(text = stringResource(id = R.string.signin), color = colorResource(id = R.color.white), modifier = modifier.padding(4.dp))
+                    Text(text = "Log In", modifier = modifier.padding(4.dp))
                 }
             }
         }

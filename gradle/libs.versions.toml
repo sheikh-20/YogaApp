@@ -16,6 +16,8 @@ kotlin-serialize = "1.8.10"
 nav_compose_version = "1.0.0"
 pager_version = "0.23.1"
 timber_version = "5.0.1"
+firebase-auth = "22.3.1"
+firebase-database = "20.3.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose" }
@@ -44,6 +46,8 @@ androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", vers
 compose-junit = { module = "androidx.compose.ui:ui-test-junit4" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebase-auth" }
+firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebase-database" }
 
 [bundles]
 compose = [ "compose-ui", "compose-ui-graphics", "compose-ui-preview", "compose-material3" ]

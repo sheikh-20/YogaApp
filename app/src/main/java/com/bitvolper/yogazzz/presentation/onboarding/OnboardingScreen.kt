@@ -52,7 +52,7 @@ fun OnboardingScreen(modifier: Modifier = Modifier, onClick: () -> Unit = { }) {
                 .fillMaxWidth()
                 .wrapContentWidth(align = Alignment.CenterHorizontally),
             pagerState = pager,
-            activeColor = Color.Red)
+            activeColor = MaterialTheme.colorScheme.primary)
 
         Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
 
@@ -103,20 +103,20 @@ private fun OnboardingContent(modifier: Modifier = Modifier, state: PagerState =
 
     val datasource = listOf<HorizontalData>(
         HorizontalData(
-            title = "Edit your photos simply in just one click",
-            description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+            title = "YogazzZ - Your Yoga Journey Starts Here",
+            description = "Get ready to embark on a transformative yoga journey with YogazzZ. Discover a wide range of yogas, tailored to your goals."
         ),
         HorizontalData(
-            title = "Unleash your creativity with AI toolbox",
-            description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+            title = "Tailored Exercise Plan for Your Needs",
+            description = "YogazzZ personalizes yoga just for you. Whether you're a beginner or a yoga enthusiast, our app adapt to your needs"
         ),
         HorizontalData(
-            title = "Enjoy all the benefits with pro subscriptions",
-            description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+            title = "Stay Informed About Your Yoga Progress",
+            description = "Stay motivated and track your progress effortlessly. Start your yoga journey today and achieve the results you've always wanted"
         ),
     )
 
-    HorizontalPager(modifier = modifier.padding(horizontal = 16.dp), count = datasource.size, state = state) { currentPage ->
+    HorizontalPager(modifier = modifier.padding(horizontal = 8.dp), count = datasource.size, state = state) { currentPage ->
         when (currentPage) {
             0 -> HorizontalContent(modifier = modifier, horizontalData = datasource[currentPage])
             1 -> HorizontalContent(modifier = modifier, horizontalData = datasource[currentPage])
@@ -157,8 +157,8 @@ private fun HorizontalContent(modifier: Modifier = Modifier, horizontalData: Hor
         Text(
             text = horizontalData.description,
             style = MaterialTheme.typography.bodyLarge,
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
+            textAlign = TextAlign.Center
         )
     }
 }

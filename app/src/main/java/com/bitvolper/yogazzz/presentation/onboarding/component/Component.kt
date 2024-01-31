@@ -36,14 +36,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bitvolper.yogazzz.R
 
+@Preview(showBackground = true)
 @Composable
-fun LoginComponent(modifier: Modifier = Modifier, @DrawableRes icon: Int, @StringRes text: Int, onClick: () -> Unit) {
+fun LoginComponent(modifier: Modifier = Modifier, @DrawableRes icon: Int = R.drawable.ic_google, @StringRes text: Int = R.string.continue_with_google, onClick: () -> Unit = {  }) {
 
     OutlinedButton(onClick = onClick,
+        elevation = ButtonDefaults.buttonElevation(defaultElevation = 1.dp),
         shape = RoundedCornerShape(50),
-        border = BorderStroke(width = .5.dp, color =  Color.LightGray),
+        border = BorderStroke(width = .5.dp, color =  MaterialTheme.colorScheme.outlineVariant),
+        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.background)
     ) {
 
         Row(modifier = modifier
@@ -57,11 +63,14 @@ fun LoginComponent(modifier: Modifier = Modifier, @DrawableRes icon: Int, @Strin
                 modifier = modifier.size(30.dp),
                 tint = Color.Unspecified)
 
-            Spacer(modifier = modifier.padding(horizontal = 8.dp))
+            Spacer(modifier = modifier.weight(1f))
 
             Text(text = stringResource(id = text),
                 style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.SemiBold)
+                fontWeight = FontWeight.SemiBold,
+                modifier = modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center, 
+                color = MaterialTheme.colorScheme.onBackground)
         }
     }
 }
@@ -117,7 +126,9 @@ fun PasswordComponent(modifier: Modifier = Modifier, password: String = "", onPa
 @Composable
 fun SocialLoginComponent(modifier: Modifier = Modifier, @DrawableRes icon: Int, onClick: () -> Unit) {
     OutlinedIconButton(
-        modifier = modifier.size(height = 50.dp, width = 70.dp).padding(4.dp),
+        modifier = modifier
+            .size(height = 50.dp, width = 70.dp)
+            .padding(4.dp),
         onClick = onClick,
         shape = RoundedCornerShape(50),
         border = BorderStroke(width = .5.dp, color =  Color.LightGray)) {
