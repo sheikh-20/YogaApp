@@ -4,6 +4,7 @@ plugins {
     kotlin("kapt")
     alias(libs.plugins.android.dagger.hilt)
     alias(libs.plugins.android.kotlin.serialize)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -59,6 +60,8 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.database)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
