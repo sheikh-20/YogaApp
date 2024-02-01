@@ -73,7 +73,6 @@
             android:name=".presentation.home.HomeActivity"
             android:exported="true"
             android:theme="@style/Theme.YogaApp.Splash">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
