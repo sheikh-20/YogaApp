@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.bitvolper.yogazzz.R
 
 sealed class Resource<out T: Any> {
     object Loading: Resource<Nothing>()
@@ -49,4 +50,44 @@ fun AccountSetupContinueComposable(modifier: Modifier = Modifier) {
             }
         }
     }
+}
+
+object Gender {
+    data class GenderData(
+        val image: Int, val title: String
+    )
+
+    val man = GenderData(image = R.drawable.ic_male, title = "Man")
+    val woman = GenderData(image = R.drawable.ic_female, title = "Woman")
+}
+
+object Body {
+    data class BodyPart(
+        val part: String
+    )
+
+    val bodyParts = listOf<BodyPart>(
+        BodyPart(part = "Full Body"),
+        BodyPart(part = "Shoulders"),
+        BodyPart(part = "Chest"),
+        BodyPart(part = "Arms"),
+        BodyPart(part = "Back"),
+        BodyPart(part = "Stomach"),
+        BodyPart(part = "Legs")
+    )
+}
+
+object Goal {
+    data class YogaGoal(
+        val name: String
+    )
+
+    val goals = listOf<YogaGoal>(
+        YogaGoal(name = "Weight loss"),
+        YogaGoal(name = "Better Sleep Quality"),
+        YogaGoal(name = "Body Relaxation"),
+        YogaGoal(name = "Improve Health"),
+        YogaGoal(name = "Relieve Stress"),
+        YogaGoal(name = "Posture Correction")
+    )
 }
