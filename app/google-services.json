@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "896959303661",
+    "firebase_url": "https://yogazzz-default-rtdb.firebaseio.com",
+    "project_id": "yogazzz",
+    "storage_bucket": "yogazzz.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:896959303661:android:e3eaddcaea51dee058e1e4",
+        "android_client_info": {
+          "package_name": "com.bitvolper.yogazzz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "896959303661-t03pgq9j4f45m837ml88hd8vn0f1vtrg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bitvolper.yogazzz",
+            "certificate_hash": "9c283c656aa794186bc83107bc3f8542acd62df7"
+          }
+        },
+        {
+          "client_id": "896959303661-uvc7o7vj37os5st5kvaiptf38mj9ve74.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtC6ouzAvP0PdGo3mvRXIMX0ZkzaNVNC8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "896959303661-uvc7o7vj37os5st5kvaiptf38mj9ve74.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

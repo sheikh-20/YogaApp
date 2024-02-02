@@ -6,6 +6,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.SignalCellularAlt
+import androidx.compose.material.icons.rounded.SignalCellularAlt1Bar
+import androidx.compose.material.icons.rounded.SignalCellularAlt2Bar
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.OutlinedButton
@@ -13,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.bitvolper.yogazzz.R
 
@@ -89,5 +94,25 @@ object Goal {
         YogaGoal(name = "Improve Health"),
         YogaGoal(name = "Relieve Stress"),
         YogaGoal(name = "Posture Correction")
+    )
+}
+
+object Experience {
+    data class  ExperienceLevel(
+        val imageVector: ImageVector,
+        val title: String,
+        val description: String
+    )
+
+    val levels = listOf<ExperienceLevel>(
+        ExperienceLevel(
+            imageVector = Icons.Rounded.SignalCellularAlt1Bar, title = "Beginner", "I'm new to yoga",
+        ),
+        ExperienceLevel(
+            imageVector = Icons.Rounded.SignalCellularAlt2Bar, title = "Intermediate", "I practice yoga regularly",
+        ),
+        ExperienceLevel(
+            imageVector = Icons.Rounded.SignalCellularAlt, title = "Expert", "I'm experienced and living with yoga",
+        )
     )
 }
