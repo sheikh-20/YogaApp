@@ -40,7 +40,10 @@ import com.bitvolper.yogazzz.utility.Body
 import com.bitvolper.yogazzz.utility.Gender
 
 @Composable
-fun SelectFocusAreaScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = PaddingValues()) {
+fun SelectFocusAreaScreen(modifier: Modifier = Modifier,
+                          paddingValues: PaddingValues = PaddingValues(),
+                          onSkipClick: () -> Unit = {  },
+                          onContinueClick: () -> Unit = {  }) {
     Column(modifier = modifier
         .fillMaxSize()
         .padding(
@@ -82,7 +85,10 @@ fun SelectFocusAreaScreen(modifier: Modifier = Modifier, paddingValues: PaddingV
 
         }
 
-        AccountSetupContinueComposable()
+        AccountSetupContinueComposable(
+            onSkipClick = onSkipClick,
+            onContinueClick = onContinueClick
+        )
     }
 }
 

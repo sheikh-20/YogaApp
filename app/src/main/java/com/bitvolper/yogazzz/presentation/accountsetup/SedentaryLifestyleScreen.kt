@@ -34,11 +34,14 @@ import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.utility.AccountSetupContinueComposable
 
 @Composable
-fun SedentaryLifestyleScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = PaddingValues()) {
+fun SedentaryLifestyleScreen(modifier: Modifier = Modifier,
+                             paddingValues: PaddingValues = PaddingValues(),
+                             onSkipClick: () -> Unit = { },
+                             onContinueClick: () -> Unit = { }) {
     Column(modifier = modifier
         .fillMaxSize()
         .padding(
-            top = 16.dp,
+            top = paddingValues.calculateTopPadding(),
             bottom = 16.dp
         ),
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -68,7 +71,10 @@ fun SedentaryLifestyleScreen(modifier: Modifier = Modifier, paddingValues: Paddi
 
         Spacer(modifier = modifier.weight(1f))
 
-        AccountSetupContinueComposable()
+        AccountSetupContinueComposable(
+            onSkipClick = onSkipClick,
+            onContinueClick = onContinueClick
+        )
     }
 }
 

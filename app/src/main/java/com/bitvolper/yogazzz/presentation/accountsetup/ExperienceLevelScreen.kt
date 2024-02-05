@@ -26,11 +26,14 @@ import com.bitvolper.yogazzz.utility.AccountSetupContinueComposable
 import com.bitvolper.yogazzz.utility.Experience
 
 @Composable
-fun ExperienceLevelScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = PaddingValues()) {
+fun ExperienceLevelScreen(modifier: Modifier = Modifier,
+                          paddingValues: PaddingValues = PaddingValues(),
+                          onSkipClick: () -> Unit = { },
+                          onContinueClick: () -> Unit = {  }) {
     Column(modifier = modifier
         .fillMaxSize()
         .padding(
-            top = 16.dp,
+            top = paddingValues.calculateTopPadding(),
             bottom = 16.dp
         ),
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -48,7 +51,10 @@ fun ExperienceLevelScreen(modifier: Modifier = Modifier, paddingValues: PaddingV
 
         Spacer(modifier = modifier.weight(1f))
 
-        AccountSetupContinueComposable()
+        AccountSetupContinueComposable(
+            onSkipClick = onSkipClick,
+            onContinueClick = onContinueClick
+        )
     }
 }
 
