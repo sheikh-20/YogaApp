@@ -17,6 +17,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.CompositingStrategy
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.bitvolper.yogazzz.R
@@ -28,7 +33,7 @@ sealed class Resource<out T: Any> {
 }
 
 @Composable
-fun AccountSetupContinueComposable(modifier: Modifier = Modifier) {
+fun AccountSetupContinueComposable(modifier: Modifier = Modifier, onSkipClick: () -> Unit = { }, onContinueClick: () -> Unit = {  }) {
     Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
 
         Divider(modifier = modifier.fillMaxWidth())
@@ -39,14 +44,14 @@ fun AccountSetupContinueComposable(modifier: Modifier = Modifier) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp)) {
 
-            OutlinedButton(onClick = {  }, modifier = modifier
+            OutlinedButton(onClick = onSkipClick, modifier = modifier
                 .weight(1f)
                 .requiredHeight(50.dp)) {
                 Text(text = "Skip")
             }
 
             Button(
-                onClick = {   },
+                onClick = onContinueClick,
                 modifier = modifier
                     .weight(1f)
                     .requiredHeight(50.dp)) {
@@ -116,3 +121,10 @@ object Experience {
         )
     )
 }
+
+fun Modifier.fadingEdge(brush: Brush) = this
+    .graphicsLayer(compositingStrategy = CompositingStrategy.Offscreen)
+    .drawWithContent {
+        drawContent()
+        drawRect(brush = brush, blendMode = BlendMode.DstIn)
+    }

@@ -27,7 +27,12 @@ import com.bitvolper.yogazzz.utility.Body
 import com.bitvolper.yogazzz.utility.Goal
 
 @Composable
-fun YogaGoalScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = PaddingValues()) {
+fun YogaGoalScreen(modifier: Modifier = Modifier,
+                   paddingValues: PaddingValues = PaddingValues(),
+                   onSkipClick: () -> Unit = { },
+                   onContinueClick: () -> Unit = {  }
+                   ) {
+
     Column(modifier = modifier
         .fillMaxSize()
         .padding(
@@ -41,7 +46,9 @@ fun YogaGoalScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues =
 
         Text(text = "Tell us what you aim to achieve with YogazzZ", style = MaterialTheme.typography.bodyLarge)
 
-        LazyColumn(modifier = modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
+        LazyColumn(modifier = modifier
+            .fillMaxWidth()
+            .padding(16.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
             items(Goal.goals.size) {
                 Card(shape = RoundedCornerShape(10),
                     border = BorderStroke(width = .5.dp, color =  MaterialTheme.colorScheme.outlineVariant)
@@ -50,14 +57,21 @@ fun YogaGoalScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues =
                         text = Goal.goals[it].name,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
-                        modifier = modifier.fillMaxWidth().padding(16.dp)
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
                     )
                 }
             }
         }
 
+        Spacer(modifier = modifier.weight(1f))
 
-        AccountSetupContinueComposable()
+
+        AccountSetupContinueComposable(
+            onSkipClick = onSkipClick, 
+            onContinueClick = onContinueClick
+        )
     }
 }
 

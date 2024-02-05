@@ -30,11 +30,14 @@ import com.bitvolper.yogazzz.utility.AccountSetupContinueComposable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SelectDesiredBodyShapeScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = PaddingValues()) {
+fun SelectDesiredBodyShapeScreen(modifier: Modifier = Modifier,
+                                 paddingValues: PaddingValues = PaddingValues(),
+                                 onSkipClick: () -> Unit = {  },
+                                 onContinueClick: () -> Unit = {  }) {
     Column(modifier = modifier
         .fillMaxSize()
         .padding(
-            top = 16.dp,
+            top = paddingValues.calculateTopPadding(),
             bottom = 16.dp
         ),
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -71,7 +74,10 @@ fun SelectDesiredBodyShapeScreen(modifier: Modifier = Modifier, paddingValues: P
             valueRange = 0f..5f
         )
 
-        AccountSetupContinueComposable()
+        AccountSetupContinueComposable(
+            onSkipClick = onSkipClick,
+            onContinueClick = onContinueClick
+        )
     }
 }
 

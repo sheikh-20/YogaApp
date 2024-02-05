@@ -56,7 +56,10 @@ import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun SelectGenderScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = PaddingValues()) {
+fun SelectGenderScreen(modifier: Modifier = Modifier,
+                       paddingValues: PaddingValues = PaddingValues(),
+                       onSkipClick: () -> Unit = {  },
+                       onContinueClick: () -> Unit = {  }) {
 
     val items = listOf<Gender.GenderData>(Gender.man, Gender.woman)
     val pager = rememberPagerState(pageCount = { items.size })
@@ -119,7 +122,10 @@ fun SelectGenderScreen(modifier: Modifier = Modifier, paddingValues: PaddingValu
 
         Spacer(modifier = modifier.weight(1f))
 
-        AccountSetupContinueComposable()
+        AccountSetupContinueComposable(
+            onSkipClick = onSkipClick,
+            onContinueClick = onContinueClick
+        )
     }
 }
 

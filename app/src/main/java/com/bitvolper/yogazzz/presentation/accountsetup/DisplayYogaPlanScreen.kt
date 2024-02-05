@@ -10,11 +10,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.material3.Button
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -23,8 +28,12 @@ import androidx.compose.ui.unit.dp
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.utility.AccountSetupContinueComposable
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DisplayYogaPlanScreen(modifier: Modifier = Modifier) {
+
+    val datePickerState = rememberDatePickerState()
+
     Column(modifier = modifier
         .fillMaxSize()
         .padding(
@@ -38,7 +47,7 @@ fun DisplayYogaPlanScreen(modifier: Modifier = Modifier) {
 
         Text(text = "Your personalized yoga plan has been generated based on your goals & physics", style = MaterialTheme.typography.bodyLarge)
 
-        Spacer(modifier = modifier.weight(1f))
+        DatePicker(state = datePickerState)
 
         Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
 
