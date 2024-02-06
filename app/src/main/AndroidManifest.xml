@@ -70,14 +70,21 @@
             android:theme="@style/Theme.YogaApp" />
 
         <activity
-            android:name=".presentation.home.HomeActivity"
+            android:name=".presentation.accountsetup.AccountSetupActivity"
             android:exported="true"
-            android:theme="@style/Theme.YogaApp.Splash">
+            android:theme="@style/Theme.YogaApp" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".presentation.home.HomeActivity"
+            android:exported="true"
+            android:theme="@style/Theme.YogaApp.Splash">
+
 
         </activity>
     </application>

@@ -20,22 +20,41 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.presentation.home.BottomNavigationScreens
+import com.bitvolper.yogazzz.presentation.viewmodel.AccountSetupUIState
+import com.bitvolper.yogazzz.presentation.viewmodel.AccountSetupViewModel
+import com.bitvolper.yogazzz.utility.ACCOUNT_SETUP_MAX_SCREEN
 
 @Composable
-fun AccountSetupApp(modifier: Modifier = Modifier, navController: NavHostController = rememberNavController()) {
+fun AccountSetupApp(modifier: Modifier = Modifier,
+                    navController: NavHostController = rememberNavController(),
+                    accountSetupViewModel: AccountSetupViewModel = viewModel()) {
+
+    val uiState by accountSetupViewModel.uiState.collectAsState()
+
     Scaffold(
-        topBar = { AccountSetupTopAppBar() }
+        topBar = {
+            AccountSetupTopAppBar(
+                navigateUp = {
+                    accountSetupViewModel.degradeCurrentScreen {
+                        navController.navigateUp()
+                    }
+                },
+                uiState = uiState) }
     ) { paddingValues ->
 
         NavHost(
@@ -45,9 +64,11 @@ fun AccountSetupApp(modifier: Modifier = Modifier, navController: NavHostControl
                 SelectGenderScreen(
                     paddingValues = paddingValues,
                     onSkipClick = {
+                        accountSetupViewModel.updateCurrentScreen()
                         navController.navigate(AccountSetupScreen.SelectFocusArea.name)
                     },
                     onContinueClick = {
+                        accountSetupViewModel.updateCurrentScreen()
                         navController.navigate(AccountSetupScreen.SelectFocusArea.name)
                     })
             }
@@ -56,9 +77,11 @@ fun AccountSetupApp(modifier: Modifier = Modifier, navController: NavHostControl
                 SelectFocusAreaScreen(
                     paddingValues = paddingValues,
                     onSkipClick = {
+                        accountSetupViewModel.updateCurrentScreen()
                         navController.navigate(AccountSetupScreen.SelectYogaGoal.name)
                     },
                     onContinueClick = {
+                        accountSetupViewModel.updateCurrentScreen()
                         navController.navigate(AccountSetupScreen.SelectYogaGoal.name)
                     }
                     )
@@ -68,9 +91,11 @@ fun AccountSetupApp(modifier: Modifier = Modifier, navController: NavHostControl
                 YogaGoalScreen(
                     paddingValues = paddingValues,
                     onSkipClick = {
+                        accountSetupViewModel.updateCurrentScreen()
                         navController.navigate(AccountSetupScreen.CurrentBodyShape.name)
                     },
                     onContinueClick = {
+                        accountSetupViewModel.updateCurrentScreen()
                         navController.navigate(AccountSetupScreen.CurrentBodyShape.name)
                     }
                     )
@@ -80,9 +105,11 @@ fun AccountSetupApp(modifier: Modifier = Modifier, navController: NavHostControl
                 SelectCurrentBodyShapeScreen(
                     paddingValues = paddingValues,
                     onSkipClick = {
+                        accountSetupViewModel.updateCurrentScreen()
                         navController.navigate(AccountSetupScreen.DesiredBodyShape.name)
                     },
                     onContinueClick = {
+                        accountSetupViewModel.updateCurrentScreen()
                         navController.navigate(AccountSetupScreen.DesiredBodyShape.name)
                     }
                 )
@@ -92,9 +119,11 @@ fun AccountSetupApp(modifier: Modifier = Modifier, navController: NavHostControl
                 SelectDesiredBodyShapeScreen(
                     paddingValues = paddingValues,
                     onSkipClick = {
+                        accountSetupViewModel.updateCurrentScreen()
                         navController.navigate(AccountSetupScreen.ExperienceLevel.name)
                     },
                     onContinueClick = {
+                        accountSetupViewModel.updateCurrentScreen()
                         navController.navigate(AccountSetupScreen.ExperienceLevel.name)
                     }
                 )
@@ -104,9 +133,11 @@ fun AccountSetupApp(modifier: Modifier = Modifier, navController: NavHostControl
                 ExperienceLevelScreen(
                     paddingValues = paddingValues,
                     onSkipClick = {
+                        accountSetupViewModel.updateCurrentScreen()
                         navController.navigate(AccountSetupScreen.Sedentary.name)
                     },
                     onContinueClick = {
+                        accountSetupViewModel.updateCurrentScreen()
                         navController.navigate(AccountSetupScreen.Sedentary.name)
                     }
                 )
@@ -116,9 +147,11 @@ fun AccountSetupApp(modifier: Modifier = Modifier, navController: NavHostControl
                 SedentaryLifestyleScreen(
                     paddingValues = paddingValues,
                     onSkipClick = {
+                        accountSetupViewModel.updateCurrentScreen()
                         navController.navigate(AccountSetupScreen.Plank.name)
                     },
                     onContinueClick = {
+                        accountSetupViewModel.updateCurrentScreen()
                         navController.navigate(AccountSetupScreen.Plank.name)
                     }
                 )
@@ -128,9 +161,11 @@ fun AccountSetupApp(modifier: Modifier = Modifier, navController: NavHostControl
                 SelectPlankDurationScreen(
                     paddingValues = paddingValues,
                     onSkipClick = {
+                        accountSetupViewModel.updateCurrentScreen()
                         navController.navigate(AccountSetupScreen.LegRaises.name)
                     },
                     onContinueClick = {
+                        accountSetupViewModel.updateCurrentScreen()
                         navController.navigate(AccountSetupScreen.LegRaises.name)
                     }
                 )
@@ -140,9 +175,11 @@ fun AccountSetupApp(modifier: Modifier = Modifier, navController: NavHostControl
                 SelectLegRaiseDurationScreen(
                     paddingValues = paddingValues,
                     onSkipClick = {
+                        accountSetupViewModel.updateCurrentScreen()
                         navController.navigate(AccountSetupScreen.Age.name)
                     },
                     onContinueClick = {
+                        accountSetupViewModel.updateCurrentScreen()
                         navController.navigate(AccountSetupScreen.Age.name)
                     }
                 )
@@ -152,9 +189,11 @@ fun AccountSetupApp(modifier: Modifier = Modifier, navController: NavHostControl
                 CollectAgeScreen(
                     paddingValues = paddingValues,
                     onSkipClick = {
+                        accountSetupViewModel.updateCurrentScreen()
                         navController.navigate(AccountSetupScreen.Height.name)
                     },
                     onContinueClick = {
+                        accountSetupViewModel.updateCurrentScreen()
                         navController.navigate(AccountSetupScreen.Height.name)
                     }
                 )
@@ -164,9 +203,11 @@ fun AccountSetupApp(modifier: Modifier = Modifier, navController: NavHostControl
                 CollectHeightScreen(
                     paddingValues = paddingValues,
                     onSkipClick = {
+                        accountSetupViewModel.updateCurrentScreen()
                         navController.navigate(AccountSetupScreen.CurrentWeight.name)
                     },
                     onContinueClick = {
+                        accountSetupViewModel.updateCurrentScreen()
                         navController.navigate(AccountSetupScreen.CurrentWeight.name)
                     }
                 )
@@ -176,9 +217,11 @@ fun AccountSetupApp(modifier: Modifier = Modifier, navController: NavHostControl
                 SelectCurrentBodyWeightScreen(
                     paddingValues = paddingValues,
                     onSkipClick = {
+                        accountSetupViewModel.updateCurrentScreen()
                         navController.navigate(AccountSetupScreen.TargetWeight.name)
                     },
                     onContinueClick = {
+                        accountSetupViewModel.updateCurrentScreen()
                         navController.navigate(AccountSetupScreen.TargetWeight.name)
                     }
                 )
@@ -188,9 +231,11 @@ fun AccountSetupApp(modifier: Modifier = Modifier, navController: NavHostControl
                 SelectTargetBodyWeightScreen(
                     paddingValues = paddingValues,
                     onSkipClick = {
+                        accountSetupViewModel.updateCurrentScreen()
                         navController.navigate(AccountSetupScreen.YogaPlan.name)
                     },
                     onContinueClick = {
+                        accountSetupViewModel.updateCurrentScreen()
                         navController.navigate(AccountSetupScreen.YogaPlan.name)
                     }
                 )
@@ -208,25 +253,24 @@ fun AccountSetupApp(modifier: Modifier = Modifier, navController: NavHostControl
     }
 }
 
-@Preview(showBackground = true)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun AccountSetupTopAppBar() {
+private fun AccountSetupTopAppBar(navigateUp: () -> Unit = { }, uiState: AccountSetupUIState = AccountSetupUIState()) {
     CenterAlignedTopAppBar(
         title = {
             LinearProgressIndicator(modifier = Modifier
                 .fillMaxWidth()
                 .requiredHeight(10.dp)
-                .padding(horizontal = 30.dp), progress = .1f, strokeCap = StrokeCap.Round)
+                .padding(horizontal = 30.dp), progress = uiState.currentScreen.div(14f), strokeCap = StrokeCap.Round)
         },
         navigationIcon = {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = navigateUp) {
                 Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null)
             }
         },
         actions = {
             Text(
-                text = "1/14",
+                text = "${uiState.currentScreen}/$ACCOUNT_SETUP_MAX_SCREEN",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold
             )
