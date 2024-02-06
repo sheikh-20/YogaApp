@@ -37,7 +37,7 @@ class HomeActivity : BaseActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    AccountSetupApp()
+                    OnboardingApp()
                 }
             }
         }

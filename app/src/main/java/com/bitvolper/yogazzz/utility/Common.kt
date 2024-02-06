@@ -128,3 +128,6 @@ fun Modifier.fadingEdge(brush: Brush) = this
         drawContent()
         drawRect(brush = brush, blendMode = BlendMode.DstIn)
     }
+
+
+const val ACCOUNT_SETUP_MAX_SCREEN: Int = 14
