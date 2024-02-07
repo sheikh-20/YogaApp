@@ -46,7 +46,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitvolper.yogazzz.R
-import com.bitvolper.yogazzz.di.model.Login
+import com.bitvolper.yogazzz.domain.model.Login
 import com.bitvolper.yogazzz.presentation.onboarding.component.EmailComponent
 import com.bitvolper.yogazzz.presentation.onboarding.component.LoginComponent
 import com.bitvolper.yogazzz.presentation.onboarding.component.PasswordComponent

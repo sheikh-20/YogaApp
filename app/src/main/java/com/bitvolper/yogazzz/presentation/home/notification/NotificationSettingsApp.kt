@@ -4,9 +4,7 @@ import android.app.Activity
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.Settings
-import androidx.compose.material.icons.rounded.Spa
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -21,17 +19,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun NotificationApp(modifier: Modifier = Modifier) {
+fun NotificationSettingsApp(modifier: Modifier = Modifier) {
     Scaffold(
-        topBar = { NotificationTopAppBar() }
+        topBar = { NotificationSettingsTopAppBar() }
     ) { paddingValues ->
-        NotificationScreen(paddingValues = paddingValues)
+        NotificationSettingsScreen(paddingValues = paddingValues)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun NotificationTopAppBar() {
+private fun NotificationSettingsTopAppBar() {
 
     val context = LocalContext.current
 

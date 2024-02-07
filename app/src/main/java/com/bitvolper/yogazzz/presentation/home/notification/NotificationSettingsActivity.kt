@@ -9,14 +9,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.bitvolper.yogazzz.base.BaseActivity
-import com.bitvolper.yogazzz.presentation.home.HomeApp
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 
-class NotificationActivity : BaseActivity() {
+class NotificationSettingsActivity : BaseActivity() {
 
     companion object {
         fun startActivity(activity: Activity?) {
-            val intent = Intent(activity, NotificationActivity::class.java)
+            val intent = Intent(activity, NotificationSettingsActivity::class.java)
             activity?.startActivity(intent)
         }
     }
@@ -31,7 +30,7 @@ class NotificationActivity : BaseActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    NotificationApp()
+                    NotificationSettingsApp()
                 }
             }
         }

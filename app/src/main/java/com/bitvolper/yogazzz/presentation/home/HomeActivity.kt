@@ -1,5 +1,7 @@
 package com.bitvolper.yogazzz.presentation.home
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,9 +16,17 @@ import com.bitvolper.yogazzz.presentation.accountsetup.AccountSetupApp
 import com.bitvolper.yogazzz.presentation.onboarding.OnboardingApp
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.presentation.viewmodel.OnboardingViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeActivity : BaseActivity() {
 
+    companion object {
+        fun startActivity(activity: Activity?) {
+            val intent = Intent(activity, HomeActivity::class.java)
+            activity?.startActivity(intent)
+        }
+    }
 
     private val onboardingViewModel: OnboardingViewModel by viewModels()
 
@@ -37,7 +47,11 @@ class HomeActivity : BaseActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    OnboardingApp()
+                    if (onboardingViewModel.getUserInfo() != null) {
+                        HomeApp()
+                    } else {
+                        OnboardingApp()
+                    }
                 }
             }
         }

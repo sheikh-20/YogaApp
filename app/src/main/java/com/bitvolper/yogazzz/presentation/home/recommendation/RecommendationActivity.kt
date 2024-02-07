@@ -9,7 +9,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.bitvolper.yogazzz.base.BaseActivity
-import com.bitvolper.yogazzz.presentation.home.notification.NotificationApp
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 
 class RecommendationActivity: BaseActivity() {

@@ -31,6 +31,7 @@ fun OnboardingApp(modifier: Modifier = Modifier,
                   onboardingViewModel: OnboardingViewModel = hiltViewModel()) {
 
     val snackbarHostState = remember { SnackbarHostState() }
+    val onSocialSignIn = onboardingViewModel.socialSignIn
 
     Scaffold(
         topBar = {
@@ -53,7 +54,10 @@ fun OnboardingApp(modifier: Modifier = Modifier,
                     },
                     onSignUpClick = {
                         navController.navigate(OnboardingScreen.SignupWithPassword.name)
-                    }
+                    },
+                    onGoogleSignInClick = { activity, intent ->  onboardingViewModel.signInGoogle(activity, intent) },
+                    onSocialSignIn = onSocialSignIn,
+                    snackbarHostState = snackbarHostState
                 )
             }
 
@@ -75,8 +79,9 @@ fun OnboardingApp(modifier: Modifier = Modifier,
                     onSignupClick = { email, password ->
 //                        onboardingViewModel.register(email, password)
                     },
-//                    registerUIState = onboardingViewModel.registerUIState,
-                    snackbarHostState = snackbarHostState
+                    snackbarHostState = snackbarHostState,
+                    onGoogleSignInClick = { activity, intent ->  onboardingViewModel.signInGoogle(activity, intent) },
+                    onSocialSignIn = onSocialSignIn,
                 )
             }
         }

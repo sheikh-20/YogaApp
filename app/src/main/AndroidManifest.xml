@@ -65,7 +65,7 @@
             android:theme="@style/Theme.YogaApp" />
 
         <activity
-            android:name=".presentation.home.notification.NotificationActivity"
+            android:name=".presentation.home.notification.NotificationSettingsActivity"
             android:exported="true"
             android:theme="@style/Theme.YogaApp" />
 
@@ -73,11 +73,7 @@
             android:name=".presentation.accountsetup.AccountSetupActivity"
             android:exported="true"
             android:theme="@style/Theme.YogaApp" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity
@@ -85,6 +81,11 @@
             android:exported="true"
             android:theme="@style/Theme.YogaApp.Splash">
 
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
     </application>
