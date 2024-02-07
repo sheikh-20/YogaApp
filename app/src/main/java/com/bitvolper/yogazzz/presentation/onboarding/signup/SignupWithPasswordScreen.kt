@@ -1,7 +1,11 @@
 package com.bitvolper.yogazzz.presentation.onboarding.signup
 
 import android.app.Activity
+import android.content.Intent
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,6 +35,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,48 +50,82 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitvolper.yogazzz.R
-import com.bitvolper.yogazzz.di.model.Register
+import com.bitvolper.yogazzz.domain.model.Register
+import com.bitvolper.yogazzz.domain.usecase.SignInGoogleInteractor
+import com.bitvolper.yogazzz.presentation.accountsetup.AccountSetupActivity
+import com.bitvolper.yogazzz.presentation.home.HomeActivity
 import com.bitvolper.yogazzz.presentation.onboarding.component.EmailComponent
 import com.bitvolper.yogazzz.presentation.onboarding.component.LoginComponent
 import com.bitvolper.yogazzz.presentation.onboarding.component.PasswordComponent
 import com.bitvolper.yogazzz.presentation.onboarding.component.SocialLoginComponent
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.utility.Resource
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 private const val TAG = "SignupWithPasswordScreen"
 @Composable
 fun SignupWithPasswordScreen(modifier: Modifier = Modifier,
                              onSignupClick: (String, String) -> Unit = { _, _ ->  },
-                             registerUIState: SharedFlow<Resource<Register>>? = null,
-                             snackbarHostState: SnackbarHostState = SnackbarHostState()
+                             snackbarHostState: SnackbarHostState = SnackbarHostState(),
+                             onGoogleSignInClick: (Activity?, Intent?) -> Unit = { _, _ ->},
+                             onSocialSignIn: SharedFlow<Resource<AuthResult>>? = null,
 ) {
 
-    val focusManager = LocalFocusManager.current
     val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    val focusManager = LocalFocusManager.current
 
     var isLoading by remember { mutableStateOf(false) }
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartIntentSenderForResult(),
+        onResult = { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                Timber.tag("LoginScreen").d("OK -> ${result.data.toString()}")
+
+                onGoogleSignInClick(context as Activity, result.data)
+            } else {
+                Timber.tag("LoginScreen").e("ERROR")
+            }
+        }
+    )
+
     LaunchedEffect(key1 = Unit) {
-        registerUIState?.collectLatest {
-            when (it) {
+        onSocialSignIn?.collectLatest {
+            when(it) {
                 is Resource.Loading -> {
                     isLoading = true
                 }
                 is Resource.Failure -> {
                     isLoading = false
-                    Timber.tag(TAG).e(it.throwable)
-                    snackbarHostState.showSnackbar(message = it.throwable.message.toString(), duration = SnackbarDuration.Long)
+
+                    if (it.throwable is FirebaseAuthUserCollisionException) {
+                        snackbarHostState.showSnackbar(message = "Already created, Try Login!")
+                        Timber.tag("Login").e(it.throwable)
+                    } else {
+                        snackbarHostState.showSnackbar(message = "Failure!")
+                        Timber.tag("Login").e(it.throwable)
+                    }
                 }
                 is Resource.Success -> {
                     isLoading = false
-                    Timber.tag(TAG).d("Created successfully")
-//                    PersonalDetailsActivity.startActivity(context as Activity)
+                    Timber.tag("Login").d("Google Success")
+
+                    if (it.data.additionalUserInfo?.isNewUser == true) {
+                        (context as Activity).finish()
+                        AccountSetupActivity.startActivity(context as Activity)
+                    } else {
+                        (context as Activity).finish()
+                        HomeActivity.startActivity((context as Activity))
+                    }
                 }
             }
         }
@@ -173,7 +212,10 @@ fun SignupWithPasswordScreen(modifier: Modifier = Modifier,
 
             Column(modifier = modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 LoginComponent(icon = R.drawable.ic_google, text = R.string.continue_with_google) {
-
+                    coroutineScope.launch {
+                        val result = SignInGoogleInteractor.signIn(context)
+                        launcher.launch(IntentSenderRequest.Builder(result ?: return@launch).build())
+                    }
                 }
                 LoginComponent(icon = R.drawable.ic_facebook, text = R.string.continue_with_facebook) {
 

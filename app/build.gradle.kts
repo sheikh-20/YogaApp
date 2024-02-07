@@ -4,7 +4,7 @@ plugins {
     kotlin("kapt")
     alias(libs.plugins.android.dagger.hilt)
     alias(libs.plugins.android.kotlin.serialize)
-    id("com.google.gms.google-services")
+    alias(libs.plugins.google.service)
 }
 
 android {
@@ -34,11 +34,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -55,13 +55,18 @@ android {
 
 dependencies {
 
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
+
+    // firebase
     implementation(libs.firebase.auth)
     implementation(libs.firebase.database)
+    implementation(libs.firebase.storage)
+    implementation(libs.play.service)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -94,10 +99,6 @@ dependencies {
     // Timber for log
     implementation(libs.timber)
 
-    // Pager
-    implementation("com.google.accompanist:accompanist-pager:0.28.0")
-    implementation("com.google.accompanist:accompanist-pager-indicators:0.25.0")
-
     // Number picker
-    implementation("com.chargemap.compose:numberpicker:1.0.3")
+    implementation(libs.number.picker)
 }

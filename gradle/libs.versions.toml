@@ -11,13 +11,17 @@ bom = "2023.08.00"
 android-gradle = "8.2.1"
 koltin = "1.9.0"
 material-icon = "1.6.0-alpha02"
-hilt-version = "2.44"
+hilt-version = "2.48"
 kotlin-serialize = "1.8.10"
 nav_compose_version = "1.0.0"
 pager_version = "0.23.1"
 timber_version = "5.0.1"
 firebase-auth = "22.3.1"
 firebase-database = "20.3.0"
+firebase-storage = "20.3.0"
+play-service-version = "20.6.0"
+google-service-version = "4.4.0"
+number-picker-version = "1.0.3"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose" }
@@ -32,6 +36,8 @@ nav_compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = 
 pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "pager_version" }
 pager_indicator = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "pager_version" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber_version" }
+number-picker = { module = "com.chargemap.compose:numberpicker", version.ref = "number-picker-version" }
+
 
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "bom" }
 compose-ui = { module = "androidx.compose.ui:ui" }
@@ -46,8 +52,13 @@ androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", vers
 compose-junit = { module = "androidx.compose.ui:ui-test-junit4" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
-firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebase-auth" }
+
+
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebase-auth" }
 firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebase-database" }
+firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebase-storage" }
+play-service = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "play-service-version" }
+
 
 [bundles]
 compose = [ "compose-ui", "compose-ui-graphics", "compose-ui-preview", "compose-material3" ]
@@ -57,3 +68,4 @@ android-application = { id = "com.android.application", version.ref = "android-g
 android-kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "koltin" }
 android-dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt-version" }
 android-kotlin-serialize = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-serialize" }
+google-service = { id = "com.google.gms.google-services", version.ref = "google-service-version" }

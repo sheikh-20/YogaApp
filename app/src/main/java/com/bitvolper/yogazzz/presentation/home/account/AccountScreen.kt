@@ -51,6 +51,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitvolper.yogazzz.R
+import com.bitvolper.yogazzz.domain.model.UserData
 import com.bitvolper.yogazzz.presentation.accountsecurity.AccountSecurityActivity
 import com.bitvolper.yogazzz.presentation.analytics.AnalyticsActivity
 import com.bitvolper.yogazzz.presentation.appearance.AppearanceActivity
@@ -63,7 +64,10 @@ import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.presentation.userprofile.UserProfileActivity
 
 @Composable
-fun AccountScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = PaddingValues()) {
+fun AccountScreen(modifier: Modifier = Modifier,
+                  paddingValues: PaddingValues = PaddingValues(),
+                  uiState: UserData? = null,
+                  onSignOutClick: () -> Unit = {}) {
 
     val interactionSource = remember {
         MutableInteractionSource()
@@ -81,6 +85,8 @@ fun AccountScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = 
         verticalArrangement = Arrangement.spacedBy(8.dp)) {
 
         ProfileViewCompose(
+            userName = uiState?.userName ?: "",
+            gmail = uiState?.email ?: "",
             onClick = {
                 UserProfileActivity.startActivity(context as Activity)
             }
@@ -120,7 +126,7 @@ fun AccountScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = 
             }
 
             Row(modifier = modifier
-                .fillMaxWidth()
+                .fillMaxWidth().clickable(onClick = onSignOutClick, interactionSource = interactionSource, indication = null)
                 .padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
                 Icon(imageVector = Icons.Rounded.Logout, contentDescription = null, tint = Color.Red)
 
@@ -133,7 +139,7 @@ fun AccountScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = 
                     modifier = modifier
                         .weight(1f)
                         .clickable(
-                            onClick = { },
+                            onClick = onSignOutClick,
                             interactionSource = interactionSource,
                             indication = null
                         ),

@@ -1,8 +1,10 @@
 package com.bitvolper.yogazzz
 
 import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
+@HiltAndroidApp
 class YogaApplication: Application() {
 
     override fun onCreate() {

@@ -1,6 +1,6 @@
-package com.bitvolper.yogazzz.di.model
+package com.bitvolper.yogazzz.domain.model
 
-data class Login(
+data class Register(
     val data: Data?
 ) {
     data class Data(

@@ -5,28 +5,45 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Bookmark
 import androidx.compose.material.icons.outlined.Notifications
-import androidx.compose.material.icons.rounded.Bookmark
 import androidx.compose.material.icons.rounded.MoreVert
-import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material.icons.rounded.Spa
+import androidx.compose.material3.BottomSheetDefaults
+import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalAbsoluteTonalElevation
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -35,7 +52,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -46,11 +66,46 @@ import com.bitvolper.yogazzz.presentation.home.account.AccountScreen
 import com.bitvolper.yogazzz.presentation.home.bookmark.BookmarkActivity
 import com.bitvolper.yogazzz.presentation.home.discover.DiscoverScreen
 import com.bitvolper.yogazzz.presentation.home.history.HistoryScreen
-import com.bitvolper.yogazzz.presentation.home.notification.NotificationActivity
+import com.bitvolper.yogazzz.presentation.home.notification.NotificationSettingsActivity
 import com.bitvolper.yogazzz.presentation.home.reports.ReportsScreen
+import com.bitvolper.yogazzz.presentation.viewmodel.HomeViewModel
+import com.bitvolper.yogazzz.presentation.viewmodel.OnboardingViewModel
+import kotlinx.coroutines.launch
 
 @Composable
-fun HomeApp(modifier: Modifier = Modifier, navController: NavHostController = rememberNavController()) {
+fun HomeApp(modifier: Modifier = Modifier,
+            navController: NavHostController = rememberNavController(),
+            onboardingViewModel: OnboardingViewModel = hiltViewModel(),
+            homeViewModel: HomeViewModel = hiltViewModel()) {
+
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    var showBottomSheet by remember { mutableStateOf(BottomSheet.Default) }
+
+    val profileUiState by homeViewModel.profileInfoUiState.collectAsState()
+
+    when (showBottomSheet) {
+        BottomSheet.Default -> {}
+        BottomSheet.Logout -> {
+            BottomSheet(
+                onDismiss = { showBottomSheet = BottomSheet.Default },
+                onNegativeClick = { showBottomSheet = BottomSheet.Default },
+                onPositiveClick = {
+                    onboardingViewModel.signOut()
+                    (context as Activity).finish()
+                    HomeActivity.startActivity(context as Activity)
+                },
+                contentSheet = {
+                        onNegativeClick, onPositiveClick ->
+
+                    BottomSheetContent(
+                        onNegativeClick = onNegativeClick,
+                        onPositiveClick = onPositiveClick
+                    )
+                })
+        }
+    }
+
     Scaffold(
         topBar = {
             HomeTopAppBar(navController = navController)
@@ -80,7 +135,82 @@ fun HomeApp(modifier: Modifier = Modifier, navController: NavHostController = re
             }
 
             composable(route = BottomNavigationScreens.Account.route) {
-                AccountScreen(paddingValues = paddingValues)
+                AccountScreen(paddingValues = paddingValues,
+                    uiState = profileUiState,
+                    onSignOutClick = {
+                        showBottomSheet = BottomSheet.Logout
+                    })
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun BottomSheet(modifier: Modifier = Modifier,
+                        onDismiss: () -> Unit = {},
+                        onNegativeClick: () -> Unit = {},
+                        onPositiveClick: () -> Unit = {},
+                        contentSheet: @Composable (onNegativeClick: () -> Unit, onPositiveClick: () -> Unit) -> Unit = { _, _ -> }
+) {
+
+    val bottomSheet = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val coroutineScope = rememberCoroutineScope()
+
+    ModalBottomSheet(
+        modifier = modifier,
+        onDismissRequest = {
+            coroutineScope.launch {
+                onDismiss()
+                bottomSheet.hide()
+            }
+        },
+        sheetState = bottomSheet,
+        dragHandle = { BottomSheetDefaults.DragHandle() },
+        containerColor = MaterialTheme.colorScheme.background,
+        tonalElevation = 0.dp
+    ) {
+
+        contentSheet(onNegativeClick, onPositiveClick)
+    }
+}
+
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun BottomSheetContent(modifier: Modifier = Modifier, onNegativeClick: () -> Unit = { }, onPositiveClick: () -> Unit = {}) {
+    Column(modifier = modifier
+        .padding(16.dp)
+        .systemBarsPadding(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Text(text = stringResource(R.string.logout),
+            style = MaterialTheme.typography.headlineSmall,
+            textAlign = TextAlign.Center,
+            modifier = modifier.fillMaxWidth(),
+            color = MaterialTheme.colorScheme.primary,
+            fontWeight = FontWeight.Bold)
+
+        Divider()
+
+        Text(text = stringResource(R.string.are_you_sure_you_want_to_log_out),
+            style = MaterialTheme.typography.bodyLarge,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center,
+            modifier = modifier.fillMaxWidth())
+
+        Row(modifier = modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically) {
+
+            OutlinedButton(onClick = onNegativeClick, modifier = modifier
+                .weight(1f)
+                .requiredHeight(50.dp)) {
+                Text(text = stringResource(id = R.string.cancel))
+            }
+
+            Button(onClick = onPositiveClick, modifier = modifier
+                .weight(1f)
+                .requiredHeight(50.dp)) {
+                Text(text = stringResource(R.string.yes_logout))
             }
         }
     }
@@ -106,7 +236,7 @@ private fun HomeTopAppBar(navController: NavHostController,) {
                     }
                 },
                 actions = {
-                    IconButton(onClick = { NotificationActivity.startActivity(context as Activity) },
+                    IconButton(onClick = { NotificationSettingsActivity.startActivity(context as Activity) },
                         modifier = Modifier
                             .padding(horizontal = 4.dp)
                             .shadow(
@@ -118,7 +248,11 @@ private fun HomeTopAppBar(navController: NavHostController,) {
                                 shape = RoundedCornerShape(50),
                                 color = MaterialTheme.colorScheme.surface
                             )
-                            .border(width = 1.dp, color = Color.DarkGray, shape = RoundedCornerShape(50))) {
+                            .border(
+                                width = 1.dp,
+                                color = Color.DarkGray,
+                                shape = RoundedCornerShape(50)
+                            )) {
                         Icon(imageVector = Icons.Outlined.Notifications, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
                     }
 
@@ -134,7 +268,11 @@ private fun HomeTopAppBar(navController: NavHostController,) {
                                 shape = RoundedCornerShape(50),
                                 color = MaterialTheme.colorScheme.surface
                             )
-                            .border(width = 1.dp, color = Color.DarkGray, shape = RoundedCornerShape(50))
+                            .border(
+                                width = 1.dp,
+                                color = Color.DarkGray,
+                                shape = RoundedCornerShape(50)
+                            )
                     ) {
                         Icon(imageVector = Icons.Outlined.Bookmark, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
                     }
@@ -218,6 +356,10 @@ private fun HomeTopAppBar(navController: NavHostController,) {
             )
         }
     }
+}
+
+enum class BottomSheet {
+    Default, Logout
 }
 
 @Composable
