@@ -54,11 +54,13 @@ import com.bitvolper.yogazzz.domain.model.Register
 import com.bitvolper.yogazzz.domain.usecase.SignInGoogleInteractor
 import com.bitvolper.yogazzz.presentation.accountsetup.AccountSetupActivity
 import com.bitvolper.yogazzz.presentation.home.HomeActivity
+import com.bitvolper.yogazzz.presentation.onboarding.ShowOnboardDialog
 import com.bitvolper.yogazzz.presentation.onboarding.component.EmailComponent
 import com.bitvolper.yogazzz.presentation.onboarding.component.LoginComponent
 import com.bitvolper.yogazzz.presentation.onboarding.component.PasswordComponent
 import com.bitvolper.yogazzz.presentation.onboarding.component.SocialLoginComponent
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
+import com.bitvolper.yogazzz.presentation.viewmodel.OnboardUIState
 import com.bitvolper.yogazzz.utility.Resource
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
@@ -74,6 +76,8 @@ fun SignupWithPasswordScreen(modifier: Modifier = Modifier,
                              snackbarHostState: SnackbarHostState = SnackbarHostState(),
                              onGoogleSignInClick: (Activity?, Intent?) -> Unit = { _, _ ->},
                              onSocialSignIn: SharedFlow<Resource<AuthResult>>? = null,
+                             signupUIState: OnboardUIState = OnboardUIState(),
+                             showDialog: (ShowOnboardDialog) -> Unit = { _ -> }
 ) {
 
     val context = LocalContext.current
@@ -81,6 +85,12 @@ fun SignupWithPasswordScreen(modifier: Modifier = Modifier,
     val focusManager = LocalFocusManager.current
 
     var isLoading by remember { mutableStateOf(false) }
+
+    if (isLoading) {
+        showDialog(ShowOnboardDialog.Signup)
+    } else {
+        showDialog(ShowOnboardDialog.Default)
+    }
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -168,7 +178,8 @@ fun SignupWithPasswordScreen(modifier: Modifier = Modifier,
                     EmailComponent(
                         email = email,
                         onEmailUpdate = { email = it },
-                        focusManager = focusManager)
+                        focusManager = focusManager,
+                        emailError = signupUIState.isEmailError)
                 }
 
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -177,7 +188,8 @@ fun SignupWithPasswordScreen(modifier: Modifier = Modifier,
                     PasswordComponent(
                         password = password,
                         onPasswordUpdate = { password = it },
-                        focusManager = focusManager
+                        focusManager = focusManager,
+                        passwordError = signupUIState.isPasswordError
                     )
                 }
 

@@ -36,5 +36,46 @@ class GoogleRepositoryImpl @Inject constructor(private val context: Context,
         it.printStackTrace()
         emit(Resource.Failure(it))
     }
+}
 
+class SignInEmailRepositoryImpl @Inject constructor(private val context: Context,
+                                                    private val auth: FirebaseAuth): AuthRepository {
+
+    private companion object {
+        const val TAG = "SignInEmailImpl"
+    }
+
+    override fun signIn(activity: Activity?, token: String?, email: String?, password: String?): Flow<Resource<AuthResult>> = flow {
+        emit(Resource.Loading)
+
+        val result = auth.signInWithEmailAndPassword(email.toString(), password.toString()).await()
+
+        Timber.tag(TAG).d(result.additionalUserInfo.toString())
+        emit(Resource.Success(result))
+    }.catch {
+        Timber.tag(TAG).e(it)
+        it.printStackTrace()
+        emit(Resource.Failure(it))
+    }
+}
+
+class SignUpEmailRepositoryImpl @Inject constructor(private val context: Context,
+                                                    private val auth: FirebaseAuth): AuthRepository {
+
+    private companion object {
+        const val TAG = "SignUpEmailImpl"
+    }
+
+    override fun signIn(activity: Activity?, token: String?, email: String?, password: String?): Flow<Resource<AuthResult>> = flow {
+        emit(Resource.Loading)
+
+        val result = auth.createUserWithEmailAndPassword(email.toString(), password.toString()).await()
+
+        Timber.tag(TAG).d(result.additionalUserInfo.toString())
+        emit(Resource.Success(result))
+    }.catch {
+        Timber.tag(TAG).e(it)
+        it.printStackTrace()
+        emit(Resource.Failure(it))
+    }
 }

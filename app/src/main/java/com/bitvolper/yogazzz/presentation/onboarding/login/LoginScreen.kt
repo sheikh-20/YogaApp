@@ -50,6 +50,7 @@ import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.domain.usecase.SignInGoogleInteractor
 import com.bitvolper.yogazzz.presentation.accountsetup.AccountSetupActivity
 import com.bitvolper.yogazzz.presentation.home.HomeActivity
+import com.bitvolper.yogazzz.presentation.onboarding.ShowOnboardDialog
 import com.bitvolper.yogazzz.presentation.onboarding.component.LoginComponent
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.utility.Resource
@@ -70,7 +71,8 @@ fun LoginScreen(modifier: Modifier = Modifier,
                 onSignUpClick: () -> Unit = { },
                 onGoogleSignInClick: (Activity?, Intent?) -> Unit = { _, _ ->},
                 onSocialSignIn: SharedFlow<Resource<AuthResult>>? = null,
-                snackbarHostState: SnackbarHostState = SnackbarHostState()
+                snackbarHostState: SnackbarHostState = SnackbarHostState(),
+                showDialog: (ShowOnboardDialog) -> Unit = {  _ -> }
 ) {
 
 
@@ -96,9 +98,11 @@ fun LoginScreen(modifier: Modifier = Modifier,
         onSocialSignIn?.collectLatest {
             when(it) {
                 is Resource.Loading -> {
+                    showDialog(ShowOnboardDialog.Login)
                     isLoading = true
                 }
                 is Resource.Failure -> {
+                    showDialog(ShowOnboardDialog.Default)
                     isLoading = false
                     if (it.throwable is FirebaseAuthInvalidUserException) {
                         snackbarHostState.showSnackbar(message = "Email does not exists, Try signup!")
@@ -108,6 +112,7 @@ fun LoginScreen(modifier: Modifier = Modifier,
                     }
                 }
                 is Resource.Success -> {
+                    showDialog(ShowOnboardDialog.Default)
                     isLoading = false
                     Timber.tag("Login").d("Google Success")
 
