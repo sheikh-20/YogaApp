@@ -17,4 +17,8 @@
     <string name="are_you_sure_you_want_to_log_out">Are you sure you want to logout?</string>
     <string name="cancel">Cancel</string>
     <string name="yes_logout">Yes, Logout</string>
+    <string name="email">Email</string>
+    <string name="enter_email_address">Enter Email Address</string>
+    <string name="password">password</string>
+    <string name="enter_password">Enter password</string>
 </resources>

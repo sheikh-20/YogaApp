@@ -3,6 +3,7 @@ package com.bitvolper.yogazzz.presentation.onboarding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -12,7 +13,11 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -20,11 +25,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.bitvolper.yogazzz.presentation.dialog.LoginDialog
+import com.bitvolper.yogazzz.presentation.dialog.SignupDialog
 import com.bitvolper.yogazzz.presentation.onboarding.login.LoginScreen
 import com.bitvolper.yogazzz.presentation.onboarding.login.LoginWithPasswordScreen
 import com.bitvolper.yogazzz.presentation.onboarding.signup.SignupWithPasswordScreen
 import com.bitvolper.yogazzz.presentation.viewmodel.OnboardingViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OnboardingApp(modifier: Modifier = Modifier,
                   navController: NavHostController = rememberNavController(),
@@ -32,6 +40,25 @@ fun OnboardingApp(modifier: Modifier = Modifier,
 
     val snackbarHostState = remember { SnackbarHostState() }
     val onSocialSignIn = onboardingViewModel.socialSignIn
+
+    val loginUIState by onboardingViewModel.loginUIState.collectAsState()
+    val signupUIState by onboardingViewModel.signupUIState.collectAsState()
+
+    var showOnboardDialog by remember { mutableStateOf(ShowOnboardDialog.Default) }
+
+    when (showOnboardDialog) {
+        ShowOnboardDialog.Default -> {  }
+        ShowOnboardDialog.Login -> {
+            AlertDialog(onDismissRequest = { /*TODO*/ }) {
+                LoginDialog()
+            }
+        }
+        ShowOnboardDialog.Signup -> {
+            AlertDialog(onDismissRequest = { /*TODO*/ }) {
+                SignupDialog()
+            }
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -57,7 +84,8 @@ fun OnboardingApp(modifier: Modifier = Modifier,
                     },
                     onGoogleSignInClick = { activity, intent ->  onboardingViewModel.signInGoogle(activity, intent) },
                     onSocialSignIn = onSocialSignIn,
-                    snackbarHostState = snackbarHostState
+                    snackbarHostState = snackbarHostState,
+                    showDialog = { showOnboardDialog = it }
                 )
             }
 
@@ -66,22 +94,25 @@ fun OnboardingApp(modifier: Modifier = Modifier,
                     onResetPasswordClick = {
 //                        navController.navigate(OnboardingScreen.ResetPassword.name)
                     },
-                    onLoginClick = { email, password ->
-//                        onboardingViewModel.login(email, password)
-                    },
-//                    loginUIState = onboardingViewModel.loginUIState,
-                    snackbarHostState = snackbarHostState
+                    onSignInClick = { email: String?, password: String? -> onboardingViewModel.signInEmail(email, password) },
+                    onGoogleSignInClick = { activity, intent ->  onboardingViewModel.signInGoogle(activity, intent) },
+                    onSocialSignIn = onSocialSignIn,
+                    email = onboardingViewModel.email,
+                    onEmailChange = onboardingViewModel::onEmailChange,
+                    snackbarHostState = snackbarHostState,
+                    loginUIState = loginUIState,
+                    showDialog = { showOnboardDialog = it }
                 )
             }
 
             composable(route = OnboardingScreen.SignupWithPassword.name) {
                 SignupWithPasswordScreen(
-                    onSignupClick = { email, password ->
-//                        onboardingViewModel.register(email, password)
-                    },
+                    onSignupClick = { email: String?, password: String? -> onboardingViewModel.signUpEmail(email, password) },
                     snackbarHostState = snackbarHostState,
                     onGoogleSignInClick = { activity, intent ->  onboardingViewModel.signInGoogle(activity, intent) },
                     onSocialSignIn = onSocialSignIn,
+                    signupUIState = signupUIState,
+                    showDialog = { showOnboardDialog = it }
                 )
             }
         }
@@ -98,6 +129,10 @@ private fun OnboardingTopAppbar(modifier: Modifier = Modifier) {
         } },
         colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
     )
+}
+
+enum class ShowOnboardDialog {
+    Default, Login, Signup
 }
 
 enum class OnboardingScreen {

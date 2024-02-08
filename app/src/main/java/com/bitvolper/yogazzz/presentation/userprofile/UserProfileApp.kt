@@ -33,7 +33,7 @@ private fun UserProfileTopAppBar() {
     CenterAlignedTopAppBar(
         title = {
             Text(
-                text = "User Profile",
+                text = "My Profile",
                 fontWeight = FontWeight.SemiBold)
         },
         navigationIcon = {
