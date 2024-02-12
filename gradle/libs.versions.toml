@@ -7,21 +7,22 @@ espresso-core = "3.5.1"
 junit = "4.13.2"
 lifecycle-runtime-ktx = "2.7.0"
 lifecycle-viewmodel-ktx = "2.7.0"
-bom = "2023.08.00"
-android-gradle = "8.2.1"
-koltin = "1.9.0"
-material-icon = "1.6.0-alpha02"
+bom = "2024.01.00"
+android-gradle = "8.2.2"
+koltin = "1.9.10"
+material-icon = "1.6.1"
 hilt-version = "2.48"
-kotlin-serialize = "1.8.10"
-nav_compose_version = "1.0.0"
-pager_version = "0.23.1"
+kotlin-serialize = "1.9.21"
+nav_compose_version = "1.1.0"
+pager_version = "0.28.0"
 timber_version = "5.0.1"
 firebase-auth = "22.3.1"
 firebase-database = "20.3.0"
 firebase-storage = "20.3.0"
-play-service-version = "20.6.0"
+play-service-version = "20.7.0"
 google-service-version = "4.4.0"
 number-picker-version = "1.0.3"
+vico-chart-version = "1.13.1"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose" }
@@ -38,6 +39,9 @@ pager_indicator = { module = "com.google.accompanist:accompanist-pager-indicator
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber_version" }
 number-picker = { module = "com.chargemap.compose:numberpicker", version.ref = "number-picker-version" }
 
+vico-compose = { module = "com.patrykandpatrick.vico:compose", version.ref = "vico-chart-version" }
+vico-compose-m3 = { module = "com.patrykandpatrick.vico:compose-m3", version.ref = "vico-chart-version" }
+vico-core = { module = "com.patrykandpatrick.vico:core", version.ref = "vico-chart-version" }
 
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "bom" }
 compose-ui = { module = "androidx.compose.ui:ui" }

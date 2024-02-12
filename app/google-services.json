@@ -15,10 +15,63 @@
       },
       "oauth_client": [
         {
+          "client_id": "896959303661-e2lvsailgbkf1e43vg193kqcq2vqbp3c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bitvolper.yogazzz",
+            "certificate_hash": "635601acc861a61e6c932da76ca0b73d8b25b81c"
+          }
+        },
+        {
+          "client_id": "896959303661-nvk225jlj0ab3qh3rfjl9sjoq5p8d5oh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bitvolper.yogazzz",
+            "certificate_hash": "e5f5fc4c669c2e9704e793f7b4e80e91a84c3f1c"
+          }
+        },
+        {
           "client_id": "896959303661-t03pgq9j4f45m837ml88hd8vn0f1vtrg.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.bitvolper.yogazzz",
+            "certificate_hash": "9c283c656aa794186bc83107bc3f8542acd62df7"
+          }
+        },
+        {
+          "client_id": "896959303661-uvc7o7vj37os5st5kvaiptf38mj9ve74.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtC6ouzAvP0PdGo3mvRXIMX0ZkzaNVNC8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "896959303661-uvc7o7vj37os5st5kvaiptf38mj9ve74.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:896959303661:android:428d0b82007baf1a58e1e4",
+        "android_client_info": {
+          "package_name": "com.bitvolper.yogazzz.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "896959303661-elmr8u51akukfm8efbog2im1gbf58pbl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bitvolper.yogazzz.debug",
             "certificate_hash": "9c283c656aa794186bc83107bc3f8542acd62df7"
           }
         },
