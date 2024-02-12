@@ -11,12 +11,22 @@ android {
     namespace = "com.bitvolper.yogazzz"
     compileSdk = 34
 
+    signingConfigs {
+        create("config") {
+            keyAlias = "yoga"
+            keyPassword = "Sheikh"
+            storeFile = file("/home/sheikh/Desktop/AndroidStudioProjects/YogaApp/app/keystore.jks")
+            storePassword = "Sheikh"
+            enableV4Signing = true
+        }
+    }
+
     defaultConfig {
         applicationId = "com.bitvolper.yogazzz"
         minSdk = 21
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -25,12 +35,24 @@ android {
     }
 
     buildTypes {
-        release {
+        getByName("debug") {
+            applicationIdSuffix = ".debug"
+            resValue(type = "string",name = "app_name", value = "YogazzZ_Debug")
+            isDebuggable = true
             isMinifyEnabled = false
+        }
+        getByName("release") {
+            resValue(type = "string",name = "app_name", value = "YogazzZ")
+            isDebuggable = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
+            signingConfig = signingConfigs.getByName("config")
         }
     }
     compileOptions {
@@ -44,12 +66,15 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.3"
     }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+    }
+    kapt {
+        correctErrorTypes = true
     }
 }
 
@@ -101,4 +126,10 @@ dependencies {
 
     // Number picker
     implementation(libs.number.picker)
+
+    // Compose Chart
+    implementation(libs.vico.compose)
+    implementation(libs.vico.compose.m3)
+    implementation(libs.vico.core)
+
 }
