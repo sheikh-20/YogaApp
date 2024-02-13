@@ -131,3 +131,11 @@ fun Modifier.fadingEdge(brush: Brush) = this
 
 
 const val ACCOUNT_SETUP_MAX_SCREEN: Int = 14
+
+data class HorizontalPagerContent(
+    val duration: String, 
+    val title: String,
+    val price: String,
+    val description: List<String>,
+    val validity: String
+)

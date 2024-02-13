@@ -1,4 +1,4 @@
-package com.bitvolper.yogazzz.presentation.support
+package com.bitvolper.yogazzz.presentation.categorydetail
 
 import android.app.Activity
 import android.content.Intent
@@ -9,13 +9,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.bitvolper.yogazzz.base.BaseActivity
+import com.bitvolper.yogazzz.presentation.home.notification.NotificationSettingsApp
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 
-class SupportActivity: BaseActivity() {
+class CategoryDetailActivity: BaseActivity() {
 
     companion object {
         fun startActivity(activity: Activity?) {
-            val intent = Intent(activity, SupportActivity::class.java)
+            val intent = Intent(activity, CategoryDetailActivity::class.java)
             activity?.startActivity(intent)
         }
     }
@@ -23,14 +24,13 @@ class SupportActivity: BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTransparentStatusBar()
-
         setContent {
             YogaAppTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    SupportApp()
+                    CategoryDetailApp()
                 }
             }
         }

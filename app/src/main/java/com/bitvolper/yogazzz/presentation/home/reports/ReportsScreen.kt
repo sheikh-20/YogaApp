@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccessTime
 import androidx.compose.material.icons.rounded.Edit
@@ -50,7 +52,8 @@ fun ReportsScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = 
         .padding(
             top = paddingValues.calculateTopPadding(),
             bottom = paddingValues.calculateBottomPadding(), start = 16.dp, end = 16.dp
-        ),
+        )
+        .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(16.dp)) {
 
         TitleCardCompose()
