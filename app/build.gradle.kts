@@ -15,7 +15,7 @@ android {
         create("config") {
             keyAlias = "yoga"
             keyPassword = "Sheikh"
-            storeFile = file("/home/sheikh/Desktop/AndroidStudioProjects/YogaApp/app/keystore.jks")
+            storeFile = file("/media/sheikh/hdd/AndroidStudioProjects/AndroidStudioProjects/YogaApp/app/keystore.jks")
             storePassword = "Sheikh"
             enableV4Signing = true
         }
@@ -25,8 +25,8 @@ android {
         applicationId = "com.bitvolper.yogazzz"
         minSdk = 21
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 4
+        versionName = "1.0.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

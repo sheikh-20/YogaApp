@@ -56,6 +56,7 @@ import com.bitvolper.yogazzz.presentation.accountsecurity.AccountSecurityActivit
 import com.bitvolper.yogazzz.presentation.analytics.AnalyticsActivity
 import com.bitvolper.yogazzz.presentation.appearance.AppearanceActivity
 import com.bitvolper.yogazzz.presentation.billing.BillingSubscriptionActivity
+import com.bitvolper.yogazzz.presentation.home.notification.NotificationSettingsActivity
 import com.bitvolper.yogazzz.presentation.mybody.MyBodyActivity
 import com.bitvolper.yogazzz.presentation.notifications.NotificationsActivity
 import com.bitvolper.yogazzz.presentation.subscription.SubscriptionActivity
@@ -102,7 +103,7 @@ fun AccountScreen(modifier: Modifier = Modifier,
             }
 
             AccountContentCompose(title = "Notifications", icon = Icons.Rounded.Notifications) {
-                NotificationsActivity.startActivity(context as Activity)
+                NotificationSettingsActivity.startActivity(context as Activity)
             }
 
             AccountContentCompose(title = "Account & Security", icon = Icons.Rounded.Security) {

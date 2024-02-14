@@ -68,6 +68,7 @@ import com.bitvolper.yogazzz.presentation.home.discover.DiscoverScreen
 import com.bitvolper.yogazzz.presentation.home.history.HistoryScreen
 import com.bitvolper.yogazzz.presentation.home.notification.NotificationSettingsActivity
 import com.bitvolper.yogazzz.presentation.home.reports.ReportsScreen
+import com.bitvolper.yogazzz.presentation.notifications.NotificationsActivity
 import com.bitvolper.yogazzz.presentation.viewmodel.HomeViewModel
 import com.bitvolper.yogazzz.presentation.viewmodel.OnboardingViewModel
 import kotlinx.coroutines.launch
@@ -236,7 +237,7 @@ private fun HomeTopAppBar(navController: NavHostController,) {
                     }
                 },
                 actions = {
-                    IconButton(onClick = { NotificationSettingsActivity.startActivity(context as Activity) },
+                    IconButton(onClick = { NotificationsActivity.startActivity(context as Activity) },
                         modifier = Modifier
                             .padding(horizontal = 4.dp)
                             .shadow(
