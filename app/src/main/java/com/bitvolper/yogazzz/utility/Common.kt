@@ -85,6 +85,20 @@ object Body {
         BodyPart(part = "Stomach"),
         BodyPart(part = "Legs")
     )
+
+    data class BodyPartImage(
+        val part: String,
+        val image: Int,
+    )
+    
+    val bodyPartsImage = listOf<BodyPartImage>(
+        BodyPartImage(part = "Shoulders", image = R.drawable.ic_shoulders),
+        BodyPartImage(part = "Chest", image = R.drawable.ic_chest),
+        BodyPartImage(part = "Arms", image = R.drawable.ic_arms),
+        BodyPartImage(part = "Back", image = R.drawable.ic_back),
+        BodyPartImage(part = "Stomach", image = R.drawable.ic_stomach),
+        BodyPartImage(part = "Legs", image = R.drawable.ic_legs),
+    )
 }
 
 object Goal {
