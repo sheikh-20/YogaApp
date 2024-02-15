@@ -1,10 +1,14 @@
 package com.bitvolper.yogazzz.presentation.onboarding
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -19,12 +23,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.Fill
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -116,7 +132,7 @@ private fun OnboardingContent(modifier: Modifier = Modifier, state: PagerState =
         ),
     )
 
-    HorizontalPager(modifier = modifier.padding(horizontal = 8.dp), count = datasource.size, state = state) { currentPage ->
+    HorizontalPager(modifier = modifier, count = datasource.size, state = state) { currentPage ->
         when (currentPage) {
             0 -> HorizontalContent(modifier = modifier, horizontalData = datasource[currentPage])
             1 -> HorizontalContent(modifier = modifier, horizontalData = datasource[currentPage])
@@ -129,37 +145,71 @@ data class HorizontalData(val title: String, val description: String)
 
 @Composable
 private fun HorizontalContent(modifier: Modifier = Modifier, horizontalData: HorizontalData) {
-    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(16.dp)) {
 
-//        Image(painter = painterResource(id = R.drawable.doctor_strange), contentDescription = null,
-//            modifier = modifier
-//                .fillMaxHeight()
-//                .drawWithCache {
-//                    val gradient = Brush.verticalGradient(
-//                        colors = listOf(Color.Transparent, Color.Black),
-//                        startY = size.height / 3,
-//                        endY = size.height
-//                    )
-//                    onDrawWithContent {
-//                        drawContent()
-//                        drawRect(gradient, blendMode = BlendMode.Multiply)
-//                    }
-//                },
-//            contentScale = ContentScale.FillBounds)
+    val color = MaterialTheme.colorScheme.background
 
-        Spacer(modifier = modifier.weight(1f))
+    Box(modifier = modifier.background(color = MaterialTheme.colorScheme.primary)) {
 
-        Text(text = horizontalData.title,
-            style = MaterialTheme.typography.headlineLarge,
-            fontWeight = FontWeight.SemiBold,
-            textAlign = TextAlign.Center)
+        Image(painter = painterResource(id = R.drawable.ic_home_screen), contentDescription = null,
+            modifier = modifier
+                .fillMaxSize()
+                .drawWithCache {
+                    val gradient = Brush.verticalGradient(
+                        colors = listOf(Color.Transparent, Color.Black),
+                        startY = size.height / 2f,
+                        endY = size.height
+                    )
+                    onDrawWithContent {
+                        drawContent()
+                        drawRect(gradient, blendMode = BlendMode.Multiply)
+                    }
+                }
+                .padding(horizontal = 16.dp),
+            contentScale = ContentScale.Crop)
 
-        Text(
-            text = horizontalData.description,
-            style = MaterialTheme.typography.bodyLarge,
-            overflow = TextOverflow.Ellipsis,
-            textAlign = TextAlign.Center
-        )
+
+        Column(
+            modifier = modifier.fillMaxWidth()) {
+
+            Spacer(modifier = modifier.weight(1f))
+
+            Column(modifier = Modifier.drawBehind {
+                val canvasWidth = size.width
+                val canvasHeight = size.height
+
+                val filledPath = Path()
+                filledPath.lineTo(x = 0f, y = 0f)
+                filledPath.lineTo(x = 0f, y = size.height)
+                filledPath.lineTo(x = size.width, y = size.height)
+                filledPath.lineTo(x = size.width, y = 0f)
+                filledPath.cubicTo(
+                    x1 = size.width / 1.5f, y1 = size.height / 4f,
+                    x2 = size.width / 2.5f, y2 = size.height / 4f,
+                    x3 = 0f, y3 = 0f)
+                filledPath.close()
+
+                drawPath(
+                    path = filledPath,
+                    color = color,
+                    style = Fill
+                )
+            }, verticalArrangement = Arrangement.spacedBy(16.dp)) {
+
+                Spacer(modifier = Modifier.requiredHeight(50.dp))
+
+                Text(text = horizontalData.title,
+                    style = MaterialTheme.typography.headlineLarge,
+                    fontWeight = FontWeight.SemiBold,
+                    textAlign = TextAlign.Center)
+
+                Text(
+                    text = horizontalData.description,
+                    style = MaterialTheme.typography.bodyLarge,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
     }
 }
 

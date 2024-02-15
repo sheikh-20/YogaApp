@@ -228,7 +228,7 @@ private fun HomeTopAppBar(navController: NavHostController,) {
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = stringResource(id = R.string.app_name),
+                        text = "YogazzZ",
                         fontWeight = FontWeight.SemiBold)
                 },
                 navigationIcon = {
