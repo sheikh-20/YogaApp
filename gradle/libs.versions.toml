@@ -4,6 +4,7 @@ androidx-junit = "1.1.5"
 core-ktx = "1.12.0"
 core-splashscreen = "1.1.0-alpha02"
 espresso-core = "3.5.1"
+google-services = "4.4.1"
 junit = "4.13.2"
 lifecycle-runtime-ktx = "2.7.0"
 lifecycle-viewmodel-ktx = "2.7.0"
@@ -23,6 +24,8 @@ play-service-version = "20.7.0"
 google-service-version = "4.4.0"
 number-picker-version = "1.0.3"
 vico-chart-version = "1.13.1"
+play-app-update-version = "2.1.0"
+firebase-analytics = "21.5.1"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose" }
@@ -30,6 +33,7 @@ androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "core-splashscreen" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle-viewmodel-ktx" }
+google-services = { module = "com.google.gms:google-services", version.ref = "google-services" }
 material-icon-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "material-icon" }
 dagger-hilt = { module = "com.google.dagger:hilt-android", version.ref = "hilt-version" }
 dagger-hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt-version" }
@@ -62,7 +66,9 @@ firebase-auth = { group = "com.google.firebase", name = "firebase-auth-ktx", ver
 firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebase-database" }
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebase-storage" }
 play-service = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "play-service-version" }
-
+play-app-update = { module = "com.google.android.play:app-update", version.ref = "play-app-update-version" }
+play-app-update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "play-app-update-version" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebase-analytics" }
 
 [bundles]
 compose = [ "compose-ui", "compose-ui-graphics", "compose-ui-preview", "compose-material3" ]
