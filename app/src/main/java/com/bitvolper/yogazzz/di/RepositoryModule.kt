@@ -2,6 +2,8 @@ package com.bitvolper.yogazzz.di
 
 import com.bitvolper.yogazzz.data.repository.AuthRepository
 import com.bitvolper.yogazzz.data.repository.GoogleRepositoryImpl
+import com.bitvolper.yogazzz.data.repository.HomeRepository
+import com.bitvolper.yogazzz.data.repository.HomeRepositoryImpl
 import com.bitvolper.yogazzz.data.repository.SignInEmailRepositoryImpl
 import com.bitvolper.yogazzz.data.repository.SignUpEmailRepositoryImpl
 import dagger.Binds
@@ -29,4 +31,6 @@ abstract class RepositoryModule {
     @Named("SignUpEmailRepo")
     abstract fun providesSignUpEmailRepoImpl(signUpEmailRepoImpl: SignUpEmailRepositoryImpl): AuthRepository
 
+    @Binds
+    abstract fun providesHomeRepoImpl(homeRepositoryImpl: HomeRepositoryImpl): HomeRepository
 }
