@@ -13,17 +13,32 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.bitvolper.yogazzz.domain.model.NotificationPreference
+import com.bitvolper.yogazzz.presentation.viewmodel.AccountViewModel
 
 @Composable
-fun NotificationSettingsApp(modifier: Modifier = Modifier) {
+fun NotificationSettingsApp(modifier: Modifier = Modifier, accountViewModel: AccountViewModel = hiltViewModel()) {
+
+    val dailyReminderUIState: NotificationPreference by accountViewModel.isDailyReminderEnabled.collectAsState(initial = NotificationPreference(true))
+    val feedbackAppUpdatesUIState: NotificationPreference by accountViewModel.isFeedbackAppUpdatesEnabled.collectAsState(initial = NotificationPreference(true))
+
     Scaffold(
         topBar = { NotificationSettingsTopAppBar() }
     ) { paddingValues ->
-        NotificationSettingsScreen(paddingValues = paddingValues)
+        NotificationSettingsScreen(
+            paddingValues = paddingValues,
+            readDailyReminder = dailyReminderUIState,
+            readFeedbackAppUpdates = feedbackAppUpdatesUIState,
+            onSaveDailyReminderPreference = accountViewModel::saveDailyReminderPreference,
+            onSaveFeedbackAppUpdatePreference = accountViewModel::saveFeedbackAppUpdatePreference
+            )
     }
 }
 

@@ -25,8 +25,8 @@ android {
         applicationId = "com.bitvolper.yogazzz"
         minSdk = 21
         targetSdk = 34
-        versionCode = 5
-        versionName = "1.0.4"
+        versionCode = 6
+        versionName = "1.0.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -93,6 +93,7 @@ dependencies {
     implementation(libs.firebase.storage)
     implementation(libs.play.service)
     implementation(libs.firebase.analytics)
+    implementation(libs.firebase.message)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -142,4 +143,10 @@ dependencies {
 
     // Coil
     implementation(libs.coil)
+
+    // Preferences datastore
+    implementation(libs.pref.datastore)
+
+    // Accompanist permission
+    implementation(libs.accompanist.permission)
 }

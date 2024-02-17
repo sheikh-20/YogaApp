@@ -1,6 +1,8 @@
 package com.bitvolper.yogazzz.presentation.home
 
+import android.Manifest
 import android.app.Activity
+import android.os.Build
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
@@ -33,6 +35,8 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.surfaceColorAtElevation
@@ -72,8 +76,11 @@ import com.bitvolper.yogazzz.presentation.home.reports.ReportsScreen
 import com.bitvolper.yogazzz.presentation.notifications.NotificationsActivity
 import com.bitvolper.yogazzz.presentation.viewmodel.HomeViewModel
 import com.bitvolper.yogazzz.presentation.viewmodel.OnboardingViewModel
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun HomeApp(modifier: Modifier = Modifier,
             navController: NavHostController = rememberNavController(),
@@ -82,11 +89,17 @@ fun HomeApp(modifier: Modifier = Modifier,
 
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+
     var showBottomSheet by remember { mutableStateOf(BottomSheet.Default) }
+
 
     val profileUiState by homeViewModel.profileInfoUiState.collectAsState()
 
     val homeUIState by homeViewModel.homeUIState.collectAsState()
+
+    var notificationPermissionState = rememberMultiplePermissionsState(permissions = listOf())
+
 
     when (showBottomSheet) {
         BottomSheet.Default -> {}
@@ -110,6 +123,40 @@ fun HomeApp(modifier: Modifier = Modifier,
         }
     }
 
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+
+        notificationPermissionState = rememberMultiplePermissionsState(permissions = listOf(Manifest.permission.POST_NOTIFICATIONS))
+
+        notificationPermissionState.permissions.forEach {
+            when (it.permission) {
+                Manifest.permission.POST_NOTIFICATIONS -> {
+                    when {
+                        it.hasPermission -> {
+//                                        coroutineScope.launch {
+//                                            snackbarHostState.showSnackbar(message = "Notification permission granted!", duration = SnackbarDuration.Short)
+//                                        }
+                        }
+                        it.shouldShowRationale -> {
+                            coroutineScope.launch {
+                                snackbarHostState.showSnackbar(message = "Notification permission is needed", duration = SnackbarDuration.Long)
+                            }
+                        }
+                        it.hasPermission.not() && it.shouldShowRationale.not() -> {
+                            coroutineScope.launch {
+                                snackbarHostState.showSnackbar(message = "Notification permission was permanently denied, You can enable it on app settings!", duration = SnackbarDuration.Long)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            notificationPermissionState.launchMultiplePermissionRequest()
+        }
+    }
 
     Scaffold(
         topBar = {
