@@ -20,10 +20,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bitvolper.yogazzz.domain.model.NotificationPreference
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 
 @Composable
-fun NotificationSettingsScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = PaddingValues()) {
+fun NotificationSettingsScreen(modifier: Modifier = Modifier,
+                               paddingValues: PaddingValues = PaddingValues(),
+                               readDailyReminder: NotificationPreference = NotificationPreference(true),
+                               readFeedbackAppUpdates: NotificationPreference = NotificationPreference(true),
+                               onSaveDailyReminderPreference: (Boolean) -> Unit = { _ -> },
+                               onSaveFeedbackAppUpdatePreference: (Boolean) -> Unit = { _ -> }) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -38,7 +44,7 @@ fun NotificationSettingsScreen(modifier: Modifier = Modifier, paddingValues: Pad
                 fontWeight = FontWeight.SemiBold,
                 modifier = modifier.weight(1f)
             )
-            Switch(checked = false, onCheckedChange = {  })
+            Switch(checked = readDailyReminder.isEnabled, onCheckedChange = onSaveDailyReminderPreference)
         }
 
         Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
@@ -73,46 +79,6 @@ fun NotificationSettingsScreen(modifier: Modifier = Modifier, paddingValues: Pad
 
         Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             androidx.compose.material3.Text(
-                text = "Account Updates",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
-                modifier = modifier.weight(1f)
-            )
-            Switch(checked = false, onCheckedChange = {  })
-        }
-
-        Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            androidx.compose.material3.Text(
-                text = "Security Alerts",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
-                modifier = modifier.weight(1f)
-            )
-            Switch(checked = false, onCheckedChange = {  })
-        }
-
-        Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            androidx.compose.material3.Text(
-                text = "Challenge Invitations",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
-                modifier = modifier.weight(1f)
-            )
-            Switch(checked = false, onCheckedChange = {  })
-        }
-
-        Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            androidx.compose.material3.Text(
-                text = "Community Updates",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
-                modifier = modifier.weight(1f)
-            )
-            Switch(checked = false, onCheckedChange = {  })
-        }
-
-        Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            androidx.compose.material3.Text(
                 text = "Achievement Unlocks",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
@@ -138,7 +104,7 @@ fun NotificationSettingsScreen(modifier: Modifier = Modifier, paddingValues: Pad
                 fontWeight = FontWeight.SemiBold,
                 modifier = modifier.weight(1f)
             )
-            Switch(checked = false, onCheckedChange = {  })
+            Switch(checked = readFeedbackAppUpdates.isEnabled, onCheckedChange = onSaveFeedbackAppUpdatePreference)
         }
     }
 }

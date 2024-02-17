@@ -1,9 +1,11 @@
 package com.bitvolper.yogazzz.di
 
 import com.bitvolper.yogazzz.data.repository.AuthRepository
+import com.bitvolper.yogazzz.data.repository.GetNotificationPreferenceImpl
 import com.bitvolper.yogazzz.data.repository.GoogleRepositoryImpl
 import com.bitvolper.yogazzz.data.repository.HomeRepository
 import com.bitvolper.yogazzz.data.repository.HomeRepositoryImpl
+import com.bitvolper.yogazzz.data.repository.NotificationPreferenceRepository
 import com.bitvolper.yogazzz.data.repository.SignInEmailRepositoryImpl
 import com.bitvolper.yogazzz.data.repository.SignUpEmailRepositoryImpl
 import dagger.Binds
@@ -33,4 +35,8 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun providesHomeRepoImpl(homeRepositoryImpl: HomeRepositoryImpl): HomeRepository
+
+    @Binds
+    abstract fun providesNotificationPreferenceImpl(notificationPreferenceImpl: GetNotificationPreferenceImpl): NotificationPreferenceRepository
+
 }
