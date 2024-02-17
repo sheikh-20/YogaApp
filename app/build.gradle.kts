@@ -92,6 +92,7 @@ dependencies {
     implementation(libs.firebase.database)
     implementation(libs.firebase.storage)
     implementation(libs.play.service)
+    implementation(libs.firebase.analytics)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -131,6 +132,10 @@ dependencies {
     implementation(libs.vico.compose)
     implementation(libs.vico.compose.m3)
     implementation(libs.vico.core)
+
+    // Play App Update
+    implementation(libs.play.app.update)
+    implementation(libs.play.app.update.ktx)
 
     // Gson
     implementation(libs.gson)

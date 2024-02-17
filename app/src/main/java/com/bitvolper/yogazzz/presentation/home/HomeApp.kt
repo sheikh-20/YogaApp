@@ -120,7 +120,7 @@ fun HomeApp(modifier: Modifier = Modifier,
             navController = navController, startDestination = BottomNavigationScreens.Home.route) {
 
             composable(route = BottomNavigationScreens.Home.route) {
-                HomeScreen(paddingValues = paddingValues)
+                HomeScreen(paddingValues = paddingValues, onClick = homeViewModel::getYogaCategory)
             }
 
             composable(route = BottomNavigationScreens.Discover.route) {

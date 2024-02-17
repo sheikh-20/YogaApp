@@ -51,7 +51,7 @@ import com.bitvolper.yogazzz.presentation.serenitydetail.SerenityDetailActivity
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = PaddingValues()) {
+fun HomeScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = PaddingValues(), onClick: () -> Unit = { }) {
 
     val context = LocalContext.current
 
@@ -89,7 +89,10 @@ fun HomeScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = Pad
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.SemiBold)
 
-                    Button(onClick = { SerenityDetailActivity.startActivity(context as Activity) }) {
+                    Button(onClick = {
+//                        SerenityDetailActivity.startActivity(context as Activity)
+                        onClick()
+                    }) {
                         Text(text = "Get Started")
                     }
 

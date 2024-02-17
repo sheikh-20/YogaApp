@@ -36,7 +36,7 @@ class HomeViewModel @Inject constructor(val homeUseCase: HomeUseCase): ViewModel
         }
     }
 
-    private fun getYogaCategory() {
+    fun getYogaCategory() {
         try {
             homeUseCase.getYogaCategory()
         } catch (exception: IOException) {
@@ -46,6 +46,6 @@ class HomeViewModel @Inject constructor(val homeUseCase: HomeUseCase): ViewModel
 
     init {
         getSignedInUser()
-        getYogaCategory()
+//        getYogaCategory()/**/
     }
 }
