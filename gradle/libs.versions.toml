@@ -27,6 +27,7 @@ vico-chart-version = "1.13.1"
 play-app-update-version = "2.1.0"
 firebase-analytics = "21.5.1"
 gson-version = "2.10.1"
+coil-version = "2.4.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose" }
@@ -49,6 +50,7 @@ vico-compose-m3 = { module = "com.patrykandpatrick.vico:compose-m3", version.ref
 vico-core = { module = "com.patrykandpatrick.vico:core", version.ref = "vico-chart-version" }
 
 gson = { module = "com.google.code.gson:gson", version.ref = "gson-version" }
+coil = { module = "io.coil-kt:coil-compose", version.ref = "coil-version"}
 
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "bom" }
 compose-ui = { module = "androidx.compose.ui:ui" }
