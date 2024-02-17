@@ -10,7 +10,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.bitvolper.yogazzz.base.BaseActivity
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RecommendationActivity: BaseActivity() {
 
     companion object {

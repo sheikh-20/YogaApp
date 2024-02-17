@@ -37,6 +37,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -85,6 +86,8 @@ fun HomeApp(modifier: Modifier = Modifier,
 
     val profileUiState by homeViewModel.profileInfoUiState.collectAsState()
 
+    val homeUIState by homeViewModel.homeUIState.collectAsState()
+
     when (showBottomSheet) {
         BottomSheet.Default -> {}
         BottomSheet.Logout -> {
@@ -107,6 +110,7 @@ fun HomeApp(modifier: Modifier = Modifier,
         }
     }
 
+
     Scaffold(
         topBar = {
             HomeTopAppBar(navController = navController)
@@ -120,7 +124,7 @@ fun HomeApp(modifier: Modifier = Modifier,
             navController = navController, startDestination = BottomNavigationScreens.Home.route) {
 
             composable(route = BottomNavigationScreens.Home.route) {
-                HomeScreen(paddingValues = paddingValues)
+                HomeScreen(paddingValues = paddingValues, homeUIState = homeUIState)
             }
 
             composable(route = BottomNavigationScreens.Discover.route) {
