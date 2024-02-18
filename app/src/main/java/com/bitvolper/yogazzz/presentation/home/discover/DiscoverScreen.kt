@@ -1,12 +1,13 @@
 package com.bitvolper.yogazzz.presentation.home.discover
 
+import android.app.Activity
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,7 +16,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
-import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
@@ -32,14 +32,15 @@ import androidx.compose.material.icons.rounded.ArrowForwardIos
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -51,47 +52,82 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.bitvolper.yogazzz.R
+import com.bitvolper.yogazzz.domain.model.AdjustYogaLevel
+import com.bitvolper.yogazzz.domain.model.FlexibilityStrength
+import com.bitvolper.yogazzz.domain.model.PopularYoga
+import com.bitvolper.yogazzz.domain.model.PopularYogaWithFlexibility
+import com.bitvolper.yogazzz.domain.model.StressRelief
+import com.bitvolper.yogazzz.presentation.home.discover.adjust_yoga.AdjustYogaActivity
+import com.bitvolper.yogazzz.presentation.home.discover.flexiblity_strength.FlexibilityStrengthActivity
+import com.bitvolper.yogazzz.presentation.home.discover.popular_yoga.PopularYogaActivity
+import com.bitvolper.yogazzz.presentation.home.discover.stress_relief.StressReliefActivity
+import com.bitvolper.yogazzz.presentation.home.recommendation.RecommendationActivity
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.utility.Body
+import com.bitvolper.yogazzz.utility.Resource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DiscoverScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = PaddingValues()) {
+fun DiscoverScreen(modifier: Modifier = Modifier,
+                   paddingValues: PaddingValues = PaddingValues(),
+                   discoverUIState: Resource<PopularYogaWithFlexibility> = Resource.Loading) {
+
     Column(modifier = modifier
         .fillMaxSize()
-        .padding(
-            top = paddingValues.calculateTopPadding(),
-            bottom = paddingValues.calculateBottomPadding(), start = 16.dp, end = 16.dp
-        )
-        .verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        .wrapContentSize(align = Alignment.Center)) {
+        when (discoverUIState) {
+            is Resource.Loading -> {
+                CircularProgressIndicator()
+            }
 
-        OutlinedTextField(
-            value = "",
-            onValueChange = { },
-            label = { Text(text = "Search") },
-            shape = RoundedCornerShape(20),
-            modifier = modifier.fillMaxWidth(),
-            leadingIcon = { Icon(imageVector = Icons.Rounded.Search, contentDescription = null) },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                unfocusedBorderColor = Color.Transparent,
-                focusedBorderColor = Color.Transparent,
-                containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                ),
-        )
+            is Resource.Failure -> {
+                Text(text = discoverUIState.throwable.toString())
+            }
 
-        PopularYogaComopose()
-        MeditationCard()
-        AdjustYogaLevelScreen()
-        BodyFocusScreen()
-        FlexibilityStrengthScreen()
-        StressReliefScreen()
+            is Resource.Success -> {
+                Column(modifier = modifier
+                    .fillMaxSize()
+                    .padding(
+                        top = paddingValues.calculateTopPadding(),
+                        bottom = paddingValues.calculateBottomPadding(), start = 16.dp, end = 16.dp
+                    )
+                    .verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+
+                    OutlinedTextField(
+                        value = "",
+                        onValueChange = { },
+                        label = { Text(text = "Search") },
+                        shape = RoundedCornerShape(20),
+                        modifier = modifier.fillMaxWidth(),
+                        leadingIcon = { Icon(imageVector = Icons.Rounded.Search, contentDescription = null) },
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            unfocusedBorderColor = Color.Transparent,
+                            focusedBorderColor = Color.Transparent,
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                        ),
+                    )
+
+                    PopularYogaCompose(popularYoga = discoverUIState.data.popularYoga)
+                    MeditationCard()
+                    AdjustYogaLevelScreen(adjustYogaLevel = discoverUIState.data.adjustYogaLevel)
+                    BodyFocusScreen()
+                    FlexibilityStrengthScreen(flexibilityStrength = discoverUIState.data.flexibilityStrength)
+                    StressReliefScreen(stressRelief = discoverUIState.data.stressRelief)
+                }
+            }
+        }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun PopularYogaComopose(modifier: Modifier = Modifier) {
+private fun PopularYogaCompose(modifier: Modifier = Modifier, popularYoga: PopularYoga = PopularYoga(emptyList())) {
+
+    val context = LocalContext.current
+
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Row(modifier = modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -100,14 +136,78 @@ private fun PopularYogaComopose(modifier: Modifier = Modifier) {
 
             Spacer(modifier = modifier.weight(1f))
 
-            Text(text = "View All", style = MaterialTheme.typography.bodyMedium)
+            Text(
+                text = "View All",
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.clickable(
+                    onClick = { PopularYogaActivity.startActivity(context as Activity) },
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null)
+            )
 
-            Icon(imageVector = Icons.Rounded.ArrowForward, contentDescription = null)
+            Icon(imageVector = Icons.Rounded.ArrowForward, contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.clickable(
+                    onClick = { PopularYogaActivity.startActivity(context as Activity) },
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null)
+            )
         }
 
-        ExerciseCard()
+        popularYoga.data?.forEach {
+            PopularYogaCard(popularYoga = it ?: return)
+        }
+    }
+}
 
-        ExerciseCard()
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true)
+@Composable
+fun PopularYogaCard(modifier: Modifier = Modifier,
+                    popularYoga: PopularYoga.Data = PopularYoga.Data(title = "Yoga Exercise", duration = "10 mins", level = "Beginner")) {
+
+    val context = LocalContext.current
+
+
+    Row(modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+
+        Card(onClick = { }, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.outlineVariant)) {
+
+            AsyncImage(
+                model = ImageRequest.Builder(context = LocalContext.current)
+                    .data(popularYoga.image)
+                    .crossfade(true)
+                    .build(),
+                error = painterResource(id = R.drawable.ic_broken_image),
+                placeholder = painterResource(id = R.drawable.ic_image_placeholder),
+                contentDescription = null,
+                modifier = modifier
+                    .size(height = 100.dp, width = 100.dp)
+                    .clip(RoundedCornerShape(20)))
+        }
+
+        Column(modifier = modifier.weight(1f)) {
+            Text(
+                text = popularYoga.title ?: "",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.SemiBold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+
+            Row {
+                Text(text = popularYoga.duration ?: "", style = MaterialTheme.typography.bodySmall)
+                Text(text = ".", style = MaterialTheme.typography.bodySmall)
+                Text(text = popularYoga.level ?: "", style = MaterialTheme.typography.bodySmall)
+            }
+        }
+
+        Icon(imageVector = Icons.Rounded.ArrowForwardIos, contentDescription = null)
+
     }
 }
 
@@ -140,8 +240,9 @@ private fun MeditationCard(modifier: Modifier = Modifier) {
 @OptIn(ExperimentalMaterialApi::class)
 @Preview(showBackground = true)
 @Composable
-private fun AdjustYogaLevelScreen(modifier: Modifier = Modifier) {
+private fun AdjustYogaLevelScreen(modifier: Modifier = Modifier, adjustYogaLevel: AdjustYogaLevel = AdjustYogaLevel(emptyList())) {
 
+    val context = LocalContext.current
     val level = listOf<String>("All", "Beginner", "Intermediate", "Advanced")
 
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -153,9 +254,24 @@ private fun AdjustYogaLevelScreen(modifier: Modifier = Modifier) {
 
             Spacer(modifier = modifier.weight(1f))
 
-            Text(text = "View All", style = MaterialTheme.typography.bodyMedium)
+            Text(
+                text = "View All",
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.clickable(
+                    onClick = { AdjustYogaActivity.startActivity(context as Activity) },
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null)
+            )
 
-            Icon(imageVector = Icons.Rounded.ArrowForward, contentDescription = null)
+            Icon(imageVector = Icons.Rounded.ArrowForward, contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.clickable(
+                    onClick = { AdjustYogaActivity.startActivity(context as Activity) },
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null)
+            )
         }
 
         LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -166,11 +282,61 @@ private fun AdjustYogaLevelScreen(modifier: Modifier = Modifier) {
             }
         }
 
-        ExerciseCard()
-
-        ExerciseCard()
+        adjustYogaLevel.data?.forEach {
+            AdjustYogaLevelCard(adjustYogaLevel = it ?: return)
+        }
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true)
+@Composable
+fun AdjustYogaLevelCard(modifier: Modifier = Modifier,
+                        adjustYogaLevel: AdjustYogaLevel.Data = AdjustYogaLevel.Data(title = "Yoga Exercise", duration = "10 mins", level = "Beginner")) {
+
+    val context = LocalContext.current
+
+
+    Row(modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+
+        Card(onClick = { }, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.outlineVariant)) {
+
+            AsyncImage(
+                model = ImageRequest.Builder(context = LocalContext.current)
+                    .data(adjustYogaLevel.image)
+                    .crossfade(true)
+                    .build(),
+                error = painterResource(id = R.drawable.ic_broken_image),
+                placeholder = painterResource(id = R.drawable.ic_image_placeholder),
+                contentDescription = null,
+                modifier = modifier
+                    .size(height = 100.dp, width = 100.dp)
+                    .clip(RoundedCornerShape(20)))
+        }
+
+        Column(modifier = modifier.weight(1f)) {
+            Text(
+                text = adjustYogaLevel.title ?: "",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.SemiBold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+
+            Row {
+                Text(text = adjustYogaLevel.duration ?: "", style = MaterialTheme.typography.bodySmall)
+                Text(text = ".", style = MaterialTheme.typography.bodySmall)
+                Text(text = adjustYogaLevel.level ?: "", style = MaterialTheme.typography.bodySmall)
+            }
+        }
+
+        Icon(imageVector = Icons.Rounded.ArrowForwardIos, contentDescription = null)
+
+    }
+}
+
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalLayoutApi::class)
 @Preview(showBackground = true)
@@ -204,7 +370,10 @@ private fun BodyFocusScreen(modifier: Modifier = Modifier) {
 @OptIn(ExperimentalMaterialApi::class)
 @Preview(showBackground = true)
 @Composable
-private fun FlexibilityStrengthScreen(modifier: Modifier = Modifier) {
+private fun FlexibilityStrengthScreen(modifier: Modifier = Modifier, flexibilityStrength: FlexibilityStrength = FlexibilityStrength(emptyList())) {
+
+
+    val context = LocalContext.current
 
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Row(modifier = modifier.fillMaxWidth(),
@@ -215,21 +384,87 @@ private fun FlexibilityStrengthScreen(modifier: Modifier = Modifier) {
 
             Spacer(modifier = modifier.weight(1f))
 
-            Text(text = "View All", style = MaterialTheme.typography.bodyMedium)
+            Text(
+                text = "View All",
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.clickable(
+                    onClick = { FlexibilityStrengthActivity.startActivity(context as Activity) },
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null)
+            )
 
-            Icon(imageVector = Icons.Rounded.ArrowForward, contentDescription = null)
+            Icon(imageVector = Icons.Rounded.ArrowForward, contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.clickable(
+                    onClick = { FlexibilityStrengthActivity.startActivity(context as Activity)  },
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null)
+            )
         }
 
-        ExerciseCard()
+        flexibilityStrength.data?.forEach {
+            FlexibilityStrengthCard(flexibilityStrength = it ?: return)
+        }
+    }
+}
 
-        ExerciseCard()
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true)
+@Composable
+fun FlexibilityStrengthCard(modifier: Modifier = Modifier,
+                            flexibilityStrength: FlexibilityStrength.Data = FlexibilityStrength.Data(title = "Yoga Exercise", duration = "10 mins", level = "Beginner")) {
+
+    val context = LocalContext.current
+
+
+    Row(modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+
+        Card(onClick = { }, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.outlineVariant)) {
+
+            AsyncImage(
+                model = ImageRequest.Builder(context = LocalContext.current)
+                    .data(flexibilityStrength.image)
+                    .crossfade(true)
+                    .build(),
+                error = painterResource(id = R.drawable.ic_broken_image),
+                placeholder = painterResource(id = R.drawable.ic_image_placeholder),
+                contentDescription = null,
+                modifier = modifier
+                    .size(height = 100.dp, width = 100.dp)
+                    .clip(RoundedCornerShape(20)))
+        }
+
+        Column(modifier = modifier.weight(1f)) {
+            Text(
+                text = flexibilityStrength.title ?: "",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.SemiBold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+
+            Row {
+                Text(text = flexibilityStrength.duration ?: "", style = MaterialTheme.typography.bodySmall)
+                Text(text = ".", style = MaterialTheme.typography.bodySmall)
+                Text(text = flexibilityStrength.level ?: "", style = MaterialTheme.typography.bodySmall)
+            }
+        }
+
+        Icon(imageVector = Icons.Rounded.ArrowForwardIos, contentDescription = null)
+
     }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Preview(showBackground = true)
 @Composable
-private fun StressReliefScreen(modifier: Modifier = Modifier) {
+private fun StressReliefScreen(modifier: Modifier = Modifier, stressRelief: StressRelief = StressRelief(emptyList())) {
+
+    val context = LocalContext.current
 
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Row(modifier = modifier.fillMaxWidth(),
@@ -240,16 +475,81 @@ private fun StressReliefScreen(modifier: Modifier = Modifier) {
 
             Spacer(modifier = modifier.weight(1f))
 
-            Text(text = "View All", style = MaterialTheme.typography.bodyMedium)
+            Text(
+                text = "View All",
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.clickable(
+                    onClick = { StressReliefActivity.startActivity(context as Activity) },
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null)
+            )
 
-            Icon(imageVector = Icons.Rounded.ArrowForward, contentDescription = null)
+            Icon(imageVector = Icons.Rounded.ArrowForward, contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.clickable(
+                    onClick = { StressReliefActivity.startActivity(context as Activity) },
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null)
+            )
         }
 
-        ExerciseCard()
-
-        ExerciseCard()
+        stressRelief.data?.forEach {
+            StressReliefCard(stressRelief =  it ?: return)
+        }
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true)
+@Composable
+fun StressReliefCard(modifier: Modifier = Modifier,
+                     stressRelief: StressRelief.Data = StressRelief.Data(title = "Yoga Exercise", duration = "10 mins", level = "Beginner")) {
+
+    val context = LocalContext.current
+
+
+    Row(modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+
+        Card(onClick = { }, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.outlineVariant)) {
+
+            AsyncImage(
+                model = ImageRequest.Builder(context = LocalContext.current)
+                    .data(stressRelief.image)
+                    .crossfade(true)
+                    .build(),
+                error = painterResource(id = R.drawable.ic_broken_image),
+                placeholder = painterResource(id = R.drawable.ic_image_placeholder),
+                contentDescription = null,
+                modifier = modifier
+                    .size(height = 100.dp, width = 100.dp)
+                    .clip(RoundedCornerShape(20)))
+        }
+
+        Column(modifier = modifier.weight(1f)) {
+            Text(
+                text = stressRelief.title ?: "",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.SemiBold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+
+            Row {
+                Text(text = stressRelief.duration ?: "", style = MaterialTheme.typography.bodySmall)
+                Text(text = ".", style = MaterialTheme.typography.bodySmall)
+                Text(text = stressRelief.level ?: "", style = MaterialTheme.typography.bodySmall)
+            }
+        }
+
+        Icon(imageVector = Icons.Rounded.ArrowForwardIos, contentDescription = null)
+
+    }
+}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
