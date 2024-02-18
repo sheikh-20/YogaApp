@@ -2,6 +2,8 @@ package com.bitvolper.yogazzz.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bitvolper.yogazzz.domain.model.PopularYoga
+import com.bitvolper.yogazzz.domain.model.PopularYogaWithFlexibility
 import com.bitvolper.yogazzz.domain.model.UserData
 import com.bitvolper.yogazzz.domain.model.YogaCategoryWithRecommendation
 import com.bitvolper.yogazzz.domain.model.YogaRecommendation
@@ -37,6 +39,9 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase): V
     private var _recommendationUIState = MutableStateFlow<Resource<YogaRecommendation>>(Resource.Loading)
     val recommendationUIState: StateFlow<Resource<YogaRecommendation>> get() = _recommendationUIState
 
+    private var _discoverUIState = MutableStateFlow<Resource<PopularYogaWithFlexibility>>(Resource.Loading)
+    val discoverUIState: StateFlow<Resource<PopularYogaWithFlexibility>> get() = _discoverUIState
+
     private fun getSignedInUser() {
         auth.currentUser?.apply {
             _profileInfoUiState.value = UserData(
@@ -70,8 +75,22 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase): V
         }
     }
 
+    fun getPopularYoga() = viewModelScope.launch {
+        try {
+            Timber.tag(TAG).d("View model called")
+            homeUseCase.getPopularYogaWithFlexibility().collectLatest {
+                _discoverUIState.value = it
+            }
+        } catch (exception: IOException) {
+            Timber.tag(TAG).e(exception)
+        }
+    }
+
+
+
     init {
         getSignedInUser()
         getHomeContent()
+        getPopularYoga()
     }
 }

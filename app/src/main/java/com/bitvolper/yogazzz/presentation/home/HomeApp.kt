@@ -97,6 +97,7 @@ fun HomeApp(modifier: Modifier = Modifier,
     val profileUiState by homeViewModel.profileInfoUiState.collectAsState()
 
     val homeUIState by homeViewModel.homeUIState.collectAsState()
+    val discoverUIState by homeViewModel.discoverUIState.collectAsState()
 
     var notificationPermissionState = rememberMultiplePermissionsState(permissions = listOf())
 
@@ -175,7 +176,7 @@ fun HomeApp(modifier: Modifier = Modifier,
             }
 
             composable(route = BottomNavigationScreens.Discover.route) {
-                DiscoverScreen(paddingValues = paddingValues)
+                DiscoverScreen(paddingValues = paddingValues, discoverUIState = discoverUIState)
             }
 
             composable(route = BottomNavigationScreens.Reports.route) {

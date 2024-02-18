@@ -27,7 +27,26 @@
             </intent-filter>
         </service>
 
+        <activity
+            android:name=".presentation.home.discover.stress_relief.StressReliefActivity"
+            android:exported="true"
+            android:theme="@style/Theme.YogaApp" />
 
+
+        <activity
+            android:name=".presentation.home.discover.flexiblity_strength.FlexibilityStrengthActivity"
+            android:exported="true"
+            android:theme="@style/Theme.YogaApp" />
+
+        <activity
+            android:name=".presentation.home.discover.adjust_yoga.AdjustYogaActivity"
+            android:exported="true"
+            android:theme="@style/Theme.YogaApp" />
+
+        <activity
+            android:name=".presentation.home.discover.popular_yoga.PopularYogaActivity"
+            android:exported="true"
+            android:theme="@style/Theme.YogaApp" />
 
         <activity
             android:name=".presentation.home.recommendation.RecommendationActivity"
