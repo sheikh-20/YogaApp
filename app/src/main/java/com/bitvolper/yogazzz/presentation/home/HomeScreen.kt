@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
@@ -26,6 +27,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowForward
+import androidx.compose.material.icons.rounded.ArrowForwardIos
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -39,6 +41,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -58,6 +61,9 @@ import com.bitvolper.yogazzz.presentation.categorydetail.CategoryDetailActivity
 import com.bitvolper.yogazzz.presentation.home.recommendation.RecommendationActivity
 import com.bitvolper.yogazzz.presentation.serenitydetail.SerenityDetailActivity
 import com.bitvolper.yogazzz.utility.Resource
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPagerIndicator
+import com.google.accompanist.pager.rememberPagerState
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -89,7 +95,7 @@ fun HomeScreen(modifier: Modifier = Modifier,
 
                     Card(modifier = modifier
                         .fillMaxWidth()
-                        .requiredHeight(200.dp)) {
+                        .requiredHeight(200.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)) {
 
                         Box {
 
@@ -98,7 +104,8 @@ fun HomeScreen(modifier: Modifier = Modifier,
                                 modifier = modifier
                                     .fillMaxSize()
                                     .wrapContentSize(align = Alignment.BottomEnd)
-                                    .size(300.dp),
+                                    .size(350.dp)
+                                    .offset(y = 0.dp, x = 50.dp),
                                 contentScale = ContentScale.Crop)
 
                             Column(modifier = modifier
@@ -139,35 +146,191 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
 
     val context = LocalContext.current
 
-    LazyVerticalGrid(modifier = modifier.requiredHeight(514.dp), columns = GridCells.Fixed(2),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        userScrollEnabled = false) {
-
-        items(yogaCategory.data?.size ?: return@LazyVerticalGrid) {
-            Card(onClick = { CategoryDetailActivity.startActivity(context as Activity) }, modifier = modifier.requiredHeight(120.dp)) {
+    Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Card(onClick = { CategoryDetailActivity.startActivity(context as Activity) },
+                modifier = modifier
+                    .weight(1f)
+                    .requiredHeight(120.dp),
+                colors = CardDefaults.cardColors(containerColor = Color(0xFFd89bfc))) {
                 Box(modifier = modifier.fillMaxSize()) {
 
-                    AsyncImage(
-                        model = ImageRequest.Builder(context = LocalContext.current)
-                            .data(yogaCategory.data[it]?.image)
-                            .crossfade(true)
-                            .build(),
-                        error = painterResource(id = R.drawable.ic_broken_image),
-                        placeholder = painterResource(id = R.drawable.ic_image_placeholder),
+
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_category1),
                         contentDescription = null,
                         modifier = modifier
                             .fillMaxWidth()
-                            .wrapContentWidth(align = Alignment.End))
+                            .wrapContentWidth(align = Alignment.End)
+                            .size(150.dp))
 
-                    Text(text = yogaCategory.data[it]?.title ?: "", style = MaterialTheme.typography.titleMedium, modifier = modifier.padding(8.dp), lineHeight = 30.sp)
+                    Text(text = "Improved\nFlexibility", style = MaterialTheme.typography.titleMedium, modifier = modifier.padding(8.dp), lineHeight = 30.sp)
+                }
+            }
+
+            Card(onClick = { CategoryDetailActivity.startActivity(context as Activity) }, modifier = modifier
+                .weight(1f)
+                .requiredHeight(120.dp),
+                colors = CardDefaults.cardColors(containerColor = Color(0xFF87c8bc))) {
+                Box(modifier = modifier.fillMaxSize()) {
+
+
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_category2),
+                        contentDescription = null,
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .wrapContentWidth(align = Alignment.End)
+                            .size(150.dp))
+
+                    Text(text = "Stress\nReduction", style = MaterialTheme.typography.titleMedium, modifier = modifier.padding(8.dp), lineHeight = 30.sp)
+                }
+            }
+        }
+
+
+        Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Card(onClick = { CategoryDetailActivity.startActivity(context as Activity) }, modifier = modifier
+                .weight(1f)
+                .requiredHeight(120.dp), colors = CardDefaults.cardColors(containerColor = Color(0xFFFF8788))) {
+                Box(modifier = modifier.fillMaxSize()) {
+
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_category3),
+                        contentDescription = null,
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .wrapContentWidth(align = Alignment.End)
+                            .size(150.dp))
+
+
+                    Text(text = "Improved\nPosture", style = MaterialTheme.typography.titleMedium, modifier = modifier.padding(8.dp), lineHeight = 30.sp)
+                }
+            }
+
+            Card(onClick = { CategoryDetailActivity.startActivity(context as Activity) }, modifier = modifier
+                .weight(1f)
+                .requiredHeight(120.dp), colors = CardDefaults.cardColors(containerColor = Color(0xFFFec9a7))) {
+                Box(modifier = modifier.fillMaxSize()) {
+
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_category4),
+                        contentDescription = null,
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .wrapContentWidth(align = Alignment.End)
+                            .size(150.dp))
+
+                    Text(text = "Recovery", style = MaterialTheme.typography.titleMedium, modifier = modifier.padding(8.dp), lineHeight = 30.sp)
+                }
+            }
+        }
+
+        Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Card(onClick = { CategoryDetailActivity.startActivity(context as Activity) }, modifier = modifier
+                .weight(1f)
+                .requiredHeight(120.dp), colors = CardDefaults.cardColors(containerColor = Color(0xFFb49edc))) {
+                Box(modifier = modifier.fillMaxSize()) {
+
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_category5),
+                        contentDescription = null,
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .wrapContentWidth(align = Alignment.End)
+                            .size(150.dp))
+
+
+                    Text(text = "Mindfulness\n& Presence", style = MaterialTheme.typography.titleMedium, modifier = modifier.padding(8.dp), lineHeight = 30.sp)
+                }
+            }
+
+            Card(onClick = { CategoryDetailActivity.startActivity(context as Activity) }, modifier = modifier
+                .weight(1f)
+                .requiredHeight(120.dp), colors = CardDefaults.cardColors(containerColor = Color(0xFF96bdff))) {
+                Box(modifier = modifier.fillMaxSize()) {
+
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_category6),
+                        contentDescription = null,
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .wrapContentWidth(align = Alignment.End)
+                            .size(150.dp))
+
+                    Text(text = "Spritual\nGrowth", style = MaterialTheme.typography.titleMedium, modifier = modifier.padding(8.dp), lineHeight = 30.sp)
+                }
+            }
+        }
+
+        Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Card(onClick = { CategoryDetailActivity.startActivity(context as Activity) }, modifier = modifier
+                .weight(1f)
+                .requiredHeight(120.dp),
+                colors = CardDefaults.cardColors(containerColor = Color(0xFFefa796))) {
+                Box(modifier = modifier.fillMaxSize()) {
+
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_category7),
+                        contentDescription = null,
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .wrapContentWidth(align = Alignment.End)
+                            .size(150.dp))
+
+                    Text(text = "Emotional\nBalance", style = MaterialTheme.typography.titleMedium, modifier = modifier.padding(8.dp), lineHeight = 30.sp)
+                }
+            }
+
+            Card(onClick = { CategoryDetailActivity.startActivity(context as Activity) }, modifier = modifier
+                .weight(1f)
+                .requiredHeight(120.dp), colors = CardDefaults.cardColors(containerColor = Color(0xFF9ca2d6))) {
+                Box(modifier = modifier.fillMaxSize()) {
+
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_category8),
+                        contentDescription = null,
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .wrapContentWidth(align = Alignment.End)
+                            .size(150.dp))
+
+
+                    Text(text = "Enhanced\nSleep\nQuality", style = MaterialTheme.typography.titleMedium, modifier = modifier.padding(8.dp), lineHeight = 30.sp)
                 }
             }
         }
     }
+
+//    LazyVerticalGrid(modifier = modifier.requiredHeight(514.dp), columns = GridCells.Fixed(2),
+//        verticalArrangement = Arrangement.spacedBy(10.dp),
+//        horizontalArrangement = Arrangement.spacedBy(16.dp),
+//        userScrollEnabled = false) {
+//
+//        items(yogaCategory.data?.size ?: return@LazyVerticalGrid) {
+//            Card(onClick = { CategoryDetailActivity.startActivity(context as Activity) }, modifier = modifier.requiredHeight(120.dp)) {
+//                Box(modifier = modifier.fillMaxSize()) {
+//
+//                    AsyncImage(
+//                        model = ImageRequest.Builder(context = LocalContext.current)
+//                            .data(yogaCategory.data[it]?.image)
+//                            .crossfade(true)
+//                            .build(),
+//                        error = painterResource(id = R.drawable.ic_broken_image),
+//                        placeholder = painterResource(id = R.drawable.ic_image_placeholder),
+//                        contentDescription = null,
+//                        modifier = modifier
+//                            .fillMaxWidth()
+//                            .wrapContentWidth(align = Alignment.End))
+//
+//                    Text(text = yogaCategory.data[it]?.title ?: "", style = MaterialTheme.typography.titleMedium, modifier = modifier.padding(8.dp), lineHeight = 30.sp)
+//                }
+//            }
+//        }
+//    }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalPagerApi::class)
 @Preview(showBackground = true)
 @Composable
 fun RecommendationCard(modifier: Modifier = Modifier,
@@ -177,9 +340,9 @@ fun RecommendationCard(modifier: Modifier = Modifier,
 
     Row(modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        horizontalArrangement = Arrangement.spacedBy(16.dp)) {
 
-        Card(onClick = { }, modifier = modifier.padding(8.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.outlineVariant)) {
+        Card(onClick = { }, modifier = modifier.padding(vertical = 4.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.outlineVariant)) {
 
             AsyncImage(
                 model = ImageRequest.Builder(context = LocalContext.current)
@@ -190,12 +353,12 @@ fun RecommendationCard(modifier: Modifier = Modifier,
                 placeholder = painterResource(id = R.drawable.ic_image_placeholder),
                 contentDescription = null,
                 modifier = modifier
-                    .size(height = 100.dp, width = 100.dp)
-                    .clip(RoundedCornerShape(20)))
+                    .size(height = 100.dp, width = 100.dp),
+                contentScale = ContentScale.Crop)
 
         }
 
-        Column(modifier = modifier.weight(1f)) {
+        Column(modifier = modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(
                 text = recommendation.title ?: "",
                 style = MaterialTheme.typography.titleLarge,
@@ -204,14 +367,14 @@ fun RecommendationCard(modifier: Modifier = Modifier,
                 maxLines = 1
             )
 
-            Row {
-                Text(text = recommendation.duration ?: "", style = MaterialTheme.typography.bodySmall)
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(text = recommendation.duration ?: "", style = MaterialTheme.typography.bodyMedium)
                 Text(text = ".", style = MaterialTheme.typography.bodySmall)
-                Text(text = recommendation.level ?: "", style = MaterialTheme.typography.bodySmall)
+                Text(text = recommendation.level ?: "", style = MaterialTheme.typography.bodyMedium)
             }
         }
 
-        Icon(imageVector = Icons.Rounded.ArrowForward, contentDescription = null)
+        Icon(imageVector = Icons.Rounded.ArrowForwardIos, contentDescription = null)
 
     }
 }
@@ -222,7 +385,7 @@ private fun YogaRecommendationCompose(recommendation: YogaRecommendation = YogaR
 
     val context = LocalContext.current
 
-    Column {
+    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = "Recommendation For You",
@@ -253,8 +416,10 @@ private fun YogaRecommendationCompose(recommendation: YogaRecommendation = YogaR
 
         }
 
-        recommendation.data?.forEach {
-            RecommendationCard(recommendation = it ?: return)
+        Column {
+            recommendation.data?.forEach {
+                RecommendationCard(recommendation = it ?: return)
+            }
         }
     }
 }

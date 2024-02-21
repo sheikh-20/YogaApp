@@ -289,44 +289,11 @@ private fun HomeTopAppBar(navController: NavHostController,) {
                     }
                 },
                 actions = {
-                    IconButton(onClick = { NotificationsActivity.startActivity(context as Activity) },
-                        modifier = Modifier
-                            .padding(horizontal = 4.dp)
-                            .shadow(
-                                elevation = 8.dp,
-                                ambientColor = Color.Transparent,
-                                spotColor = Color.Transparent
-                            )
-                            .background(
-                                shape = RoundedCornerShape(50),
-                                color = MaterialTheme.colorScheme.surface
-                            )
-                            .border(
-                                width = 1.dp,
-                                color = Color.DarkGray,
-                                shape = RoundedCornerShape(50)
-                            )) {
+                    IconButton(onClick = { NotificationsActivity.startActivity(context as Activity) }) {
                         Icon(imageVector = Icons.Outlined.Notifications, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
                     }
 
-                    IconButton(onClick = { BookmarkActivity.startActivity(context as Activity) },
-                        modifier = Modifier
-                            .padding(horizontal = 4.dp)
-                            .shadow(
-                                elevation = 8.dp,
-                                ambientColor = Color.Transparent,
-                                spotColor = Color.Transparent
-                            )
-                            .background(
-                                shape = RoundedCornerShape(50),
-                                color = MaterialTheme.colorScheme.surface
-                            )
-                            .border(
-                                width = 1.dp,
-                                color = Color.DarkGray,
-                                shape = RoundedCornerShape(50)
-                            )
-                    ) {
+                    IconButton(onClick = { BookmarkActivity.startActivity(context as Activity) }) {
                         Icon(imageVector = Icons.Outlined.Bookmark, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
                     }
                 }
