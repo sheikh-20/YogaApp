@@ -52,6 +52,8 @@ class HomeActivity : BaseActivity() {
                 onboardingViewModel.loading.value
             }
         }
+
+
         setTransparentStatusBar()
 
         analytics = Firebase.analytics

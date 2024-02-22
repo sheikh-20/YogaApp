@@ -7,6 +7,7 @@ import com.bitvolper.yogazzz.domain.model.PopularYogaWithFlexibility
 import com.bitvolper.yogazzz.domain.model.StressRelief
 import com.bitvolper.yogazzz.domain.model.YogaCategory
 import com.bitvolper.yogazzz.domain.model.YogaCategoryWithRecommendation
+import com.bitvolper.yogazzz.domain.model.YogaExercise
 import com.bitvolper.yogazzz.domain.model.YogaRecommendation
 import com.bitvolper.yogazzz.utility.Resource
 import com.google.firebase.database.FirebaseDatabase
@@ -35,6 +36,12 @@ interface HomeRepository {
     fun getStressRelief(): Flow<Resource<StressRelief>>
 
     fun getPopularYogaWithFlexibility(): Flow<Resource<PopularYogaWithFlexibility>>
+
+    fun getYogaExercise(id: Int): Flow<Resource<YogaExercise>>
+
+    fun getBookmarkYogaExercise(): Flow<Resource<YogaExercise>>
+
+    suspend fun updateBookmarkYogaExercise(bookmark: Boolean)
 }
 
 class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatabase): HomeRepository {
@@ -294,4 +301,71 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
             it.printStackTrace()
             emit(Resource.Failure(it))
         }
+
+
+    override fun getYogaExercise(id: Int): Flow<Resource<YogaExercise>> = flow {
+
+        Timber.tag(TAG).d("Called")
+        emit(Resource.Loading)
+
+        try {
+
+            Timber.tag(TAG).d("Repo called")
+
+
+            val result = database.getReference("yoga_exercise").get().await()
+
+            val json = Gson().toJson(result.value)
+            Timber.tag(TAG).d("Result -> $json")
+
+            val listType = object : TypeToken<List<YogaExercise.Data>>() {}.type
+            val data = Gson().fromJson<List<YogaExercise.Data>>(json, listType)
+
+            emit(Resource.Success(YogaExercise(data = data.filter { it.id == id })))
+        } catch (exception: Exception) {
+            throw Throwable(exception)
+        }
+    }
+        .catch {
+            Timber.tag(TAG).e(it)
+            it.printStackTrace()
+            emit(Resource.Failure(it))
+        }
+
+    override fun getBookmarkYogaExercise(): Flow<Resource<YogaExercise>> = flow {
+
+        Timber.tag(TAG).d("Called")
+        emit(Resource.Loading)
+
+        try {
+
+            Timber.tag(TAG).d("Repo called")
+
+            val result = database.getReference("yoga_exercise").get().await()
+
+            val json = Gson().toJson(result.value)
+            Timber.tag(TAG).d("Result -> $json")
+
+            val listType = object : TypeToken<List<YogaExercise.Data>>() {}.type
+            val data = Gson().fromJson<List<YogaExercise.Data>>(json, listType)
+
+            emit(Resource.Success(YogaExercise(data = data.filter { it.bookmark == true })))
+        } catch (exception: Exception) {
+            throw Throwable(exception)
+        }
+    }
+        .catch {
+            Timber.tag(TAG).e(it)
+            it.printStackTrace()
+            emit(Resource.Failure(it))
+        }
+
+    override suspend fun updateBookmarkYogaExercise(bookmark: Boolean) {
+        try {
+            Timber.tag(TAG).d("Repo called")
+            database.getReference("yoga_exercise").child("0").child("bookmark").setValue(bookmark)
+        } catch (exception: Exception) {
+            Timber.tag(TAG).e(exception)
+        }
+    }
 }

@@ -1,8 +1,11 @@
 package com.bitvolper.yogazzz.di
 
+import com.bitvolper.yogazzz.data.repository.AppThemePreferenceRepository
 import com.bitvolper.yogazzz.data.repository.AuthRepository
 import com.bitvolper.yogazzz.data.repository.HomeRepository
 import com.bitvolper.yogazzz.data.repository.NotificationPreferenceRepository
+import com.bitvolper.yogazzz.domain.usecase.AppThemeUseCase
+import com.bitvolper.yogazzz.domain.usecase.GetAppThemeInteractors
 import com.bitvolper.yogazzz.domain.usecase.GetHomeUseCaseInteractors
 import com.bitvolper.yogazzz.domain.usecase.GetPushNotificationInteractors
 import com.bitvolper.yogazzz.domain.usecase.HomeUseCase
@@ -55,4 +58,9 @@ class UseCaseModule {
         return GetPushNotificationInteractors(notificationPreferenceRepository)
     }
 
+    @Provides
+    @Singleton
+    fun providesAppThemeUseCase(appThemePreferenceRepository: AppThemePreferenceRepository): AppThemeUseCase {
+        return GetAppThemeInteractors(appThemePreferenceRepository)
+    }
 }
