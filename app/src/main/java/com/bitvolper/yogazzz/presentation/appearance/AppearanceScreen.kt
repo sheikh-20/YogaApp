@@ -25,7 +25,10 @@ import androidx.compose.ui.unit.dp
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 
 @Composable
-fun AppearanceScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = PaddingValues()) {
+fun AppearanceScreen(modifier: Modifier = Modifier,
+                     paddingValues: PaddingValues = PaddingValues(),
+                     onThemeClick: () -> Unit = {  },
+                     appThemeIndex: Int = 0) {
     Column(modifier = modifier
         .fillMaxSize()
         .padding(
@@ -34,13 +37,17 @@ fun AppearanceScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues
             end = 16.dp,
             bottom = 16.dp
         ),
-        verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        verticalArrangement = Arrangement.spacedBy(16.dp)) {
 
         Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
             Text(text = "Theme", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, modifier = modifier.weight(1f))
 
-            Text(text = "Light", style = MaterialTheme.typography.bodyLarge)
-            IconButton(onClick = { /*TODO*/ }, modifier = modifier.then(modifier.size(30.dp))) {
+            Text(text = when(appThemeIndex) {
+                0 -> { "System Default" }
+                1 -> { "Light" }
+                else -> { "Dark" }
+                                            }, style = MaterialTheme.typography.bodyLarge)
+            IconButton(onClick = onThemeClick, modifier = modifier.then(modifier.size(30.dp))) {
                 Icon(imageVector = Icons.Rounded.ArrowForwardIos, contentDescription = null)
             }
         }

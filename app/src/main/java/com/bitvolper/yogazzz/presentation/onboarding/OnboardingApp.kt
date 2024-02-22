@@ -24,6 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.bitvolper.yogazzz.presentation.dialog.LoginDialog
 import com.bitvolper.yogazzz.presentation.dialog.SignupDialog
@@ -62,11 +63,11 @@ fun OnboardingApp(modifier: Modifier = Modifier,
 
     Scaffold(
         topBar = {
-            OnboardingTopAppbar()
+            OnboardingTopAppbar(navController = navController)
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { paddingValues ->
-        NavHost(modifier = modifier.padding(paddingValues), navController = navController, startDestination = OnboardingScreen.Start.name) {
+        NavHost(navController = navController, startDestination = OnboardingScreen.Start.name) {
 
             composable(route = OnboardingScreen.Start.name) {
                 OnboardingScreen(modifier = modifier) {
@@ -121,14 +122,31 @@ fun OnboardingApp(modifier: Modifier = Modifier,
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun OnboardingTopAppbar(modifier: Modifier = Modifier) {
-    TopAppBar(
-        title = {  },
-        navigationIcon = { IconButton(onClick = { }) {
-            Icon(imageVector = Icons.Outlined.ArrowBack, contentDescription = null)
-        } },
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
-    )
+private fun OnboardingTopAppbar(navController: NavHostController) {
+
+    when (navController.currentBackStackEntryAsState().value?.destination?.route) {
+        OnboardingScreen.Start.name -> {
+            TopAppBar(
+                title = {  },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+            )
+        }
+        OnboardingScreen.Login.name -> {
+            TopAppBar(
+                title = {  },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+            )
+        }
+        else -> {
+        TopAppBar(
+            title = {  },
+            navigationIcon = { IconButton(onClick = { }) {
+                Icon(imageVector = Icons.Outlined.ArrowBack, contentDescription = null)
+            } },
+            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+        )
+        }
+    }
 }
 
 enum class ShowOnboardDialog {

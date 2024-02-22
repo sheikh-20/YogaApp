@@ -1,6 +1,7 @@
 package com.bitvolper.yogazzz.presentation.onboarding
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -11,10 +12,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -23,10 +28,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
@@ -39,6 +46,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
@@ -58,7 +66,7 @@ fun OnboardingScreen(modifier: Modifier = Modifier, onClick: () -> Unit = { }) {
 
     Column(modifier = modifier
         .fillMaxSize()
-        .padding(vertical = 20.dp),
+        .padding(bottom = 20.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)) {
 
         OnboardingContent(modifier = modifier.weight(1f), state = pager)
@@ -83,8 +91,10 @@ fun OnboardingScreen(modifier: Modifier = Modifier, onClick: () -> Unit = { }) {
                 if ((pager.currentPage != pager.pageCount.dec())) {
                     OutlinedButton(onClick = onClick, modifier = modifier
                         .weight(1f)
-                        .requiredHeight(50.dp)) {
-                        Text(text = "Skip")
+                        .requiredHeight(50.dp),
+                        border = BorderStroke(0.dp, Color.Transparent),
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
+                        Text(text = "Skip", color = MaterialTheme.colorScheme.onPrimaryContainer)
                     }
                 }
 
@@ -143,29 +153,38 @@ private fun OnboardingContent(modifier: Modifier = Modifier, state: PagerState =
 
 data class HorizontalData(val title: String, val description: String)
 
+
+private val cropShape = GenericShape { size: Size, layoutDirection: LayoutDirection ->
+    addRect(Rect(0f, 0f, size.width, size.height * .8f))
+}
+
 @Composable
 private fun HorizontalContent(modifier: Modifier = Modifier, horizontalData: HorizontalData) {
 
     val color = MaterialTheme.colorScheme.background
 
-    Box(modifier = modifier.background(color = MaterialTheme.colorScheme.primary)) {
+    Box(modifier = modifier.background(color = Color(0xFF655de6))) {
 
-        Image(painter = painterResource(id = R.drawable.ic_home_screen), contentDescription = null,
-            modifier = modifier
-                .fillMaxSize()
-                .drawWithCache {
-                    val gradient = Brush.verticalGradient(
-                        colors = listOf(Color.Transparent, Color.Black),
-                        startY = size.height / 2f,
-                        endY = size.height
-                    )
-                    onDrawWithContent {
-                        drawContent()
-                        drawRect(gradient, blendMode = BlendMode.Multiply)
+
+            Image(painter = painterResource(id = R.drawable.ic_home_screen), contentDescription = null,
+                modifier = modifier
+                    .fillMaxSize()
+                    .offset(x = 0.dp, y = 50.dp)
+                    .clip(cropShape)
+                    .drawWithCache {
+                        val gradient = Brush.verticalGradient(
+                            colors = listOf(Color.Transparent, Color.Black),
+                            startY = size.height / 2f,
+                            endY = size.height
+                        )
+                        onDrawWithContent {
+                            drawContent()
+                            drawRect(gradient, blendMode = BlendMode.Multiply)
+                        }
                     }
-                }
-                .padding(horizontal = 16.dp),
-            contentScale = ContentScale.Crop)
+                    .padding(horizontal = 16.dp),
+                )
+
 
 
         Column(

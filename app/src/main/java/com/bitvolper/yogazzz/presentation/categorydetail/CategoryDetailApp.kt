@@ -9,8 +9,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 
@@ -21,7 +23,7 @@ fun CategoryDetailApp(modifier: Modifier = Modifier) {
             CategoryTopAppBar()
         }
     ) { paddingValues ->
-        CategoryDetailScreen(paddingValues = paddingValues)
+        CategoryDetailScreen()
     }
 }
 
@@ -38,6 +40,7 @@ private fun CategoryTopAppBar() {
             IconButton(onClick = { (context as Activity).finish() }) {
                 Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null)
             }
-        }
+        },
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.Transparent)
     )
 }
