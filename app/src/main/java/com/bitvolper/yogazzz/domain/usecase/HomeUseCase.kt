@@ -8,6 +8,7 @@ import com.bitvolper.yogazzz.domain.model.PopularYogaWithFlexibility
 import com.bitvolper.yogazzz.domain.model.StressRelief
 import com.bitvolper.yogazzz.domain.model.YogaCategory
 import com.bitvolper.yogazzz.domain.model.YogaCategoryWithRecommendation
+import com.bitvolper.yogazzz.domain.model.YogaExercise
 import com.bitvolper.yogazzz.domain.model.YogaRecommendation
 import com.bitvolper.yogazzz.utility.Resource
 import kotlinx.coroutines.flow.Flow
@@ -29,6 +30,12 @@ interface HomeUseCase {
     fun getStressRelief(): Flow<Resource<StressRelief>>
 
     fun getPopularYogaWithFlexibility(): Flow<Resource<PopularYogaWithFlexibility>>
+
+    fun getYogaExercise(id: Int): Flow<Resource<YogaExercise>>
+
+    fun getBookmarkYogaExercise(): Flow<Resource<YogaExercise>>
+
+    suspend fun updateBookmarkYogaExercise(bookmark: Boolean)
 }
 
 class GetHomeUseCaseInteractors(private val repository: HomeRepository): HomeUseCase {
@@ -68,5 +75,17 @@ class GetHomeUseCaseInteractors(private val repository: HomeRepository): HomeUse
 
     override fun getPopularYogaWithFlexibility(): Flow<Resource<PopularYogaWithFlexibility>> {
         return repository.getPopularYogaWithFlexibility()
+    }
+
+    override fun getYogaExercise(id: Int): Flow<Resource<YogaExercise>> {
+        return repository.getYogaExercise(id)
+    }
+
+    override fun getBookmarkYogaExercise(): Flow<Resource<YogaExercise>> {
+        return repository.getBookmarkYogaExercise()
+    }
+
+    override suspend fun updateBookmarkYogaExercise(bookmark: Boolean) {
+        repository.updateBookmarkYogaExercise(bookmark)
     }
 }

@@ -14,21 +14,31 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.bitvolper.yogazzz.presentation.viewmodel.HomeViewModel
 
 @Composable
-fun BookmarkApp(modifier: Modifier = Modifier) {
+fun BookmarkApp(modifier: Modifier = Modifier, homeViewModel: HomeViewModel = hiltViewModel()) {
+
+    val bookmarkUIState by homeViewModel.bookmarkUIState.collectAsState()
+
     Scaffold(
         topBar = { BookmarkTopAppBar() }
     ) { paddingValues ->
-        BookmarkScreen(paddingValues = paddingValues)
+        BookmarkScreen(paddingValues = paddingValues, bookmarkUIState = bookmarkUIState)
     }
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
+@Preview
 @Composable
 private fun BookmarkTopAppBar() {
     val context = LocalContext.current

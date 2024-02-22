@@ -11,7 +11,10 @@ import androidx.compose.ui.Modifier
 import com.bitvolper.yogazzz.base.BaseActivity
 import com.bitvolper.yogazzz.presentation.accountsecurity.AccountSecurityApp
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
 
+@AndroidEntryPoint
 class AppearanceActivity: BaseActivity() {
 
     companion object {

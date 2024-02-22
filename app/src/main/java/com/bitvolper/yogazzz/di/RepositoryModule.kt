@@ -1,6 +1,8 @@
 package com.bitvolper.yogazzz.di
 
+import com.bitvolper.yogazzz.data.repository.AppThemePreferenceRepository
 import com.bitvolper.yogazzz.data.repository.AuthRepository
+import com.bitvolper.yogazzz.data.repository.GetAppThemePreferenceRepositoryImpl
 import com.bitvolper.yogazzz.data.repository.GetNotificationPreferenceImpl
 import com.bitvolper.yogazzz.data.repository.GoogleRepositoryImpl
 import com.bitvolper.yogazzz.data.repository.HomeRepository
@@ -38,5 +40,8 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun providesNotificationPreferenceImpl(notificationPreferenceImpl: GetNotificationPreferenceImpl): NotificationPreferenceRepository
+
+    @Binds
+    abstract fun providesAppThemePreferenceImpl(getAppThemePreferenceRepositoryImpl: GetAppThemePreferenceRepositoryImpl): AppThemePreferenceRepository
 
 }
