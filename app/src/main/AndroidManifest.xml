@@ -28,6 +28,16 @@
         </service>
 
         <activity
+            android:name=".presentation.home.discover.body_focus.BodyFocusActivity"
+            android:exported="true"
+            android:theme="@style/Theme.YogaApp" />
+
+        <activity
+            android:name=".presentation.home.discover.meditation.MeditationActivity"
+            android:exported="true"
+            android:theme="@style/Theme.YogaApp" />
+
+        <activity
             android:name=".presentation.serenitydetail.yogaexercise.YogaExerciseActivity"
             android:exported="true"
             android:theme="@style/Theme.YogaApp" />

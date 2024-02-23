@@ -1,4 +1,4 @@
-package com.bitvolper.yogazzz.presentation.home.recommendation
+package com.bitvolper.yogazzz.presentation.home.discover.meditation
 
 import android.app.Activity
 import android.content.Intent
@@ -12,18 +12,18 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.coroutineScope
 import com.bitvolper.yogazzz.base.BaseActivity
-import com.bitvolper.yogazzz.presentation.home.notification.NotificationSettingsApp
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
+import com.bitvolper.yogazzz.presentation.userprofile.UserProfileApp
 import com.bitvolper.yogazzz.presentation.viewmodel.AccountViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class RecommendationActivity: BaseActivity() {
+class MeditationActivity: BaseActivity() {
 
     companion object {
         fun startActivity(activity: Activity?) {
-            val intent = Intent(activity, RecommendationActivity::class.java)
+            val intent = Intent(activity, MeditationActivity::class.java)
             activity?.startActivity(intent)
         }
     }
@@ -49,7 +49,7 @@ class RecommendationActivity: BaseActivity() {
                             modifier = Modifier.fillMaxSize(),
                             color = MaterialTheme.colorScheme.background
                         ) {
-                            RecommendationApp()
+                            MeditationApp()
                         }
                     }
                 }
