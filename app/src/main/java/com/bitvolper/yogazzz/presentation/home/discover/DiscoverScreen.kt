@@ -14,8 +14,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
@@ -45,6 +47,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -61,7 +64,9 @@ import com.bitvolper.yogazzz.domain.model.PopularYoga
 import com.bitvolper.yogazzz.domain.model.PopularYogaWithFlexibility
 import com.bitvolper.yogazzz.domain.model.StressRelief
 import com.bitvolper.yogazzz.presentation.home.discover.adjust_yoga.AdjustYogaActivity
+import com.bitvolper.yogazzz.presentation.home.discover.body_focus.BodyFocusActivity
 import com.bitvolper.yogazzz.presentation.home.discover.flexiblity_strength.FlexibilityStrengthActivity
+import com.bitvolper.yogazzz.presentation.home.discover.meditation.MeditationActivity
 import com.bitvolper.yogazzz.presentation.home.discover.popular_yoga.PopularYogaActivity
 import com.bitvolper.yogazzz.presentation.home.discover.stress_relief.StressReliefActivity
 import com.bitvolper.yogazzz.presentation.home.recommendation.RecommendationActivity
@@ -211,28 +216,38 @@ fun PopularYogaCard(modifier: Modifier = Modifier,
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 private fun MeditationCard(modifier: Modifier = Modifier) {
+
+    val context = LocalContext.current
+
     Card(modifier = modifier
         .fillMaxWidth()
-        .requiredHeight(120.dp)) {
-        Row(modifier = modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+        .requiredHeight(120.dp), colors = CardDefaults.cardColors(containerColor = Color(0xFFb4a3ff)),
+
+        onClick = { MeditationActivity.startActivity(context as Activity) }) {
+        Row(modifier = modifier.fillMaxWidth()) {
 
             Column(modifier = modifier
                 .weight(1f)
-                .padding(start = 16.dp, top = 16.dp)) {
-                Text(text = "Meditation", style = MaterialTheme.typography.titleMedium)
+                .padding(start = 16.dp, top = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(text = "Meditation", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
                 Text(text = "Achieve a state of profound of calmness and clarity with our \"Calmness",
                     style = MaterialTheme.typography.bodyMedium,
                     maxLines = 2, overflow = TextOverflow.Ellipsis)
             }
 
-            Image(painter = painterResource(id = R.drawable.ic_balance),
+            Image(painter = painterResource(id = R.drawable.ic_meditation),
                 contentDescription = null,
-                modifier = modifier.fillMaxHeight(),
+                modifier = modifier.fillMaxHeight().offset(x = 10.dp, y = 30.dp).graphicsLayer(
+                    scaleX = 2f,
+                    scaleY = 2f,
+                    translationX = 0f,
+                    translationY = 0f,
                 )
+            )
         }
     }
 }
@@ -338,10 +353,14 @@ fun AdjustYogaLevelCard(modifier: Modifier = Modifier,
 }
 
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalLayoutApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalLayoutApi::class,
+    ExperimentalMaterial3Api::class
+)
 @Preview(showBackground = true)
 @Composable
 private fun BodyFocusScreen(modifier: Modifier = Modifier) {
+
+    val context = LocalContext.current
 
     Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
 
@@ -353,7 +372,7 @@ private fun BodyFocusScreen(modifier: Modifier = Modifier) {
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             items(Body.bodyPartsImage.size) {
-                Card(modifier = modifier.requiredHeight(100.dp)) {
+                Card(modifier = modifier.requiredHeight(100.dp), onClick = { BodyFocusActivity.startActivity(context as Activity) }) {
                     Row {
                         Text(text = Body.bodyPartsImage[it].part)
                         Image(painter = painterResource(id = Body.bodyPartsImage[it].image),
