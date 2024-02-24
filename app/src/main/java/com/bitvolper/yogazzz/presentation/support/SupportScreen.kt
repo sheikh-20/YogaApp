@@ -1,5 +1,6 @@
 package com.bitvolper.yogazzz.presentation.support
 
+import android.app.Activity
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,13 +19,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bitvolper.yogazzz.presentation.faq.FaqActivity
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 
 @Composable
 fun SupportScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = PaddingValues()) {
+
+    val context = LocalContext.current
+
     Column(modifier = modifier
         .fillMaxSize()
         .padding(
@@ -38,7 +44,7 @@ fun SupportScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = 
         Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Text(text = "FAQ", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, modifier = modifier.weight(1f))
 
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { FaqActivity.startActivity(context as Activity) }) {
                 Icon(imageVector = Icons.Rounded.ArrowForwardIos, contentDescription = null)
             }
         }
