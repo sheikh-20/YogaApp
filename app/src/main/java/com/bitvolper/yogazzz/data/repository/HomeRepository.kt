@@ -1,6 +1,7 @@
 package com.bitvolper.yogazzz.data.repository
 
 import com.bitvolper.yogazzz.domain.model.AdjustYogaLevel
+import com.bitvolper.yogazzz.domain.model.FaqQuestion
 import com.bitvolper.yogazzz.domain.model.FlexibilityStrength
 import com.bitvolper.yogazzz.domain.model.PopularYoga
 import com.bitvolper.yogazzz.domain.model.PopularYogaWithFlexibility
@@ -42,6 +43,8 @@ interface HomeRepository {
     fun getBookmarkYogaExercise(): Flow<Resource<YogaExercise>>
 
     suspend fun updateBookmarkYogaExercise(bookmark: Boolean)
+
+    fun getFaqQuestion(): Flow<Resource<FaqQuestion>>
 }
 
 class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatabase): HomeRepository {
@@ -368,4 +371,32 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
             Timber.tag(TAG).e(exception)
         }
     }
+
+    override fun getFaqQuestion(): Flow<Resource<FaqQuestion>> = flow {
+
+        Timber.tag(TAG).d("Called")
+        emit(Resource.Loading)
+
+        try {
+
+            Timber.tag(TAG).d("Repo called")
+
+            val result = database.getReference("app_config").child("faq").get().await()
+
+            val json = Gson().toJson(result.value)
+            Timber.tag(TAG).d("Result -> $json")
+
+            val listType = object : TypeToken<List<FaqQuestion.Data>>() {}.type
+            val data = Gson().fromJson<List<FaqQuestion.Data>>(json, listType)
+
+            emit(Resource.Success(FaqQuestion(data = data)))
+        } catch (exception: Exception) {
+            throw Throwable(exception)
+        }
+    }
+        .catch {
+            Timber.tag(TAG).e(it)
+            it.printStackTrace()
+            emit(Resource.Failure(it))
+        }
 }
