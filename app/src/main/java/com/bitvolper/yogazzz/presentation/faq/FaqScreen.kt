@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -17,10 +18,14 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Chip
 import androidx.compose.material.ChipDefaults
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ExpandLess
+import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -73,7 +78,7 @@ fun FaqScreen(modifier: Modifier = Modifier,
                         .fillMaxSize()
                         .padding(
                             top = paddingValues.calculateTopPadding(),
-                            bottom = paddingValues.calculateBottomPadding(),
+                            bottom = 16.dp,
                             start = 16.dp,
                             end = 16.dp
                         )
@@ -118,20 +123,41 @@ fun FaqScreen(modifier: Modifier = Modifier,
                     }
 
                     question?.forEach {
-                        Card() {
-                            Column(modifier = modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                                Text(
-                                    text = it?.question ?: "",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.SemiBold
-                                )
-
-                                Text(text = it?.ans ?: "",
-                                    style = MaterialTheme.typography.bodyMedium)
-                            }
-                        }
+                        FaqCard(faq = it ?: return@forEach)
                     }
                 }
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun FaqCard(modifier: Modifier = Modifier, faq: FaqQuestion.Data = FaqQuestion.Data()) {
+
+    var expanded by remember { mutableStateOf("") }
+
+    Card() {
+        Column(modifier = modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+
+            Row(modifier = modifier.fillMaxWidth()) {
+                Text(
+                    text = faq.question ?: "",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = modifier.weight(1f)
+                )
+
+                IconButton(onClick = { expanded = faq.question ?: "" }) {
+                    Icon(imageVector = if (expanded == faq.question) Icons.Rounded.ExpandMore else Icons.Rounded.ExpandLess, contentDescription = null)
+                }
+            }
+
+            if (expanded == faq.question) {
+                Divider(color = MaterialTheme.colorScheme.outline)
+
+                Text(text = faq.ans ?: "",
+                    style = MaterialTheme.typography.bodyMedium)
             }
         }
     }
