@@ -7,6 +7,7 @@ import com.bitvolper.yogazzz.domain.model.FlexibilityStrength
 import com.bitvolper.yogazzz.domain.model.PopularYoga
 import com.bitvolper.yogazzz.domain.model.PopularYogaWithFlexibility
 import com.bitvolper.yogazzz.domain.model.StressRelief
+import com.bitvolper.yogazzz.domain.model.Subscription
 import com.bitvolper.yogazzz.domain.model.YogaCategory
 import com.bitvolper.yogazzz.domain.model.YogaCategoryWithRecommendation
 import com.bitvolper.yogazzz.domain.model.YogaExercise
@@ -39,6 +40,8 @@ interface HomeUseCase {
     suspend fun updateBookmarkYogaExercise(bookmark: Boolean)
 
     fun getFaqQuestion(): Flow<Resource<FaqQuestion>>
+
+    fun getSubscription(): Flow<Resource<Subscription>>
 }
 
 class GetHomeUseCaseInteractors(private val repository: HomeRepository): HomeUseCase {
@@ -94,5 +97,9 @@ class GetHomeUseCaseInteractors(private val repository: HomeRepository): HomeUse
 
     override fun getFaqQuestion(): Flow<Resource<FaqQuestion>> {
         return repository.getFaqQuestion()
+    }
+
+    override fun getSubscription(): Flow<Resource<Subscription>> {
+        return repository.getSubscription()
     }
 }

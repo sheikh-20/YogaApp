@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.bitvolper.yogazzz.domain.model.AppThemePreference
 import com.bitvolper.yogazzz.domain.model.FaqQuestion
 import com.bitvolper.yogazzz.domain.model.NotificationPreference
+import com.bitvolper.yogazzz.domain.model.Subscription
 import com.bitvolper.yogazzz.domain.usecase.AppThemeUseCase
 import com.bitvolper.yogazzz.domain.usecase.HomeUseCase
 import com.bitvolper.yogazzz.domain.usecase.PushNotificationUseCase
@@ -35,6 +36,8 @@ class AccountViewModel @Inject constructor(
     private var _faqQuestionUIState = MutableStateFlow<Resource<FaqQuestion>>(Resource.Loading)
     val faqQuestionUIState: StateFlow<Resource<FaqQuestion>> get() = _faqQuestionUIState
 
+    private var _subscriptionUIState = MutableStateFlow<Resource<Subscription>>(Resource.Loading)
+    val subscriptionUIState: StateFlow<Resource<Subscription>> get() = _subscriptionUIState
 
     val isDailyReminderEnabled: Flow<NotificationPreference> = pushNotificationUseCase.readDailyReminder.stateIn(
         scope = viewModelScope,
@@ -87,7 +90,27 @@ class AccountViewModel @Inject constructor(
         }
     }
 
+    fun getSubscription() = viewModelScope.launch {
+        try {
+            Timber.tag(TAG).d("View model called")
+            homeUseCase.getSubscription().collectLatest {
+                _subscriptionUIState.value = it
+
+                when (it) {
+                    is Resource.Loading -> { }
+                    is Resource.Failure -> { }
+                    is Resource.Success -> {
+                        Timber.tag(TAG).d(it.data.data.toString())
+                    }
+                }
+            }
+        } catch (exception: IOException) {
+            Timber.tag(TAG).e(exception)
+        }
+    }
+
     init {
         getFaqQuestion()
+        getSubscription()
     }
 }
