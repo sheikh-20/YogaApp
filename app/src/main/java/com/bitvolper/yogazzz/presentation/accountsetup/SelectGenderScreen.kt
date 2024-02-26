@@ -1,6 +1,7 @@
 package com.bitvolper.yogazzz.presentation.accountsetup
 
 import android.content.res.Configuration
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
@@ -52,6 +54,11 @@ import com.bitvolper.yogazzz.utility.AccountSetupContinueComposable
 import com.bitvolper.yogazzz.utility.Gender
 import com.google.accompanist.pager.ExperimentalPagerApi
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
+import androidx.compose.material3.OutlinedButton
+import com.bitvolper.yogazzz.domain.model.AccountInfo
 import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalFoundationApi::class)
@@ -59,14 +66,10 @@ import kotlin.math.absoluteValue
 fun SelectGenderScreen(modifier: Modifier = Modifier,
                        paddingValues: PaddingValues = PaddingValues(),
                        onSkipClick: () -> Unit = {  },
-                       onContinueClick: () -> Unit = {  }) {
+                       onContinueClick: (Int) -> Unit = {  }) {
 
     val items = listOf<Gender.GenderData>(Gender.man, Gender.woman)
     val pager = rememberPagerState(pageCount = { items.size })
-    var showPager by remember {
-        mutableStateOf(false)
-    }
-
 
     Column(modifier = modifier
         .fillMaxSize()
@@ -78,54 +81,60 @@ fun SelectGenderScreen(modifier: Modifier = Modifier,
 
         Text(text = "Select Your Gender", style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.SemiBold)
 
-        Text(text = "Let's start by understanding you", style = MaterialTheme.typography.bodyLarge)
+        Text(text = "Let's start by understanding you", style = MaterialTheme.typography.bodyMedium)
 
-        Row(modifier = modifier
-            .fillMaxWidth()
-            .clickable(onClick = { showPager = true }, interactionSource = remember {
-                MutableInteractionSource()
-            }, indication = null)
-            .padding(8.dp), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
 
-            if (!showPager) {
-                ShowGenderImage(modifier = modifier.weight(1f), gender = Gender.man)
+        HorizontalPager(
+            state = pager,
+            modifier = modifier.fillMaxWidth().weight(1f),
+            contentPadding = PaddingValues(horizontal = 80.dp),
+        ) { index ->
 
-                ShowGenderImage(modifier = modifier.weight(1f), gender = Gender.woman)
-            }
-            else {
-                HorizontalPager(
-                    state = pager,
-                    modifier = modifier.fillMaxWidth().clickable(onClick = { }, interactionSource = remember {
-                        MutableInteractionSource()
-                    }, indication = null),
-                    contentPadding = PaddingValues(horizontal = 80.dp),
-                ) { index ->
+            val pageOffset =
+                (pager.currentPage - index) + pager.currentPageOffsetFraction
 
-                    val pageOffset =
-                        (pager.currentPage - index) + pager.currentPageOffsetFraction
+            val scaleFactor = 0.75f + (1f - 0.75f) * (1f - pageOffset.absoluteValue)
 
-                    val scaleFactor = 0.75f + (1f - 0.75f) * (1f - pageOffset.absoluteValue)
-
-                    Box(modifier = modifier
-                        .graphicsLayer {
-                            scaleX = scaleFactor
-                            scaleY = scaleFactor
-                        }
-                        .alpha(
-                            scaleFactor.coerceIn(0f, 1f)
-                        )) {
-                        ShowGenderImage(modifier = modifier, gender = items[index], currentGender = items[pager.currentPage])
-                    }
+            Box(modifier = modifier
+                .graphicsLayer {
+                    scaleX = scaleFactor
+                    scaleY = scaleFactor
                 }
+                .alpha(
+                    scaleFactor.coerceIn(0f, 1f)
+                )) {
+                ShowGenderImage(modifier = modifier, gender = items[index], currentGender = items[pager.currentPage])
             }
         }
 
-        Spacer(modifier = modifier.weight(1f))
+        Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
 
-        AccountSetupContinueComposable(
-            onSkipClick = onSkipClick,
-            onContinueClick = onContinueClick
-        )
+            Divider(modifier = modifier.fillMaxWidth())
+
+            Row(modifier = modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+
+                OutlinedButton(onClick = onSkipClick, modifier = modifier
+                    .weight(1f)
+                    .requiredHeight(50.dp),
+                    border = BorderStroke(0.dp, Color.Transparent),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
+                    Text(text = "Skip", color = MaterialTheme.colorScheme.onPrimaryContainer)
+                }
+
+                Button(
+                    onClick = { onContinueClick(pager.currentPage) },
+                    modifier = modifier
+                        .weight(1f)
+                        .requiredHeight(50.dp)) {
+
+                    Text(text = "Continue")
+                }
+            }
+        }
     }
 }
 

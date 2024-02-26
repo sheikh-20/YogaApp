@@ -9,6 +9,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -72,6 +73,7 @@ import timber.log.Timber
 private const val TAG = "SignupWithPasswordScreen"
 @Composable
 fun SignupWithPasswordScreen(modifier: Modifier = Modifier,
+                             paddingValues: PaddingValues = PaddingValues(),
                              onSignupClick: (String, String) -> Unit = { _, _ ->  },
                              snackbarHostState: SnackbarHostState = SnackbarHostState(),
                              onGoogleSignInClick: (Activity?, Intent?) -> Unit = { _, _ ->},
@@ -146,7 +148,7 @@ fun SignupWithPasswordScreen(modifier: Modifier = Modifier,
         .padding(bottom = 16.dp)) {
 
         Column(modifier = modifier
-            .padding(top = 16.dp, bottom = 100.dp)
+            .padding(top = paddingValues.calculateTopPadding(), bottom = 100.dp)
             .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp)) {

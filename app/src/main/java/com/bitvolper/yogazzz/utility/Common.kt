@@ -1,5 +1,6 @@
 package com.bitvolper.yogazzz.utility
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,7 +12,9 @@ import androidx.compose.material.icons.rounded.SignalCellularAlt
 import androidx.compose.material.icons.rounded.SignalCellularAlt1Bar
 import androidx.compose.material.icons.rounded.SignalCellularAlt2Bar
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -46,8 +50,10 @@ fun AccountSetupContinueComposable(modifier: Modifier = Modifier, onSkipClick: (
 
             OutlinedButton(onClick = onSkipClick, modifier = modifier
                 .weight(1f)
-                .requiredHeight(50.dp)) {
-                Text(text = "Skip")
+                .requiredHeight(50.dp),
+                border = BorderStroke(0.dp, Color.Transparent),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
+                Text(text = "Skip", color = MaterialTheme.colorScheme.onPrimaryContainer)
             }
 
             Button(
@@ -107,12 +113,12 @@ object Goal {
     )
 
     val goals = listOf<YogaGoal>(
-        YogaGoal(name = "Weight loss"),
-        YogaGoal(name = "Better Sleep Quality"),
-        YogaGoal(name = "Body Relaxation"),
-        YogaGoal(name = "Improve Health"),
-        YogaGoal(name = "Relieve Stress"),
-        YogaGoal(name = "Posture Correction")
+        YogaGoal(name = "\uD83C\uDFCB\uD83C\uDFFB \t\tWeight loss"),
+        YogaGoal(name = "\uD83D\uDE34 \t\tBetter Sleep Quality"),
+        YogaGoal(name = "\uD83E\uDDD8\uD83C\uDFFB \t\tBody Relaxation"),
+        YogaGoal(name = "\uD83C\uDF4F \t\tImprove Health"),
+        YogaGoal(name = "\uD83C\uDF2C\uFE0F \t\tRelieve Stress"),
+        YogaGoal(name = "\uD83E\uDE70 \t\tPosture Correction")
     )
 }
 
