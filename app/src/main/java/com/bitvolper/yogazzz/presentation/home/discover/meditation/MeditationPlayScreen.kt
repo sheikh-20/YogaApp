@@ -36,7 +36,8 @@ import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 
 @Composable
-fun MeditationPlayScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = PaddingValues()) {
+fun MeditationPlayScreen(modifier: Modifier = Modifier,
+                         paddingValues: PaddingValues = PaddingValues(), ) {
     Box(modifier = modifier
         .fillMaxSize()
         .wrapContentSize(align = Alignment.Center)) {

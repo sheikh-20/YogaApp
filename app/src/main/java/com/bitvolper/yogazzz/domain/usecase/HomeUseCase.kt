@@ -4,6 +4,7 @@ import com.bitvolper.yogazzz.data.repository.HomeRepository
 import com.bitvolper.yogazzz.domain.model.AdjustYogaLevel
 import com.bitvolper.yogazzz.domain.model.FaqQuestion
 import com.bitvolper.yogazzz.domain.model.FlexibilityStrength
+import com.bitvolper.yogazzz.domain.model.Meditation
 import com.bitvolper.yogazzz.domain.model.PopularYoga
 import com.bitvolper.yogazzz.domain.model.PopularYogaWithFlexibility
 import com.bitvolper.yogazzz.domain.model.StressRelief
@@ -42,6 +43,8 @@ interface HomeUseCase {
     fun getFaqQuestion(): Flow<Resource<FaqQuestion>>
 
     fun getSubscription(): Flow<Resource<Subscription>>
+
+    fun getMeditation(): Flow<Resource<Meditation>>
 }
 
 class GetHomeUseCaseInteractors(private val repository: HomeRepository): HomeUseCase {
@@ -101,5 +104,9 @@ class GetHomeUseCaseInteractors(private val repository: HomeRepository): HomeUse
 
     override fun getSubscription(): Flow<Resource<Subscription>> {
         return repository.getSubscription()
+    }
+
+    override fun getMeditation(): Flow<Resource<Meditation>> {
+        return repository.getMeditation()
     }
 }
