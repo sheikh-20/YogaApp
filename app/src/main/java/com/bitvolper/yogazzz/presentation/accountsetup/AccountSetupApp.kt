@@ -24,6 +24,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -35,6 +36,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.presentation.home.BottomNavigationScreens
+import com.bitvolper.yogazzz.presentation.home.discover.meditation.Meditation
 import com.bitvolper.yogazzz.presentation.viewmodel.AccountSetupUIState
 import com.bitvolper.yogazzz.presentation.viewmodel.AccountSetupViewModel
 import com.bitvolper.yogazzz.utility.ACCOUNT_SETUP_MAX_SCREEN
@@ -45,10 +47,12 @@ fun AccountSetupApp(modifier: Modifier = Modifier,
                     accountSetupViewModel: AccountSetupViewModel = viewModel()) {
 
     val uiState by accountSetupViewModel.uiState.collectAsState()
+    val accountInfoUIState by accountSetupViewModel.accountInfoUIState.collectAsState()
 
     Scaffold(
         topBar = {
             AccountSetupTopAppBar(
+                navController = navController,
                 navigateUp = {
                     accountSetupViewModel.degradeCurrentScreen {
                         navController.navigateUp()
@@ -69,6 +73,7 @@ fun AccountSetupApp(modifier: Modifier = Modifier,
                     },
                     onContinueClick = {
                         accountSetupViewModel.updateCurrentScreen()
+                        accountSetupViewModel.updateGender(it)
                         navController.navigate(AccountSetupScreen.SelectFocusArea.name)
                     })
             }
@@ -82,8 +87,10 @@ fun AccountSetupApp(modifier: Modifier = Modifier,
                     },
                     onContinueClick = {
                         accountSetupViewModel.updateCurrentScreen()
+                        accountSetupViewModel.updateFocusArea(it)
                         navController.navigate(AccountSetupScreen.SelectYogaGoal.name)
-                    }
+                    },
+                    accountInfo = accountInfoUIState
                     )
             }
 
@@ -255,27 +262,52 @@ fun AccountSetupApp(modifier: Modifier = Modifier,
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun AccountSetupTopAppBar(navigateUp: () -> Unit = { }, uiState: AccountSetupUIState = AccountSetupUIState()) {
-    CenterAlignedTopAppBar(
-        title = {
-            LinearProgressIndicator(modifier = Modifier
-                .fillMaxWidth()
-                .requiredHeight(10.dp)
-                .padding(horizontal = 30.dp), progress = uiState.currentScreen.div(14f), strokeCap = StrokeCap.Round)
-        },
-        navigationIcon = {
-            IconButton(onClick = navigateUp) {
-                Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null)
-            }
-        },
-        actions = {
-            Text(
-                text = "${uiState.currentScreen}/$ACCOUNT_SETUP_MAX_SCREEN",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold
+private fun AccountSetupTopAppBar(navController: NavHostController, navigateUp: () -> Unit = { }, uiState: AccountSetupUIState = AccountSetupUIState()) {
+
+    val context = LocalContext.current
+
+    when (navController.currentBackStackEntryAsState().value?.destination?.route) {
+        AccountSetupScreen.SelectGender.name -> {
+            CenterAlignedTopAppBar(
+                title = {
+                    LinearProgressIndicator(modifier = Modifier
+                        .fillMaxWidth()
+                        .requiredHeight(10.dp)
+                        .padding(horizontal = 30.dp), progress = uiState.currentScreen.div(14f), strokeCap = StrokeCap.Round)
+                },
+                navigationIcon = {   },
+                actions = {
+                    Text(
+                        text = "${uiState.currentScreen}/$ACCOUNT_SETUP_MAX_SCREEN",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
             )
         }
-    )
+        else -> {
+            CenterAlignedTopAppBar(
+                title = {
+                    LinearProgressIndicator(modifier = Modifier
+                        .fillMaxWidth()
+                        .requiredHeight(10.dp)
+                        .padding(horizontal = 30.dp), progress = uiState.currentScreen.div(14f), strokeCap = StrokeCap.Round)
+                },
+                navigationIcon = {
+                    IconButton(onClick = navigateUp) {
+                        Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null)
+                    }
+                },
+                actions = {
+                    Text(
+                        text = "${uiState.currentScreen}/$ACCOUNT_SETUP_MAX_SCREEN",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+            )
+        }
+    }
 }
 
 enum class AccountSetupScreen {

@@ -9,6 +9,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -67,6 +68,7 @@ import timber.log.Timber
 private const val TAG = "LoginWithPasswordScreen"
 @Composable
 fun LoginWithPasswordScreen(modifier: Modifier = Modifier,
+                            paddingValues: PaddingValues = PaddingValues(),
                             onResetPasswordClick: () -> Unit = { },
                             onSignInClick: (String, String) -> Unit = { _, _ ->  },
                             onGoogleSignInClick: (Activity?, Intent?) -> Unit = { _, _ ->},
@@ -142,7 +144,7 @@ fun LoginWithPasswordScreen(modifier: Modifier = Modifier,
         .padding(bottom = 16.dp)) {
 
         Column(modifier = modifier
-            .padding(top = 16.dp, bottom = 100.dp)
+            .padding(top = paddingValues.calculateTopPadding(), bottom = 100.dp)
             .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp)) {

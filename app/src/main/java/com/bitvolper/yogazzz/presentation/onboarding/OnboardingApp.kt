@@ -92,6 +92,7 @@ fun OnboardingApp(modifier: Modifier = Modifier,
 
             composable(route = OnboardingScreen.LoginWithPassword.name) {
                 LoginWithPasswordScreen(
+                    paddingValues = paddingValues,
                     onResetPasswordClick = {
 //                        navController.navigate(OnboardingScreen.ResetPassword.name)
                     },
@@ -108,6 +109,7 @@ fun OnboardingApp(modifier: Modifier = Modifier,
 
             composable(route = OnboardingScreen.SignupWithPassword.name) {
                 SignupWithPasswordScreen(
+                    paddingValues = paddingValues,
                     onSignupClick = { email: String?, password: String? -> onboardingViewModel.signUpEmail(email, password) },
                     snackbarHostState = snackbarHostState,
                     onGoogleSignInClick = { activity, intent ->  onboardingViewModel.signInGoogle(activity, intent) },
@@ -140,7 +142,7 @@ private fun OnboardingTopAppbar(navController: NavHostController) {
         else -> {
         TopAppBar(
             title = {  },
-            navigationIcon = { IconButton(onClick = { }) {
+            navigationIcon = { IconButton(onClick = { navController.navigateUp() }) {
                 Icon(imageVector = Icons.Outlined.ArrowBack, contentDescription = null)
             } },
             colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
