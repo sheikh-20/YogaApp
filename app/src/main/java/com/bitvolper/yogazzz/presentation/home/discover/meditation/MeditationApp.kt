@@ -4,7 +4,9 @@ import android.app.Activity
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -12,44 +14,127 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.bitvolper.yogazzz.presentation.home.BottomNavigationScreens
+import com.bitvolper.yogazzz.presentation.home.HomeScreen
+import com.bitvolper.yogazzz.presentation.viewmodel.DiscoverViewModel
 
 @Composable
-fun MeditationApp(modifier: Modifier = Modifier) {
-    Scaffold(
-        topBar = { MeditationTopAppBar() }
-    ) { paddingValues ->
-//        MeditationStartScreen()
+fun MeditationApp(modifier: Modifier = Modifier,
+                  navController: NavHostController = rememberNavController(),
+                  discoverViewModel: DiscoverViewModel = hiltViewModel()) {
 
-        MeditationCompleteScreen(paddingValues = paddingValues)
+    val meditationUIState by discoverViewModel.meditationUIState.collectAsState()
+
+    Scaffold(
+        topBar = { MeditationTopAppBar(navController = navController) }
+    ) { paddingValues ->
+
+        NavHost(
+            navController = navController, startDestination = Meditation.Start.name) {
+
+            composable(route = Meditation.Start.name) {
+                MeditationStartScreen(
+                    meditationUIState = meditationUIState,
+                    onCardClick = {
+                        discoverViewModel.updateMeditation(it)
+                        navController.navigate(Meditation.Detail.name)
+                    })
+            }
+
+            composable(route = Meditation.Detail.name) {
+                MeditationDetailScreen(paddingValues = paddingValues,
+                    onContinueScreen = { navController.navigate(Meditation.Play.name) },
+                    meditation = discoverViewModel.meditation)
+            }
+
+            composable(route = Meditation.Play.name) {
+                MeditationPlayScreen(paddingValues = paddingValues)
+            }
+
+            composable(route = Meditation.Complete.name) {
+                MeditationCompleteScreen()
+            }
+        }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun MeditationTopAppBar() {
+private fun MeditationTopAppBar(navController: NavHostController) {
     val context = LocalContext.current
 
-    CenterAlignedTopAppBar(
-        title = {
-            Text(
-                text = "Meditation",
-                fontWeight = FontWeight.SemiBold)
-        },
-        navigationIcon = {
-            IconButton(onClick = { (context as Activity).finish() }) {
-                Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null)
-            }
-        },
-        actions = {
-            IconButton(onClick = { /*TODO*/ },
-                modifier = Modifier.padding(horizontal = 4.dp)) {
-                Icon(imageVector = Icons.Rounded.Search, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
-            }
+    when (navController.currentBackStackEntryAsState().value?.destination?.route) {
+        Meditation.Start.name -> {
+            CenterAlignedTopAppBar(
+                title = {   },
+                navigationIcon = {
+                    IconButton(onClick = { (context as Activity).finish() }) {
+                        Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null)
+                    }
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.Transparent)
+            )
         }
-    )
+        Meditation.Detail.name -> {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        text = "Meditation",
+                        fontWeight = FontWeight.SemiBold)
+                },
+                navigationIcon = {
+                    IconButton(onClick = {  navController.navigateUp() }) {
+                        Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null)
+                    }
+                },
+                actions = {
+                    IconButton(onClick = { /*TODO*/ },
+                        modifier = Modifier.padding(horizontal = 4.dp)) {
+                        Icon(imageVector = Icons.Rounded.Share, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
+                    }
+                }
+            )
+        }
+        Meditation.Play.name -> {
+            CenterAlignedTopAppBar(
+                title = {   },
+                navigationIcon = {
+                    IconButton(onClick = { navController.navigateUp() }) {
+                        Icon(imageVector = Icons.Rounded.Close, contentDescription = null)
+                    }
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.Transparent)
+            )
+        }
+        else -> {
+            CenterAlignedTopAppBar(
+                title = {   },
+                navigationIcon = {
+                    IconButton(onClick = { navController.navigateUp() }) {
+                        Icon(imageVector = Icons.Rounded.Close, contentDescription = null)
+                    }
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.Transparent)
+            )
+        }
+    }
+}
+
+enum class Meditation {
+    Start, Detail, Play, Complete
 }

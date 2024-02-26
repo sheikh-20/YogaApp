@@ -1,9 +1,13 @@
 package com.bitvolper.yogazzz.presentation.viewmodel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bitvolper.yogazzz.domain.model.AdjustYogaLevel
 import com.bitvolper.yogazzz.domain.model.FlexibilityStrength
+import com.bitvolper.yogazzz.domain.model.Meditation
 import com.bitvolper.yogazzz.domain.model.PopularYoga
 import com.bitvolper.yogazzz.domain.model.StressRelief
 import com.bitvolper.yogazzz.domain.usecase.HomeUseCase
@@ -37,6 +41,13 @@ class DiscoverViewModel @Inject constructor(private val homeUseCase: HomeUseCase
 
     private var _stressRelief = MutableStateFlow<Resource<StressRelief>>(Resource.Loading)
     val stressRelief: StateFlow<Resource<StressRelief>> get() = _stressRelief
+
+
+    private var _meditationUIState = MutableStateFlow<Resource<Meditation>>(Resource.Loading)
+    val meditationUIState: StateFlow<Resource<Meditation>> get() = _meditationUIState
+
+    var meditation by mutableStateOf(Meditation.Data())
+        private set
 
     fun getPopularYoga() = viewModelScope.launch {
         try {
@@ -80,6 +91,21 @@ class DiscoverViewModel @Inject constructor(private val homeUseCase: HomeUseCase
         } catch (exception: IOException) {
             Timber.tag(TAG).e(exception)
         }
+    }
+
+    fun getMeditation() = viewModelScope.launch {
+        try {
+            Timber.tag(TAG).d("View model called")
+            homeUseCase.getMeditation().collectLatest {
+                _meditationUIState.value = it
+            }
+        } catch (exception: IOException) {
+            Timber.tag(TAG).e(exception)
+        }
+    }
+
+    fun updateMeditation(value: Meditation.Data) {
+        meditation = value
     }
 
     init {

@@ -3,6 +3,7 @@ package com.bitvolper.yogazzz.data.repository
 import com.bitvolper.yogazzz.domain.model.AdjustYogaLevel
 import com.bitvolper.yogazzz.domain.model.FaqQuestion
 import com.bitvolper.yogazzz.domain.model.FlexibilityStrength
+import com.bitvolper.yogazzz.domain.model.Meditation
 import com.bitvolper.yogazzz.domain.model.PopularYoga
 import com.bitvolper.yogazzz.domain.model.PopularYogaWithFlexibility
 import com.bitvolper.yogazzz.domain.model.StressRelief
@@ -48,6 +49,8 @@ interface HomeRepository {
     fun getFaqQuestion(): Flow<Resource<FaqQuestion>>
 
     fun getSubscription(): Flow<Resource<Subscription>>
+
+    fun getMeditation(): Flow<Resource<Meditation>>
 }
 
 class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatabase): HomeRepository {
@@ -432,4 +435,32 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
         emit(Resource.Failure(it))
     }
 
+
+    override fun getMeditation(): Flow<Resource<Meditation>> = flow {
+
+        Timber.tag(TAG).d("Called")
+        emit(Resource.Loading)
+
+        try {
+
+            Timber.tag(TAG).d("Repo called")
+
+            val result = database.getReference("app_config").child("meditation").get().await()
+
+            val json = Gson().toJson(result.value)
+            Timber.tag(TAG).d("Result -> $json")
+
+            val listType = object : TypeToken<List<Meditation.Data>>() {}.type
+            val data = Gson().fromJson<List<Meditation.Data>>(json, listType)
+
+            emit(Resource.Success(Meditation(data = data)))
+        } catch (exception: Exception) {
+            throw Throwable(exception)
+        }
+    }
+        .catch {
+            Timber.tag(TAG).e(it)
+            it.printStackTrace()
+            emit(Resource.Failure(it))
+        }
 }
