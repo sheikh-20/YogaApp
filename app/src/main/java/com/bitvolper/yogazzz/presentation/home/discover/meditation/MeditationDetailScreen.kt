@@ -30,11 +30,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitvolper.yogazzz.R
+import com.bitvolper.yogazzz.domain.model.Meditation
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import kotlinx.coroutines.launch
 
 @Composable
-fun MeditationDetailScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = PaddingValues()) {
+fun MeditationDetailScreen(modifier: Modifier = Modifier,
+                           paddingValues: PaddingValues = PaddingValues(),
+                           onContinueScreen: () -> Unit = {  },
+                           meditation: Meditation.Data = Meditation.Data()) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -53,25 +57,24 @@ fun MeditationDetailScreen(modifier: Modifier = Modifier, paddingValues: Padding
                 contentScale = ContentScale.Crop)
         }
 
-        Text(text = "Mindful Moments Meditation",
+        Text(text = meditation.title ?: "",
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold,
             modifier = modifier.padding(horizontal = 16.dp))
 
-        Text(text = "Embark on a journey of mindfulness with our \"Mindful Moments Meditation\". This guided practice encourages you to savor each moment, fostering" +
-                "a heightened awareness of the present. Cultivate mindfulness as you gently guide thoughts, finding peace in the simplicity of each mindful moment.",
-            style = MaterialTheme.typography.bodyLarge,
+        Text(text = meditation.description ?: "",
+            style = MaterialTheme.typography.bodyMedium,
             modifier = modifier.padding(horizontal = 16.dp))
 
         Row(modifier = modifier.padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically) {
             Card(shape = RoundedCornerShape(20)) {
-                Text(text = "8 mins", modifier = modifier.padding(8.dp))
+                Text(text = meditation.duration ?: "", modifier = modifier.padding(8.dp), style = MaterialTheme.typography.bodySmall)
             }
 
             Card(shape = RoundedCornerShape(20)) {
-                Text(text = "Calm", modifier = modifier.padding(8.dp))
+                Text(text = meditation.category ?: "", modifier = modifier.padding(8.dp), style = MaterialTheme.typography.bodySmall)
             }
         }
 
@@ -90,9 +93,7 @@ fun MeditationDetailScreen(modifier: Modifier = Modifier, paddingValues: Padding
 
 
                 Button(
-                    onClick = {
-
-                    },
+                    onClick = onContinueScreen,
                     modifier = modifier
                         .weight(1f)
                         .requiredHeight(50.dp)) {
