@@ -9,6 +9,7 @@ import com.bitvolper.yogazzz.domain.model.AdjustYogaLevel
 import com.bitvolper.yogazzz.domain.model.FlexibilityStrength
 import com.bitvolper.yogazzz.domain.model.Meditation
 import com.bitvolper.yogazzz.domain.model.PopularYoga
+import com.bitvolper.yogazzz.domain.model.PopularYogaWithFlexibility
 import com.bitvolper.yogazzz.domain.model.StressRelief
 import com.bitvolper.yogazzz.domain.usecase.HomeUseCase
 import com.bitvolper.yogazzz.utility.Resource
@@ -32,6 +33,9 @@ class DiscoverViewModel @Inject constructor(private val homeUseCase: HomeUseCase
     private var _popularYoga = MutableStateFlow<Resource<PopularYoga>>(Resource.Loading)
     val popularYoga: StateFlow<Resource<PopularYoga>> get() = _popularYoga
 
+    private var _discoverUIState = MutableStateFlow<Resource<PopularYogaWithFlexibility>>(Resource.Loading)
+    val discoverUIState: StateFlow<Resource<PopularYogaWithFlexibility>> get() = _discoverUIState
+
 
     private var _adjustYogaLevel = MutableStateFlow<Resource<AdjustYogaLevel>>(Resource.Loading)
     val adjustYogaLevel: StateFlow<Resource<AdjustYogaLevel>> get() = _adjustYogaLevel
@@ -48,6 +52,17 @@ class DiscoverViewModel @Inject constructor(private val homeUseCase: HomeUseCase
 
     var meditation by mutableStateOf(Meditation.Data())
         private set
+
+    fun getExploreContent() = viewModelScope.launch {
+        try {
+            Timber.tag(TAG).d("View model called")
+            homeUseCase.getPopularYogaWithFlexibility().collectLatest {
+                _discoverUIState.value = it
+            }
+        } catch (exception: IOException) {
+            Timber.tag(TAG).e(exception)
+        }
+    }
 
     fun getPopularYoga() = viewModelScope.launch {
         try {

@@ -74,6 +74,7 @@ import com.bitvolper.yogazzz.presentation.home.history.HistoryScreen
 import com.bitvolper.yogazzz.presentation.home.notification.NotificationSettingsActivity
 import com.bitvolper.yogazzz.presentation.home.reports.ReportsScreen
 import com.bitvolper.yogazzz.presentation.notifications.NotificationsActivity
+import com.bitvolper.yogazzz.presentation.viewmodel.DiscoverViewModel
 import com.bitvolper.yogazzz.presentation.viewmodel.HomeViewModel
 import com.bitvolper.yogazzz.presentation.viewmodel.OnboardingViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -85,7 +86,8 @@ import kotlinx.coroutines.launch
 fun HomeApp(modifier: Modifier = Modifier,
             navController: NavHostController = rememberNavController(),
             onboardingViewModel: OnboardingViewModel = hiltViewModel(),
-            homeViewModel: HomeViewModel = hiltViewModel()) {
+            homeViewModel: HomeViewModel = hiltViewModel(),
+            discoverViewModel: DiscoverViewModel = hiltViewModel()) {
 
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -97,7 +99,7 @@ fun HomeApp(modifier: Modifier = Modifier,
     val profileUiState by homeViewModel.profileInfoUiState.collectAsState()
 
     val homeUIState by homeViewModel.homeUIState.collectAsState()
-    val discoverUIState by homeViewModel.discoverUIState.collectAsState()
+    val discoverUIState by discoverViewModel.discoverUIState.collectAsState()
 
     var notificationPermissionState = rememberMultiplePermissionsState(permissions = listOf())
 

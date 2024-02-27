@@ -4,6 +4,7 @@ data class AdjustYogaLevel(
     val data: List<Data?>? = null
 ) {
     data class Data(
+        val category: String? = null,
         val title: String? = null,
         val image: String? = null,
         val duration: String? = null,
