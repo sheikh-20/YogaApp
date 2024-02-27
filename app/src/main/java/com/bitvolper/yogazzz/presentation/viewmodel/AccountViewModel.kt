@@ -108,9 +108,4 @@ class AccountViewModel @Inject constructor(
             Timber.tag(TAG).e(exception)
         }
     }
-
-    init {
-        getFaqQuestion()
-        getSubscription()
-    }
 }

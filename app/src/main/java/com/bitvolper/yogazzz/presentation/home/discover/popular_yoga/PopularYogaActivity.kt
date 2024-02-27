@@ -16,6 +16,7 @@ import com.bitvolper.yogazzz.presentation.categorydetail.CategoryDetailApp
 import com.bitvolper.yogazzz.presentation.home.discover.flexiblity_strength.FlexibilityStrengthApp
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.presentation.viewmodel.AccountViewModel
+import com.bitvolper.yogazzz.presentation.viewmodel.DiscoverViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -30,9 +31,12 @@ class PopularYogaActivity: BaseActivity() {
     }
 
     private val accountViewModel: AccountViewModel by viewModels()
+    private val discoverViewModel: DiscoverViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        discoverViewModel.getPopularYoga()
 
         lifecycle.coroutineScope.launch {
             accountViewModel.appThemeIndex.collect {
