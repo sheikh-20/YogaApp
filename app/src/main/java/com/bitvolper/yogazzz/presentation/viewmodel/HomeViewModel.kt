@@ -40,9 +40,6 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase): V
     private var _recommendationUIState = MutableStateFlow<Resource<YogaRecommendation>>(Resource.Loading)
     val recommendationUIState: StateFlow<Resource<YogaRecommendation>> get() = _recommendationUIState
 
-    private var _discoverUIState = MutableStateFlow<Resource<PopularYogaWithFlexibility>>(Resource.Loading)
-    val discoverUIState: StateFlow<Resource<PopularYogaWithFlexibility>> get() = _discoverUIState
-
     private var _yogaExerciseUIState = MutableStateFlow<Resource<YogaExercise>>(Resource.Loading)
     val yogaExerciseUIState: StateFlow<Resource<YogaExercise>> get() = _yogaExerciseUIState
 
@@ -96,16 +93,7 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase): V
         }
     }
 
-    fun getExploreContent() = viewModelScope.launch {
-        try {
-            Timber.tag(TAG).d("View model called")
-            homeUseCase.getPopularYogaWithFlexibility().collectLatest {
-                _discoverUIState.value = it
-            }
-        } catch (exception: IOException) {
-            Timber.tag(TAG).e(exception)
-        }
-    }
+
 
     fun getYogaExercise(id: Int = 1) = viewModelScope.launch {
         try {

@@ -15,6 +15,7 @@ import com.bitvolper.yogazzz.base.BaseActivity
 import com.bitvolper.yogazzz.presentation.home.discover.popular_yoga.PopularYogaApp
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.presentation.viewmodel.AccountViewModel
+import com.bitvolper.yogazzz.presentation.viewmodel.DiscoverViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -29,9 +30,12 @@ class StressReliefActivity: BaseActivity() {
     }
 
     private val accountViewModel: AccountViewModel by viewModels()
+    private val discoverViewModel: DiscoverViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        discoverViewModel.getStressRelief()
 
         lifecycle.coroutineScope.launch {
             accountViewModel.appThemeIndex.collect {

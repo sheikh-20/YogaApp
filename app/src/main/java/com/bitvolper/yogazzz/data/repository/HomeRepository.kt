@@ -174,10 +174,13 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
 
             Timber.tag(TAG).d("Repo called")
 
-            val result = database.getReference("app_config").child("popular_yoga").get().await()
+            val result = firestore.collection("yoga_exercise")
+                .whereEqualTo("category", "popularYoga")
+                .get()
+                .await()
 
-            val json = Gson().toJson(result.value)
-            Timber.tag(TAG).d("Result -> $json")
+            val json = Gson().toJson(result.documents.map { it.data })
+            Timber.tag(TAG).e("Result -> $json")
 
             val listType = object : TypeToken<List<PopularYoga.Data>>() {}.type
             val data = Gson().fromJson<List<PopularYoga.Data>>(json, listType)
@@ -202,9 +205,12 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
 
             Timber.tag(TAG).d("Repo called")
 
-            val result = database.getReference("app_config").child("adjust_yoga_level").get().await()
+            val result = firestore.collection("yoga_exercise")
+                .whereEqualTo("category", "adjustYogaLevel")
+                .get()
+                .await()
 
-            val json = Gson().toJson(result.value)
+            val json = Gson().toJson(result.documents.map { it.data })
             Timber.tag(TAG).d("Result -> $json")
 
             val listType = object : TypeToken<List<AdjustYogaLevel.Data>>() {}.type
@@ -230,9 +236,12 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
 
             Timber.tag(TAG).d("Repo called")
 
-            val result = database.getReference("app_config").child("flexibility_yoga").get().await()
+            val result = firestore.collection("yoga_exercise")
+                .whereEqualTo("category", "flexibilityYoga")
+                .get()
+                .await()
 
-            val json = Gson().toJson(result.value)
+            val json = Gson().toJson(result.documents.map { it.data })
             Timber.tag(TAG).d("Result -> $json")
 
             val listType = object : TypeToken<List<FlexibilityStrength.Data>>() {}.type
@@ -258,9 +267,12 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
 
             Timber.tag(TAG).d("Repo called")
 
-            val result = database.getReference("app_config").child("stress_relief").get().await()
+            val result = firestore.collection("yoga_exercise")
+                .whereEqualTo("category", "stressRelief")
+                .get()
+                .await()
 
-            val json = Gson().toJson(result.value)
+            val json = Gson().toJson(result.documents.map { it.data })
             Timber.tag(TAG).d("Result -> $json")
 
             val listType = object : TypeToken<List<StressRelief.Data>>() {}.type
@@ -285,28 +297,43 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
 
             Timber.tag(TAG).d("Repo called")
 
-            val popularYogaResult = database.getReference("app_config").child("popular_yoga").get().await()
-            val adjustYogaLevelResult = database.getReference("app_config").child("adjust_yoga_level").get().await()
-            val flexibilityStrengthResult = database.getReference("app_config").child("flexibility_yoga").get().await()
-            val stressReliefResult = database.getReference("app_config").child("stress_relief").get().await()
+            val popularYogaResult = firestore.collection("yoga_exercise")
+                .whereEqualTo("category", "popularYoga")
+                .get()
+                .await()
 
-            val jsonPopularYoga = Gson().toJson(popularYogaResult.value)
+            val adjustYogaLevelResult = firestore.collection("yoga_exercise")
+                .whereEqualTo("category", "adjustYogaLevel")
+                .get()
+                .await()
+
+            val flexibilityStrengthResult = firestore.collection("yoga_exercise")
+                .whereEqualTo("category", "flexibilityYoga")
+                .get()
+                .await()
+
+            val stressReliefResult = firestore.collection("yoga_exercise")
+                .whereEqualTo("category", "stressRelief")
+                .get()
+                .await()
+
+            val jsonPopularYoga = Gson().toJson(popularYogaResult.documents.map { it.data })
             Timber.tag(TAG).d("Result -> $jsonPopularYoga")
             val listTypePopularYoga = object : TypeToken<List<PopularYoga.Data>>() {}.type
             val popularYoga = Gson().fromJson<List<PopularYoga.Data>>(jsonPopularYoga, listTypePopularYoga)
 
 
-            val jsonAdjustYogaLevel = Gson().toJson(adjustYogaLevelResult.value)
+            val jsonAdjustYogaLevel = Gson().toJson(adjustYogaLevelResult.documents.map { it.data })
             Timber.tag(TAG).d("Result -> $jsonAdjustYogaLevel")
             val listTypeAdjustYogaLevel = object : TypeToken<List<AdjustYogaLevel.Data>>() {}.type
             val adjustYogaLevel = Gson().fromJson<List<AdjustYogaLevel.Data>>(jsonAdjustYogaLevel, listTypeAdjustYogaLevel)
 
-            val jsonFlexibilityStrength = Gson().toJson(flexibilityStrengthResult.value)
+            val jsonFlexibilityStrength = Gson().toJson(flexibilityStrengthResult.documents.map { it.data })
             Timber.tag(TAG).d("Result -> $jsonFlexibilityStrength")
             val listTypeFlexibilityStrength = object : TypeToken<List<FlexibilityStrength.Data>>() {}.type
             val flexibilityStrength = Gson().fromJson<List<FlexibilityStrength.Data>>(jsonFlexibilityStrength, listTypeFlexibilityStrength)
 
-            val jsonStressRelief = Gson().toJson(stressReliefResult.value)
+            val jsonStressRelief = Gson().toJson(stressReliefResult.documents.map { it.data })
             Timber.tag(TAG).d("Result -> $jsonStressRelief")
             val listTypeStressRelief = object : TypeToken<List<StressRelief.Data>>() {}.type
             val stressRelief = Gson().fromJson<List<StressRelief.Data>>(jsonStressRelief, listTypeStressRelief)
