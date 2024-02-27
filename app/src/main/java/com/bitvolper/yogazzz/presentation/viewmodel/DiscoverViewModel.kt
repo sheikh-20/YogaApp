@@ -107,11 +107,4 @@ class DiscoverViewModel @Inject constructor(private val homeUseCase: HomeUseCase
     fun updateMeditation(value: Meditation.Data) {
         meditation = value
     }
-
-    init {
-        getPopularYoga()
-        getAdjustYogaLevel()
-        getFlexibilityStrength()
-        getStressRelief()
-    }
 }

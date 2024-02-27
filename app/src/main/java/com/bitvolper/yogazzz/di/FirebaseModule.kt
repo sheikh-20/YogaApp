@@ -5,6 +5,7 @@ import android.content.Context
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import dagger.Module
@@ -32,6 +33,11 @@ object FirebaseModule {
     @Provides
     @Singleton
     fun providesFirebaseRealtimeDatabase() = FirebaseDatabase.getInstance()
+
+
+    @Provides
+    @Singleton
+    fun providesFirebaseCloudDatastore() = FirebaseFirestore.getInstance()
 
     @Provides
     @Singleton

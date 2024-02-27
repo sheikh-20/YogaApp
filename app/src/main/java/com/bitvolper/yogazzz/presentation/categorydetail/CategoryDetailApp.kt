@@ -11,19 +11,27 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.bitvolper.yogazzz.presentation.viewmodel.HomeViewModel
 
 @Composable
-fun CategoryDetailApp(modifier: Modifier = Modifier) {
+fun CategoryDetailApp(modifier: Modifier = Modifier,
+                      homeViewModel: HomeViewModel = hiltViewModel()) {
+
+    val yogaCategoryUIState by homeViewModel.yogaCategoryUIState.collectAsState()
+
     Scaffold(
         topBar = {
             CategoryTopAppBar()
         }
     ) { paddingValues ->
-        CategoryDetailScreen()
+        CategoryDetailScreen(yogaCategoryUIState = yogaCategoryUIState)
     }
 }
 

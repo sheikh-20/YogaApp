@@ -31,6 +31,7 @@ gson-version = "2.10.1"
 coil-version = "2.4.0"
 datastore-version = "1.0.0"
 accompanist-permission-version = "0.23.1"
+firebase-firestore-ktx = "24.10.2"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose" }
@@ -83,6 +84,7 @@ play-app-update = { module = "com.google.android.play:app-update", version.ref =
 play-app-update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "play-app-update-version" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebase-analytics" }
 firebase-message = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebase-message" }
+firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebase-firestore-ktx" }
 
 
 [bundles]

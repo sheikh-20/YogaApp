@@ -10,10 +10,12 @@ import com.bitvolper.yogazzz.domain.model.StressRelief
 import com.bitvolper.yogazzz.domain.model.Subscription
 import com.bitvolper.yogazzz.domain.model.YogaCategory
 import com.bitvolper.yogazzz.domain.model.YogaCategoryWithRecommendation
+import com.bitvolper.yogazzz.domain.model.YogaData
 import com.bitvolper.yogazzz.domain.model.YogaExercise
 import com.bitvolper.yogazzz.domain.model.YogaRecommendation
 import com.bitvolper.yogazzz.utility.Resource
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.flow.Flow
@@ -51,9 +53,11 @@ interface HomeRepository {
     fun getSubscription(): Flow<Resource<Subscription>>
 
     fun getMeditation(): Flow<Resource<Meditation>>
+
+    fun getYogaExerciseByCategory(category: String): Flow<Resource<YogaData>>
 }
 
-class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatabase): HomeRepository {
+class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatabase, private val firestore: FirebaseFirestore): HomeRepository {
     private companion object {
         const val TAG = "HomeRepositoryImpl"
     }
@@ -95,9 +99,18 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
 
             Timber.tag(TAG).d("Repo called")
 
-            val result = database.getReference("app_config").child("recommendation").get().await()
 
-            val json = Gson().toJson(result.value)
+            val result = firestore.collection("yoga_exercise")
+                .whereEqualTo("category", "recommendation")
+                .get()
+                .await()
+
+            val filter = result.documents.map {
+                Timber.tag(TAG).e(it.toString())
+                it.data
+            }
+
+            val json = Gson().toJson(filter)
             Timber.tag(TAG).d("Result -> $json")
 
             val listType = object : TypeToken<List<YogaRecommendation.Data>>() {}.type
@@ -122,7 +135,11 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
 
             Timber.tag(TAG).d("Repo called")
 
-            val recommendationResult = database.getReference("app_config").child("recommendation").get().await()
+            val recommendationResult =  firestore.collection("yoga_exercise")
+                .whereEqualTo("category", "recommendation")
+                .get()
+                .await()
+
             val categoryResult = database.getReference("app_config").child("yoga_category").get().await()
 
             val jsonCategory = Gson().toJson(categoryResult.value)
@@ -131,7 +148,7 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
             val category = Gson().fromJson<List<YogaCategory.Data>>(jsonCategory, listTypeCategory)
 
 
-            val jsonRecommendation = Gson().toJson(recommendationResult.value)
+            val jsonRecommendation = Gson().toJson(recommendationResult.documents.map { it.data })
             Timber.tag(TAG).d("Result -> $jsonRecommendation")
             val listTypeRecommendation = object : TypeToken<List<YogaRecommendation.Data>>() {}.type
             val recommendation = Gson().fromJson<List<YogaRecommendation.Data>>(jsonRecommendation, listTypeRecommendation)
@@ -454,6 +471,43 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
             val data = Gson().fromJson<List<Meditation.Data>>(json, listType)
 
             emit(Resource.Success(Meditation(data = data)))
+        } catch (exception: Exception) {
+            throw Throwable(exception)
+        }
+    }
+        .catch {
+            Timber.tag(TAG).e(it)
+            it.printStackTrace()
+            emit(Resource.Failure(it))
+        }
+
+    override fun getYogaExerciseByCategory(category: String): Flow<Resource<YogaData>> = flow {
+
+        Timber.tag(TAG).d("Called")
+        emit(Resource.Loading)
+
+        try {
+
+            Timber.tag(TAG).d("Repo called")
+
+
+            val result = firestore.collection("yoga_exercise")
+                .whereEqualTo("category", category)
+                .get()
+                .await()
+
+            val filter = result.documents.map {
+                Timber.tag(TAG).e(it.toString())
+                it.data
+            }
+
+            val json = Gson().toJson(filter)
+            Timber.tag(TAG).d("Result -> $json")
+
+            val listType = object : TypeToken<List<YogaData.Data>>() {}.type
+            val data = Gson().fromJson<List<YogaData.Data>>(json, listType)
+
+            emit(Resource.Success(YogaData(data = data)))
         } catch (exception: Exception) {
             throw Throwable(exception)
         }
