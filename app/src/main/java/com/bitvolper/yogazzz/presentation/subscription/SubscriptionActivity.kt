@@ -34,6 +34,8 @@ class SubscriptionActivity: BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        accountViewModel.getSubscription()
+
         lifecycle.coroutineScope.launch {
             accountViewModel.appThemeIndex.collect {
                 setTransparentStatusBar(it.themeIndex)

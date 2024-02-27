@@ -33,6 +33,8 @@ class FaqActivity: BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        accountViewModel.getFaqQuestion()
+
         lifecycle.coroutineScope.launch {
             accountViewModel.appThemeIndex.collect {
                 setTransparentStatusBar(it.themeIndex)
