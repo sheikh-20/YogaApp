@@ -12,9 +12,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.coroutineScope
 import com.bitvolper.yogazzz.base.BaseActivity
-import com.bitvolper.yogazzz.presentation.home.HomeApp
-import com.bitvolper.yogazzz.presentation.notifications.NotificationsApp
-import com.bitvolper.yogazzz.presentation.onboarding.OnboardingApp
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.presentation.viewmodel.AccountViewModel
 import dagger.hilt.android.AndroidEntryPoint

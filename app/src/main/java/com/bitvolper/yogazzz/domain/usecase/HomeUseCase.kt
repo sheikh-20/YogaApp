@@ -11,6 +11,7 @@ import com.bitvolper.yogazzz.domain.model.StressRelief
 import com.bitvolper.yogazzz.domain.model.Subscription
 import com.bitvolper.yogazzz.domain.model.YogaCategory
 import com.bitvolper.yogazzz.domain.model.YogaCategoryWithRecommendation
+import com.bitvolper.yogazzz.domain.model.YogaData
 import com.bitvolper.yogazzz.domain.model.YogaExercise
 import com.bitvolper.yogazzz.domain.model.YogaRecommendation
 import com.bitvolper.yogazzz.utility.Resource
@@ -45,6 +46,8 @@ interface HomeUseCase {
     fun getSubscription(): Flow<Resource<Subscription>>
 
     fun getMeditation(): Flow<Resource<Meditation>>
+
+    fun getYogaExerciseByCategory(category: String): Flow<Resource<YogaData>>
 }
 
 class GetHomeUseCaseInteractors(private val repository: HomeRepository): HomeUseCase {
@@ -108,5 +111,9 @@ class GetHomeUseCaseInteractors(private val repository: HomeRepository): HomeUse
 
     override fun getMeditation(): Flow<Resource<Meditation>> {
         return repository.getMeditation()
+    }
+
+    override fun getYogaExerciseByCategory(category: String): Flow<Resource<YogaData>> {
+        return repository.getYogaExerciseByCategory(category)
     }
 }

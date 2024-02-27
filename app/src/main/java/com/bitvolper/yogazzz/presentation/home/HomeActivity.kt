@@ -18,6 +18,7 @@ import com.bitvolper.yogazzz.presentation.accountsetup.AccountSetupApp
 import com.bitvolper.yogazzz.presentation.onboarding.OnboardingApp
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.presentation.viewmodel.AccountViewModel
+import com.bitvolper.yogazzz.presentation.viewmodel.HomeViewModel
 import com.bitvolper.yogazzz.presentation.viewmodel.OnboardingViewModel
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -43,6 +44,7 @@ class HomeActivity : BaseActivity() {
 
     private val onboardingViewModel: OnboardingViewModel by viewModels()
     private val accountViewModel: AccountViewModel by viewModels()
+    private val homeViewModel: HomeViewModel by viewModels()
 
     private lateinit var analytics: FirebaseAnalytics
 
@@ -62,6 +64,9 @@ class HomeActivity : BaseActivity() {
 
         appUpdateManager = AppUpdateManagerFactory.create(this)
         checkForAppUpdates()
+
+        homeViewModel.getHomeContent()
+        homeViewModel.getExploreContent()
 
         lifecycle.coroutineScope.launch {
             accountViewModel.appThemeIndex.collect {

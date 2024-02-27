@@ -44,6 +44,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -148,11 +149,18 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
 
     Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Card(onClick = { CategoryDetailActivity.startActivity(context as Activity) },
+            Card(onClick = {
+                CategoryDetailActivity.startActivity(
+                    activity = context as Activity,
+                    category = "improvedFlexibility",
+                    title = "Improved Flexibility",
+                    image = R.drawable.ic_category1,
+                    color = R.color.category1) },
+
                 modifier = modifier
                     .weight(1f)
                     .requiredHeight(120.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFFd89bfc))) {
+                colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.category1))) {
                 Box(modifier = modifier.fillMaxSize()) {
 
 
@@ -168,10 +176,18 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
                 }
             }
 
-            Card(onClick = { CategoryDetailActivity.startActivity(context as Activity) }, modifier = modifier
-                .weight(1f)
-                .requiredHeight(120.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF87c8bc))) {
+            Card(onClick = {
+                CategoryDetailActivity.startActivity(
+                    activity = context as Activity,
+                    category = "stressReduction",
+                    title = "Stress Reduction",
+                    image = R.drawable.ic_category2,
+                    color = R.color.category2)
+                           },
+                modifier = modifier
+                    .weight(1f)
+                    .requiredHeight(120.dp),
+                colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.category2))) {
                 Box(modifier = modifier.fillMaxSize()) {
 
 
@@ -192,7 +208,7 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
         Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Card(onClick = { CategoryDetailActivity.startActivity(context as Activity) }, modifier = modifier
                 .weight(1f)
-                .requiredHeight(120.dp), colors = CardDefaults.cardColors(containerColor = Color(0xFFFF8788))) {
+                .requiredHeight(120.dp), colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.category3))) {
                 Box(modifier = modifier.fillMaxSize()) {
 
                     Image(
@@ -210,7 +226,7 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
 
             Card(onClick = { CategoryDetailActivity.startActivity(context as Activity) }, modifier = modifier
                 .weight(1f)
-                .requiredHeight(120.dp), colors = CardDefaults.cardColors(containerColor = Color(0xFFFec9a7))) {
+                .requiredHeight(120.dp), colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.category4))) {
                 Box(modifier = modifier.fillMaxSize()) {
 
                     Image(
@@ -229,7 +245,7 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
         Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Card(onClick = { CategoryDetailActivity.startActivity(context as Activity) }, modifier = modifier
                 .weight(1f)
-                .requiredHeight(120.dp), colors = CardDefaults.cardColors(containerColor = Color(0xFFb49edc))) {
+                .requiredHeight(120.dp), colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.category5))) {
                 Box(modifier = modifier.fillMaxSize()) {
 
                     Image(
@@ -247,7 +263,7 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
 
             Card(onClick = { CategoryDetailActivity.startActivity(context as Activity) }, modifier = modifier
                 .weight(1f)
-                .requiredHeight(120.dp), colors = CardDefaults.cardColors(containerColor = Color(0xFF96bdff))) {
+                .requiredHeight(120.dp), colors = CardDefaults.cardColors(containerColor = colorResource(R.color.category6))) {
                 Box(modifier = modifier.fillMaxSize()) {
 
                     Image(
@@ -267,7 +283,7 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
             Card(onClick = { CategoryDetailActivity.startActivity(context as Activity) }, modifier = modifier
                 .weight(1f)
                 .requiredHeight(120.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFFefa796))) {
+                colors = CardDefaults.cardColors(containerColor = colorResource(R.color.category7))) {
                 Box(modifier = modifier.fillMaxSize()) {
 
                     Image(
@@ -284,7 +300,7 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
 
             Card(onClick = { CategoryDetailActivity.startActivity(context as Activity) }, modifier = modifier
                 .weight(1f)
-                .requiredHeight(120.dp), colors = CardDefaults.cardColors(containerColor = Color(0xFF9ca2d6))) {
+                .requiredHeight(120.dp), colors = CardDefaults.cardColors(containerColor = colorResource(R.color.category8))) {
                 Box(modifier = modifier.fillMaxSize()) {
 
                     Image(

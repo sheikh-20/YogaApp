@@ -94,6 +94,7 @@ dependencies {
     implementation(libs.play.service)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.message)
+    implementation(libs.firebase.firestore.ktx)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
