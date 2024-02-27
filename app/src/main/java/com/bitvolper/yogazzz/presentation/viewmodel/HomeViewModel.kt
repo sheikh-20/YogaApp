@@ -2,10 +2,10 @@ package com.bitvolper.yogazzz.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bitvolper.yogazzz.domain.model.PopularYoga
 import com.bitvolper.yogazzz.domain.model.PopularYogaWithFlexibility
 import com.bitvolper.yogazzz.domain.model.UserData
 import com.bitvolper.yogazzz.domain.model.YogaCategoryWithRecommendation
+import com.bitvolper.yogazzz.domain.model.YogaData
 import com.bitvolper.yogazzz.domain.model.YogaExercise
 import com.bitvolper.yogazzz.domain.model.YogaRecommendation
 import com.bitvolper.yogazzz.domain.usecase.HomeUseCase
@@ -49,6 +49,9 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase): V
     private var _bookmarkUIState = MutableStateFlow<Resource<YogaExercise>>(Resource.Loading)
     val bookmarkUIState: StateFlow<Resource<YogaExercise>> get() = _bookmarkUIState
 
+    private var _yogaCategoryUIState = MutableStateFlow<Resource<YogaData>>(Resource.Loading)
+    val yogaCategoryUIState: StateFlow<Resource<YogaData>> get() = _yogaCategoryUIState
+
     private fun getSignedInUser() {
         auth.currentUser?.apply {
             _profileInfoUiState.value = UserData(
@@ -71,6 +74,17 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase): V
         }
     }
 
+    fun getYogaExerciseByCategory(category: String = "improvedFlexibility") = viewModelScope.launch {
+        try {
+            Timber.tag(TAG).d("View model called")
+            homeUseCase.getYogaExerciseByCategory(category).collectLatest {
+                _yogaCategoryUIState.value = it
+            }
+        } catch (exception: IOException) {
+            Timber.tag(TAG).e(exception)
+        }
+    }
+
     fun getYogaRecommendation() = viewModelScope.launch {
         try {
             Timber.tag(TAG).d("View model called")
@@ -82,7 +96,7 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase): V
         }
     }
 
-    fun getPopularYoga() = viewModelScope.launch {
+    fun getExploreContent() = viewModelScope.launch {
         try {
             Timber.tag(TAG).d("View model called")
             homeUseCase.getPopularYogaWithFlexibility().collectLatest {
@@ -128,7 +142,5 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase): V
 
     init {
         getSignedInUser()
-        getHomeContent()
-        getPopularYoga()
     }
 }

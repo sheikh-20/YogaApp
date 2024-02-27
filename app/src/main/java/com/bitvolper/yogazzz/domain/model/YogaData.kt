@@ -1,6 +1,6 @@
 package com.bitvolper.yogazzz.domain.model
 
-data class YogaRecommendation(
+data class YogaData(
     val data: List<Data?>? = null
 ) {
     data class Data(

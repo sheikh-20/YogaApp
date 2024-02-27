@@ -10,4 +10,14 @@
 
     <color name="outline">#FF938F99</color>
     <color name="primary">#FFD0BCFF</color>
+
+    <color name="category1">#FFd89bfc</color>
+    <color name="category2">#FF87c8bc</color>
+    <color name="category3">#FFFF8788</color>
+    <color name="category4">#FFFec9a7</color>
+    <color name="category5">#FFb49edc</color>
+    <color name="category6">#FF96bdff</color>
+    <color name="category7">#FFefa796</color>
+    <color name="category8">#FF9ca2d6</color>
+
 </resources>
