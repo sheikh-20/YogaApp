@@ -1,15 +1,19 @@
 package com.bitvolper.yogazzz.presentation.userprofile
 
 import android.content.res.Configuration
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
@@ -19,8 +23,15 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CalendarMonth
+import androidx.compose.material.icons.rounded.Email
+import androidx.compose.material.icons.rounded.ExpandMore
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -39,6 +51,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
+import kotlinx.coroutines.launch
 
 @Composable
 fun UserProfileScreen(modifier: Modifier = Modifier,
@@ -47,12 +60,14 @@ fun UserProfileScreen(modifier: Modifier = Modifier,
                       onFullNameChange: (String) -> Unit = { _ -> },
                       email: String = "",
                       onEmailChange: (String) -> Unit = { _ -> },
-                      gender: String = "",
-                      onGenderChange: (String) -> Unit = { _ -> },
-                      birthdayDate: String = "",
-                      onBirthdayDateChange: (String) -> Unit = { _ -> }
-                      ) {
+                      gender: Int = 0,
 
+                      onGenderButtonClick: () -> Unit = { },
+                      birthdayDate: Long = 0L,
+
+                      onUpdateButtonClick: () -> Unit = { },
+                      onCalendarButtonClick: () -> Unit = {  }
+                      ) {
 
     val focusManager = LocalFocusManager.current
 
@@ -64,12 +79,7 @@ fun UserProfileScreen(modifier: Modifier = Modifier,
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(
-                top = paddingValues.calculateTopPadding(),
-                start = 16.dp,
-                end = 16.dp,
-                bottom = 16.dp
-            ),
+            .padding(top = paddingValues.calculateTopPadding(), bottom = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
 
@@ -77,6 +87,7 @@ fun UserProfileScreen(modifier: Modifier = Modifier,
             modifier = modifier
                 .fillMaxWidth()
                 .wrapContentWidth(align = Alignment.CenterHorizontally)
+                .padding(horizontal = 16.dp)
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally) {
@@ -93,7 +104,7 @@ fun UserProfileScreen(modifier: Modifier = Modifier,
 
             Column {
                 Text(
-                    text = "Store Name",
+                    text = "Full Name",
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -103,7 +114,7 @@ fun UserProfileScreen(modifier: Modifier = Modifier,
                     onValueChange = onFullNameChange,
                     label = {
                         if (fullNameInteractionSource.collectIsFocusedAsState().value.not() && fullName.isEmpty()) {
-                            Text(text = "Store name")
+                            Text(text = "Full name")
                         }
                     },
                     modifier = modifier.fillMaxWidth(),
@@ -147,7 +158,11 @@ fun UserProfileScreen(modifier: Modifier = Modifier,
                             FocusDirection.Down
                         )
                     }),
-                    interactionSource = emailInteractionSource
+                    leadingIcon = {
+                                  Icon(imageVector = Icons.Rounded.Email, contentDescription = null)
+                    },
+                    interactionSource = emailInteractionSource,
+                    enabled = false
                 )
             }
 
@@ -159,10 +174,10 @@ fun UserProfileScreen(modifier: Modifier = Modifier,
                 )
 
                 OutlinedTextField(
-                    value = gender,
-                    onValueChange = onGenderChange,
+                    value = if (gender == 0) "Man" else "Woman",
+                    onValueChange = {  },
                     label = {
-                        if (genderInteractionSource.collectIsFocusedAsState().value.not() && gender.isEmpty()) {
+                        if (genderInteractionSource.collectIsFocusedAsState().value.not() && gender.toString().isEmpty()) {
                             Text(text = "Gender")
                         }
                     },
@@ -177,7 +192,15 @@ fun UserProfileScreen(modifier: Modifier = Modifier,
                             FocusDirection.Down
                         )
                     }),
-                    interactionSource = genderInteractionSource
+                    trailingIcon = {
+                                   IconButton(onClick = onGenderButtonClick) {
+                                       Icon(
+                                           imageVector = Icons.Rounded.ExpandMore,
+                                           contentDescription = null
+                                       )
+                                   }
+                    },
+                    interactionSource = genderInteractionSource,
                 )
             }
 
@@ -189,10 +212,10 @@ fun UserProfileScreen(modifier: Modifier = Modifier,
                 )
 
                 OutlinedTextField(
-                    value = birthdayDate,
-                    onValueChange = onBirthdayDateChange,
+                    value = birthdayDate.toString(),
+                    onValueChange = {  },
                     label = {
-                        if (birthdayDateInteractionSource.collectIsFocusedAsState().value.not() && birthdayDate.isEmpty()) {
+                        if (birthdayDateInteractionSource.collectIsFocusedAsState().value.not() && birthdayDate.toString().isEmpty()) {
                             Text(text = "12/12/1995")
                         }
                     },
@@ -209,9 +232,36 @@ fun UserProfileScreen(modifier: Modifier = Modifier,
                     }),
                     interactionSource = birthdayDateInteractionSource,
                     trailingIcon = {
-                        Icon(imageVector = Icons.Rounded.CalendarMonth, contentDescription = null)
+                        IconButton(onClick = onCalendarButtonClick) {
+                            Icon(imageVector = Icons.Rounded.CalendarMonth, contentDescription = null)
+                        }
                     }
                 )
+            }
+        }
+
+
+        Spacer(modifier = modifier.weight(1f))
+
+        Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+
+            Divider(modifier = modifier.fillMaxWidth())
+
+            Row(modifier = modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+
+
+                Button(
+                    onClick = onUpdateButtonClick,
+                    modifier = modifier
+                        .weight(1f)
+                        .requiredHeight(50.dp)) {
+
+                    Text(text = "Update")
+                }
             }
         }
     }

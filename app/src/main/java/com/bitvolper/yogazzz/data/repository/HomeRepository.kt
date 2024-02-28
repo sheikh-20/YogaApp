@@ -1,5 +1,6 @@
 package com.bitvolper.yogazzz.data.repository
 
+import com.bitvolper.yogazzz.domain.model.AccountInfo
 import com.bitvolper.yogazzz.domain.model.AdjustYogaLevel
 import com.bitvolper.yogazzz.domain.model.FaqQuestion
 import com.bitvolper.yogazzz.domain.model.FlexibilityStrength
@@ -55,6 +56,10 @@ interface HomeRepository {
     fun getMeditation(): Flow<Resource<Meditation>>
 
     fun getYogaExerciseByCategory(category: String): Flow<Resource<YogaData>>
+
+    suspend fun updateUserInfo(userId: String, accountInfo: AccountInfo)
+
+    fun getUserInfo(userId: String): Flow<Resource<AccountInfo>>
 }
 
 class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatabase, private val firestore: FirebaseFirestore): HomeRepository {
@@ -535,6 +540,30 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
             val data = Gson().fromJson<List<YogaData.Data>>(json, listType)
 
             emit(Resource.Success(YogaData(data = data)))
+        } catch (exception: Exception) {
+            throw Throwable(exception)
+        }
+    }
+        .catch {
+            Timber.tag(TAG).e(it)
+            it.printStackTrace()
+            emit(Resource.Failure(it))
+        }
+
+    override suspend fun updateUserInfo(userId: String, accountInfo: AccountInfo) {
+        database.getReference("user").child(userId).setValue(accountInfo)
+    }
+
+    override fun getUserInfo(userId: String): Flow<Resource<AccountInfo>> = flow {
+        emit(Resource.Loading)
+
+        try {
+            val result = database.getReference("user").child(userId).get().await()
+
+            val json = Gson().toJson(result.value)
+            Timber.tag(TAG).d(json)
+
+            emit(Resource.Success(Gson().fromJson(json, AccountInfo::class.java)))
         } catch (exception: Exception) {
             throw Throwable(exception)
         }
