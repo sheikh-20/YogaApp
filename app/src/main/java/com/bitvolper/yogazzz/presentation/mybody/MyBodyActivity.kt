@@ -34,6 +34,8 @@ class MyBodyActivity: BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
+
         lifecycle.coroutineScope.launch {
             accountViewModel.appThemeIndex.collect {
                 setTransparentStatusBar(it.themeIndex)

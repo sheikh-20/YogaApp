@@ -1,6 +1,7 @@
 package com.bitvolper.yogazzz.domain.usecase
 
 import com.bitvolper.yogazzz.data.repository.HomeRepository
+import com.bitvolper.yogazzz.domain.model.AccountInfo
 import com.bitvolper.yogazzz.domain.model.AdjustYogaLevel
 import com.bitvolper.yogazzz.domain.model.FaqQuestion
 import com.bitvolper.yogazzz.domain.model.FlexibilityStrength
@@ -9,6 +10,7 @@ import com.bitvolper.yogazzz.domain.model.PopularYoga
 import com.bitvolper.yogazzz.domain.model.PopularYogaWithFlexibility
 import com.bitvolper.yogazzz.domain.model.StressRelief
 import com.bitvolper.yogazzz.domain.model.Subscription
+import com.bitvolper.yogazzz.domain.model.UserData
 import com.bitvolper.yogazzz.domain.model.YogaCategory
 import com.bitvolper.yogazzz.domain.model.YogaCategoryWithRecommendation
 import com.bitvolper.yogazzz.domain.model.YogaData
@@ -48,6 +50,10 @@ interface HomeUseCase {
     fun getMeditation(): Flow<Resource<Meditation>>
 
     fun getYogaExerciseByCategory(category: String): Flow<Resource<YogaData>>
+
+    suspend fun updateUserInfo(userId: String, accountInfo: AccountInfo)
+
+    fun getUserInfo(userId: String): Flow<Resource<AccountInfo>>
 }
 
 class GetHomeUseCaseInteractors(private val repository: HomeRepository): HomeUseCase {
@@ -115,5 +121,13 @@ class GetHomeUseCaseInteractors(private val repository: HomeRepository): HomeUse
 
     override fun getYogaExerciseByCategory(category: String): Flow<Resource<YogaData>> {
         return repository.getYogaExerciseByCategory(category)
+    }
+
+    override suspend fun updateUserInfo(userId: String, accountInfo: AccountInfo) {
+        repository.updateUserInfo(userId, accountInfo)
+    }
+
+    override fun getUserInfo(userId: String): Flow<Resource<AccountInfo>> {
+        return repository.getUserInfo(userId)
     }
 }
