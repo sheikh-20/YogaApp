@@ -8,6 +8,7 @@ data class Meditation(
         val image: String? = null,
         val duration: String? = null,
         val category: String? = null,
-        val description: String? = null
+        val description: String? = null,
+        val file: String? = null
     )
 }

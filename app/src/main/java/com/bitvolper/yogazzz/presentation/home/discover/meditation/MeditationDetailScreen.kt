@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -25,10 +26,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.domain.model.Meditation
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
@@ -51,7 +55,14 @@ fun MeditationDetailScreen(modifier: Modifier = Modifier,
         Card(modifier = modifier
             .fillMaxWidth()
             .requiredHeight(200.dp).padding(horizontal = 16.dp)) {
-            Image(painter = painterResource(id = R.drawable.ic_yoga_exercise),
+
+            AsyncImage(
+                model = ImageRequest.Builder(context = LocalContext.current)
+                    .data(meditation.image)
+                    .crossfade(true)
+                    .build(),
+                error = painterResource(id = R.drawable.ic_broken_image),
+                placeholder = painterResource(id = R.drawable.ic_image_placeholder),
                 contentDescription = null,
                 modifier = modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop)
