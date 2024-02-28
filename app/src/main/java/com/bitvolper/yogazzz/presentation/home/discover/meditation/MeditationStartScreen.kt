@@ -161,7 +161,7 @@ fun MeditationStartScreen(modifier: Modifier = Modifier,
                 }
 
                 is Resource.Success -> {
-                    LazyColumn(contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp)) {
+                    LazyColumn(modifier = modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp)) {
                         items(meditationUIState.data.data?.size ?: return@LazyColumn) {
                             MeditationCard(meditation = meditationUIState.data.data[it] ?: return@items, onCardClick = onCardClick)
                         }

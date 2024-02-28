@@ -32,16 +32,20 @@ import androidx.navigation.compose.rememberNavController
 import com.bitvolper.yogazzz.presentation.home.BottomNavigationScreens
 import com.bitvolper.yogazzz.presentation.home.HomeScreen
 import com.bitvolper.yogazzz.presentation.viewmodel.DiscoverViewModel
+import com.bitvolper.yogazzz.presentation.viewmodel.MeditationViewModel
 
 @Composable
 fun MeditationApp(modifier: Modifier = Modifier,
                   navController: NavHostController = rememberNavController(),
-                  discoverViewModel: DiscoverViewModel = hiltViewModel()) {
+                  discoverViewModel: DiscoverViewModel = hiltViewModel(),
+                  meditationViewModel: MeditationViewModel = hiltViewModel()) {
 
     val meditationUIState by discoverViewModel.meditationUIState.collectAsState()
+    val playerUIState by meditationViewModel.playerStreamUIState.collectAsState()
+
 
     Scaffold(
-        topBar = { MeditationTopAppBar(navController = navController) }
+        topBar = { MeditationTopAppBar(navController = navController, onMeditationStop = meditationViewModel::onMeditationStop) }
     ) { paddingValues ->
 
         NavHost(
@@ -63,11 +67,25 @@ fun MeditationApp(modifier: Modifier = Modifier,
             }
 
             composable(route = Meditation.Play.name) {
-                MeditationPlayScreen(paddingValues = paddingValues)
+                MeditationPlayScreen(
+                    paddingValues = paddingValues,
+                    meditation = discoverViewModel.meditation,
+                    onPlayMeditation = meditationViewModel::playVideoStream,
+                    onMeditationStop = {
+                        meditationViewModel.onMeditationStop()
+                        navController.navigateUp()
+                    },
+                    onPlayPauseClick = meditationViewModel::playOrPauseVideo,
+                    playerUIState = playerUIState,
+                    onSeekTo = meditationViewModel::onSeekTo,
+                    showCompleteScreen = {
+
+                        navController.navigate(Meditation.Complete.name)
+                    })
             }
 
             composable(route = Meditation.Complete.name) {
-                MeditationCompleteScreen()
+                MeditationCompleteScreen(paddingValues = paddingValues)
             }
         }
     }
@@ -75,7 +93,7 @@ fun MeditationApp(modifier: Modifier = Modifier,
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun MeditationTopAppBar(navController: NavHostController) {
+private fun MeditationTopAppBar(navController: NavHostController, onMeditationStop: () -> Unit = { }) {
     val context = LocalContext.current
 
     when (navController.currentBackStackEntryAsState().value?.destination?.route) {
@@ -91,6 +109,7 @@ private fun MeditationTopAppBar(navController: NavHostController) {
             )
         }
         Meditation.Detail.name -> {
+
             CenterAlignedTopAppBar(
                 title = {
                     Text(
@@ -114,7 +133,10 @@ private fun MeditationTopAppBar(navController: NavHostController) {
             CenterAlignedTopAppBar(
                 title = {   },
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
+                    IconButton(onClick = {
+                        onMeditationStop()
+                        navController.navigateUp()
+                    }) {
                         Icon(imageVector = Icons.Rounded.Close, contentDescription = null)
                     }
                 },
@@ -125,7 +147,10 @@ private fun MeditationTopAppBar(navController: NavHostController) {
             CenterAlignedTopAppBar(
                 title = {   },
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
+                    IconButton(onClick = {
+                        onMeditationStop()
+                        navController.popBackStack()
+                    }) {
                         Icon(imageVector = Icons.Rounded.Close, contentDescription = null)
                     }
                 },

@@ -32,6 +32,8 @@ coil-version = "2.4.0"
 datastore-version = "1.0.0"
 accompanist-permission-version = "0.23.1"
 firebase-firestore-ktx = "24.10.2"
+media3-version = "1.2.0-alpha01"
+media3-common = "1.2.1"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose" }
@@ -60,6 +62,10 @@ pref-datastore = { module = "androidx.datastore:datastore-preferences", version.
 
 accompanist-permission = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist-permission-version" }
 
+media3-ui = { module = "androidx.media3:media3-ui", version.ref = "media3-version" }
+media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3-version" }
+media3-session = { module = "androidx.media3:media3-session", version.ref = "media3-version" }
+
 
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "bom" }
 compose-ui = { module = "androidx.compose.ui:ui" }
@@ -85,6 +91,7 @@ play-app-update-ktx = { module = "com.google.android.play:app-update-ktx", versi
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebase-analytics" }
 firebase-message = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebase-message" }
 firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebase-firestore-ktx" }
+androidx-media3-common = { group = "androidx.media3", name = "media3-common", version.ref = "media3-common" }
 
 
 [bundles]
