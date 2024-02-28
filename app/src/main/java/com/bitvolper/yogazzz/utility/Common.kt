@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.bitvolper.yogazzz.R
+import java.util.concurrent.TimeUnit
 
 sealed class Resource<out T: Any> {
     object Loading: Resource<Nothing>()
@@ -159,3 +160,18 @@ data class HorizontalPagerContent(
     val description: List<String>,
     val validity: String
 )
+
+fun Long.formatMinSec(): String {
+    return if (this == 0L) {
+        "..."
+    } else {
+        String.format(
+            "%02d:%02d",
+            TimeUnit.MILLISECONDS.toMinutes(this),
+            TimeUnit.MILLISECONDS.toSeconds(this) -
+                    TimeUnit.MINUTES.toSeconds(
+                        TimeUnit.MILLISECONDS.toMinutes(this)
+                    )
+        )
+    }
+}

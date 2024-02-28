@@ -95,6 +95,7 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.message)
     implementation(libs.firebase.firestore.ktx)
+    implementation(libs.androidx.media3.common)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -150,4 +151,9 @@ dependencies {
 
     // Accompanist permission
     implementation(libs.accompanist.permission)
+
+    // Media 3
+    implementation(libs.media3.ui)
+    implementation(libs.media3.exoplayer)
+    implementation(libs.media3.session)
 }
