@@ -5,6 +5,7 @@ import com.bitvolper.yogazzz.domain.model.AccountInfo
 import com.bitvolper.yogazzz.domain.model.AdjustYogaLevel
 import com.bitvolper.yogazzz.domain.model.FaqQuestion
 import com.bitvolper.yogazzz.domain.model.FlexibilityStrength
+import com.bitvolper.yogazzz.domain.model.History
 import com.bitvolper.yogazzz.domain.model.Meditation
 import com.bitvolper.yogazzz.domain.model.PopularYoga
 import com.bitvolper.yogazzz.domain.model.PopularYogaWithFlexibility
@@ -54,6 +55,8 @@ interface HomeUseCase {
     suspend fun updateUserInfo(userId: String, accountInfo: AccountInfo)
 
     fun getUserInfo(userId: String): Flow<Resource<AccountInfo>>
+
+    fun getHistory(id: List<String>): Flow<Resource<History>>
 }
 
 class GetHomeUseCaseInteractors(private val repository: HomeRepository): HomeUseCase {
@@ -129,5 +132,9 @@ class GetHomeUseCaseInteractors(private val repository: HomeRepository): HomeUse
 
     override fun getUserInfo(userId: String): Flow<Resource<AccountInfo>> {
         return repository.getUserInfo(userId)
+    }
+
+    override fun getHistory(id: List<String>): Flow<Resource<History>> {
+        return repository.getHistory(id)
     }
 }

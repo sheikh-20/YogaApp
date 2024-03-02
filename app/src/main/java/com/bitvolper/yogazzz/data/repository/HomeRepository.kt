@@ -4,6 +4,7 @@ import com.bitvolper.yogazzz.domain.model.AccountInfo
 import com.bitvolper.yogazzz.domain.model.AdjustYogaLevel
 import com.bitvolper.yogazzz.domain.model.FaqQuestion
 import com.bitvolper.yogazzz.domain.model.FlexibilityStrength
+import com.bitvolper.yogazzz.domain.model.History
 import com.bitvolper.yogazzz.domain.model.Meditation
 import com.bitvolper.yogazzz.domain.model.PopularYoga
 import com.bitvolper.yogazzz.domain.model.PopularYogaWithFlexibility
@@ -60,6 +61,8 @@ interface HomeRepository {
     suspend fun updateUserInfo(userId: String, accountInfo: AccountInfo)
 
     fun getUserInfo(userId: String): Flow<Resource<AccountInfo>>
+
+    fun getHistory(id: List<String>): Flow<Resource<History>>
 }
 
 class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatabase, private val firestore: FirebaseFirestore): HomeRepository {
@@ -494,9 +497,17 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
 
             Timber.tag(TAG).d("Repo called")
 
-            val result = database.getReference("app_config").child("meditation").get().await()
+            val result = firestore.collection("yoga_exercise")
+                .whereEqualTo("type", "meditation")
+                .get()
+                .await()
 
-            val json = Gson().toJson(result.value)
+            val filter = result.documents.map {
+                Timber.tag(TAG).e(it.toString())
+                it.data
+            }
+
+            val json = Gson().toJson(filter)
             Timber.tag(TAG).d("Result -> $json")
 
             val listType = object : TypeToken<List<Meditation.Data>>() {}.type
@@ -512,6 +523,44 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
             it.printStackTrace()
             emit(Resource.Failure(it))
         }
+
+
+    override fun getHistory(id: List<String>): Flow<Resource<History>> = flow {
+
+        Timber.tag(TAG).d("Called")
+        emit(Resource.Loading)
+
+        try {
+
+            Timber.tag(TAG).d("Repo called")
+
+            val result = firestore.collection("yoga_exercise")
+                .whereIn("id", id)
+                .get()
+                .await()
+
+            val filter = result.documents.map {
+                Timber.tag(TAG).e(it.toString())
+                it.data
+            }
+
+            val json = Gson().toJson(filter)
+            Timber.tag(TAG).d("Result -> $json")
+
+            val listType = object : TypeToken<List<History.Data>>() {}.type
+            val data = Gson().fromJson<List<History.Data>>(json, listType)
+
+            emit(Resource.Success(History(data = data)))
+        } catch (exception: Exception) {
+            throw Throwable(exception)
+        }
+    }
+        .catch {
+            Timber.tag(TAG).e(it)
+            it.printStackTrace()
+            emit(Resource.Failure(it))
+        }
+
 
     override fun getYogaExerciseByCategory(category: String): Flow<Resource<YogaData>> = flow {
 

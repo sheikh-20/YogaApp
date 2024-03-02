@@ -13,17 +13,23 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 data class PlayerStreamUIState(
     val isPlaying: Boolean = true,
     val currentTime: Long = 0L,
     val totalDuration: Long = 0L,
-    val bufferedPercentage: Int = 0
+    val bufferedPercentage: Int = 0,
+    val completed: Boolean = false
 )
 
 @HiltViewModel
 class MeditationViewModel @Inject constructor(val player: Player): ViewModel() {
+
+    companion object {
+        private const val TAG = "MeditationViewModel"
+    }
 
     private var _playerStreamUIState = MutableStateFlow(PlayerStreamUIState())
     val playerStreamUIState: StateFlow<PlayerStreamUIState> get() = _playerStreamUIState.asStateFlow()
@@ -35,7 +41,7 @@ class MeditationViewModel @Inject constructor(val player: Player): ViewModel() {
     fun playVideoStream(file: String, context: Context) = viewModelScope.launch {
 
         _playerStreamUIState.update {
-            it.copy( isPlaying = true)
+            it.copy(isPlaying = true, completed = false)
         }
 
         player.setMediaItem(MediaItem.fromUri(file))
@@ -51,6 +57,7 @@ class MeditationViewModel @Inject constructor(val player: Player): ViewModel() {
                         bufferedPercentage = player.bufferedPercentage
                     )
                 }
+
                 handler.postDelayed(this,500L)
             }
         }
@@ -77,9 +84,9 @@ class MeditationViewModel @Inject constructor(val player: Player): ViewModel() {
 
     fun onMeditationStop() {
         player.pause()
-
-        runnable = Runnable {  }
-        handler.removeCallbacks(runnable)
+        _playerStreamUIState.update {
+            it.copy(currentTime = 0L, totalDuration = 0L, completed = true)
+        }
     }
 
     override fun onCleared() {

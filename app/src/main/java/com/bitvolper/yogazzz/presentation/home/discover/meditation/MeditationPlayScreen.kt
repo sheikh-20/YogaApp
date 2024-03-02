@@ -47,7 +47,9 @@ import com.bitvolper.yogazzz.domain.model.Meditation
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.presentation.viewmodel.PlayerStreamUIState
 import com.bitvolper.yogazzz.utility.formatMinSec
+import timber.log.Timber
 
+private const val TAG = "MeditationPlayScreen"
 @Composable
 fun MeditationPlayScreen(modifier: Modifier = Modifier,
                          paddingValues: PaddingValues = PaddingValues(),
@@ -69,8 +71,10 @@ fun MeditationPlayScreen(modifier: Modifier = Modifier,
     BackHandler { onMeditationStop() }
 
     if (playerUIState.currentTime > playerUIState.totalDuration) {
+        Timber.tag(TAG).e("current -> ${playerUIState.currentTime}\ntotal -> ${playerUIState.totalDuration}")
         showCompleteScreen()
     }
+
     
     Box(modifier = modifier
         .fillMaxSize()
