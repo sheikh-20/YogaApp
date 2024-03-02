@@ -25,8 +25,8 @@ android {
         applicationId = "com.bitvolper.yogazzz"
         minSdk = 21
         targetSdk = 34
-        versionCode = 12
-        versionName = "1.0.11"
+        versionCode = 13
+        versionName = "1.0.12"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -156,4 +156,8 @@ dependencies {
     implementation(libs.media3.ui)
     implementation(libs.media3.exoplayer)
     implementation(libs.media3.session)
+
+
+//    implementation(libs.calendar.view)
+    implementation("com.google.android.material:material:1.11.0")
 }

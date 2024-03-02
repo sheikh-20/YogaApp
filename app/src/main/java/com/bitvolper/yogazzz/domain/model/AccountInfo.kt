@@ -10,4 +10,6 @@ data class AccountInfo(
     val height: Int? = null,
     val currentWeight: Double? = null,
     val targetWeight: Double? = null,
+
+    val history: List<String>? = null
 )

@@ -74,6 +74,7 @@ import com.bitvolper.yogazzz.presentation.home.history.HistoryScreen
 import com.bitvolper.yogazzz.presentation.home.notification.NotificationSettingsActivity
 import com.bitvolper.yogazzz.presentation.home.reports.ReportsScreen
 import com.bitvolper.yogazzz.presentation.notifications.NotificationsActivity
+import com.bitvolper.yogazzz.presentation.viewmodel.AccountViewModel
 import com.bitvolper.yogazzz.presentation.viewmodel.DiscoverViewModel
 import com.bitvolper.yogazzz.presentation.viewmodel.HomeViewModel
 import com.bitvolper.yogazzz.presentation.viewmodel.OnboardingViewModel
@@ -87,7 +88,8 @@ fun HomeApp(modifier: Modifier = Modifier,
             navController: NavHostController = rememberNavController(),
             onboardingViewModel: OnboardingViewModel = hiltViewModel(),
             homeViewModel: HomeViewModel = hiltViewModel(),
-            discoverViewModel: DiscoverViewModel = hiltViewModel()) {
+            discoverViewModel: DiscoverViewModel = hiltViewModel(),
+            accountViewModel: AccountViewModel = hiltViewModel()) {
 
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -102,6 +104,9 @@ fun HomeApp(modifier: Modifier = Modifier,
     val discoverUIState by discoverViewModel.discoverUIState.collectAsState()
 
     var notificationPermissionState = rememberMultiplePermissionsState(permissions = listOf())
+
+    val historyUIState by homeViewModel.historyUIState.collectAsState()
+    val accountInfoUIState by accountViewModel.accountInfoUIState.collectAsState()
 
 
     when (showBottomSheet) {
@@ -186,7 +191,9 @@ fun HomeApp(modifier: Modifier = Modifier,
             }
 
             composable(route = BottomNavigationScreens.History.route) {
-                HistoryScreen(paddingValues = paddingValues)
+                HistoryScreen(paddingValues = paddingValues,
+                    onHistory = { homeViewModel.getHistory(accountInfoUIState.history ?: return@HistoryScreen) },
+                    historyUIState = historyUIState)
             }
 
             composable(route = BottomNavigationScreens.Account.route) {
