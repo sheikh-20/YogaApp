@@ -31,6 +31,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.bitvolper.yogazzz.presentation.home.BottomNavigationScreens
 import com.bitvolper.yogazzz.presentation.home.HomeScreen
+import com.bitvolper.yogazzz.presentation.viewmodel.AccountViewModel
 import com.bitvolper.yogazzz.presentation.viewmodel.DiscoverViewModel
 import com.bitvolper.yogazzz.presentation.viewmodel.MeditationViewModel
 
@@ -38,11 +39,12 @@ import com.bitvolper.yogazzz.presentation.viewmodel.MeditationViewModel
 fun MeditationApp(modifier: Modifier = Modifier,
                   navController: NavHostController = rememberNavController(),
                   discoverViewModel: DiscoverViewModel = hiltViewModel(),
-                  meditationViewModel: MeditationViewModel = hiltViewModel()) {
+                  meditationViewModel: MeditationViewModel = hiltViewModel(),
+                  accountViewModel: AccountViewModel = hiltViewModel()) {
 
+    val context = LocalContext.current
     val meditationUIState by discoverViewModel.meditationUIState.collectAsState()
     val playerUIState by meditationViewModel.playerStreamUIState.collectAsState()
-
 
     Scaffold(
         topBar = { MeditationTopAppBar(navController = navController, onMeditationStop = meditationViewModel::onMeditationStop) }
@@ -79,13 +81,20 @@ fun MeditationApp(modifier: Modifier = Modifier,
                     playerUIState = playerUIState,
                     onSeekTo = meditationViewModel::onSeekTo,
                     showCompleteScreen = {
-
+                        meditationViewModel.onMeditationStop()
                         navController.navigate(Meditation.Complete.name)
                     })
             }
 
             composable(route = Meditation.Complete.name) {
-                MeditationCompleteScreen(paddingValues = paddingValues)
+                MeditationCompleteScreen(
+                    paddingValues = paddingValues,
+                    meditation = discoverViewModel.meditation,
+                    onCloseButtonClick = { (context as Activity).finish() },
+                    onCompleteClick = {
+                        accountViewModel.updateHistory(it)
+                        (context as Activity).finish()
+                    })
             }
         }
     }
@@ -143,14 +152,11 @@ private fun MeditationTopAppBar(navController: NavHostController, onMeditationSt
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.Transparent)
             )
         }
-        else -> {
+        Meditation.Complete.name -> {
             CenterAlignedTopAppBar(
                 title = {   },
                 navigationIcon = {
-                    IconButton(onClick = {
-                        onMeditationStop()
-                        navController.popBackStack()
-                    }) {
+                    IconButton(onClick = { (context as Activity).finish() }) {
                         Icon(imageVector = Icons.Rounded.Close, contentDescription = null)
                     }
                 },

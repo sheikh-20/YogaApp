@@ -2,6 +2,7 @@ package com.bitvolper.yogazzz.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bitvolper.yogazzz.domain.model.History
 import com.bitvolper.yogazzz.domain.model.PopularYogaWithFlexibility
 import com.bitvolper.yogazzz.domain.model.UserData
 import com.bitvolper.yogazzz.domain.model.YogaCategoryWithRecommendation
@@ -49,6 +50,9 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase): V
     private var _yogaCategoryUIState = MutableStateFlow<Resource<YogaData>>(Resource.Loading)
     val yogaCategoryUIState: StateFlow<Resource<YogaData>> get() = _yogaCategoryUIState
 
+    private var _historyUIState = MutableStateFlow<Resource<History>>(Resource.Loading)
+    val historyUIState: StateFlow<Resource<History>> get() = _historyUIState
+
     private fun getSignedInUser() {
         auth.currentUser?.apply {
             _profileInfoUiState.value = UserData(
@@ -93,8 +97,6 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase): V
         }
     }
 
-
-
     fun getYogaExercise(id: Int = 1) = viewModelScope.launch {
         try {
             Timber.tag(TAG).d("View model called")
@@ -123,6 +125,16 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase): V
             Timber.tag(TAG).d("View model called")
             homeUseCase.updateBookmarkYogaExercise(bookmark)
             getBookmarkYogaExercise()
+        } catch (exception: IOException) {
+            Timber.tag(TAG).e(exception)
+        }
+    }
+
+    fun getHistory(id: List<String>) = viewModelScope.launch {
+        try {
+            homeUseCase.getHistory(id).collectLatest {
+                _historyUIState.value = it
+            }
         } catch (exception: IOException) {
             Timber.tag(TAG).e(exception)
         }

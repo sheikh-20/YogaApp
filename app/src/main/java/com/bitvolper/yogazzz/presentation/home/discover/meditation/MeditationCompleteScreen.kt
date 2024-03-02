@@ -1,6 +1,7 @@
 package com.bitvolper.yogazzz.presentation.home.discover.meditation
 
 import android.content.res.Configuration
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -34,10 +35,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitvolper.yogazzz.R
+import com.bitvolper.yogazzz.domain.model.Meditation
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 
 @Composable
-fun MeditationCompleteScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = PaddingValues()) {
+fun MeditationCompleteScreen(modifier: Modifier = Modifier,
+                             paddingValues: PaddingValues = PaddingValues(),
+                             meditation: Meditation.Data = Meditation.Data(),
+                             onCloseButtonClick: () -> Unit = { },
+                             onCompleteClick: (String) -> Unit = { _ ->  }) {
+
+    BackHandler { onCloseButtonClick() }
+
     Column(modifier = modifier
         .fillMaxSize()
         .wrapContentSize(align = Alignment.TopCenter)
@@ -71,7 +80,9 @@ fun MeditationCompleteScreen(modifier: Modifier = Modifier, paddingValues: Paddi
             textAlign = TextAlign.Center)
 
 
-        Card(modifier = modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+        Card(modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)) {
 
             Column(modifier = modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 Text(text = "How do you feel after this session", modifier = modifier.fillMaxWidth(), textAlign = TextAlign.Center)
@@ -131,11 +142,8 @@ fun MeditationCompleteScreen(modifier: Modifier = Modifier, paddingValues: Paddi
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(16.dp)) {
 
-
                 Button(
-                    onClick = {
-
-                    },
+                    onClick = { onCompleteClick(meditation.id ?: return@Button) },
                     modifier = modifier
                         .weight(1f)
                         .requiredHeight(50.dp)) {

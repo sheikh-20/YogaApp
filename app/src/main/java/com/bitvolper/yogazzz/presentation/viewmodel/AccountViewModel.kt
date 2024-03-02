@@ -155,6 +155,19 @@ class AccountViewModel @Inject constructor(
         }
     }
 
+    fun updateHistory(id: String) {
+        val history = mutableListOf<String>().apply {
+            addAll(_accountInfoUIState.value.history ?: emptyList())
+            add(id)
+        }
+
+        _accountInfoUIState.update {
+            it.copy(history = history)
+        }
+
+        updateUserProfile()
+    }
+
     fun updateUserProfile() = viewModelScope.launch {
         try {
             homeUseCase.updateUserInfo(auth.currentUser?.uid ?: return@launch, accountInfoUIState.value)
@@ -183,6 +196,7 @@ class AccountViewModel @Inject constructor(
             Timber.tag(TAG).e(exception)
         }
     }
+
 
     init {
         getUserProfile()
