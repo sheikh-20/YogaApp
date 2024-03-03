@@ -1,5 +1,6 @@
 package com.bitvolper.yogazzz.data.repository
 
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.bitvolper.yogazzz.domain.model.AccountInfo
 import com.bitvolper.yogazzz.domain.model.AdjustYogaLevel
 import com.bitvolper.yogazzz.domain.model.FaqQuestion
@@ -62,7 +63,7 @@ interface HomeRepository {
 
     fun getUserInfo(userId: String): Flow<Resource<AccountInfo>>
 
-    fun getHistory(id: List<String>): Flow<Resource<History>>
+    fun getHistory(id: List<AccountInfo.HistoryData>): Flow<Resource<History>>
 }
 
 class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatabase, private val firestore: FirebaseFirestore): HomeRepository {
@@ -525,7 +526,7 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
         }
 
 
-    override fun getHistory(id: List<String>): Flow<Resource<History>> = flow {
+    override fun getHistory(id: List<AccountInfo.HistoryData>): Flow<Resource<History>> = flow {
 
         Timber.tag(TAG).d("Called")
         emit(Resource.Loading)
@@ -535,7 +536,7 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
             Timber.tag(TAG).d("Repo called")
 
             val result = firestore.collection("yoga_exercise")
-                .whereIn("id", id)
+                .whereIn("id", id.map { it.id })
                 .get()
                 .await()
 
@@ -550,7 +551,17 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
             val listType = object : TypeToken<List<History.Data>>() {}.type
             val data = Gson().fromJson<List<History.Data>>(json, listType)
 
-            emit(Resource.Success(History(data = data)))
+            val date = id.map { it.id }
+
+            val alteredResult = data.map {
+                Timber.tag(TAG).d("Date -> " + it.date)
+                it.copy(date = if (date.contains(it.id)) {
+                    id.first { historyData -> historyData.id == it.id }.date
+                } else "")
+            }
+
+            Timber.tag(TAG).d(alteredResult.toString())
+            emit(Resource.Success(History(data = alteredResult)))
         } catch (exception: Exception) {
             throw Throwable(exception)
         }

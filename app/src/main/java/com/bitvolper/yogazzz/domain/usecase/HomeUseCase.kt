@@ -56,7 +56,7 @@ interface HomeUseCase {
 
     fun getUserInfo(userId: String): Flow<Resource<AccountInfo>>
 
-    fun getHistory(id: List<String>): Flow<Resource<History>>
+    fun getHistory(id: List<AccountInfo.HistoryData>): Flow<Resource<History>>
 }
 
 class GetHomeUseCaseInteractors(private val repository: HomeRepository): HomeUseCase {
@@ -134,7 +134,7 @@ class GetHomeUseCaseInteractors(private val repository: HomeRepository): HomeUse
         return repository.getUserInfo(userId)
     }
 
-    override fun getHistory(id: List<String>): Flow<Resource<History>> {
+    override fun getHistory(id: List<AccountInfo.HistoryData>): Flow<Resource<History>> {
         return repository.getHistory(id)
     }
 }
