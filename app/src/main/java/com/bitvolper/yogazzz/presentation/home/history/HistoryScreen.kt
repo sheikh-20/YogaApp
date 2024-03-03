@@ -1,12 +1,15 @@
 package com.bitvolper.yogazzz.presentation.home.history
 
 import android.content.res.Configuration
+import android.icu.text.DateFormat
+import android.view.ContextThemeWrapper
 import android.widget.CalendarView
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,7 +23,6 @@ import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -41,7 +43,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -61,6 +66,7 @@ import com.bitvolper.yogazzz.domain.model.History
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.utility.Resource
 import timber.log.Timber
+import java.util.Date
 
 private const val TAG = "HistoryScreen"
 @OptIn(ExperimentalMaterial3Api::class)
@@ -70,6 +76,12 @@ fun HistoryScreen(modifier: Modifier = Modifier,
                   onHistory: () -> Unit = {  },
                   historyUIState: Resource<History> = Resource.Loading,
                   ) {
+
+    val dayTheme = if (isSystemInDarkTheme()) R.style.CustomDayDark else R.style.CustomDay
+    val weekTheme = if (isSystemInDarkTheme()) R.style.CustomWeekDark else R.style.CustomWeek
+    val customTheme = if (isSystemInDarkTheme()) R.style.CustomCalendarDark else R.style.CustomCalendar
+
+    var selectedDate by remember { mutableStateOf("") }
 
     LaunchedEffect(key1 = Unit) {
         onHistory()
@@ -107,13 +119,26 @@ fun HistoryScreen(modifier: Modifier = Modifier,
                     Card(border = BorderStroke(width = .5.dp, color = MaterialTheme.colorScheme.outlineVariant), colors = CardDefaults.cardColors(containerColor = Color.Transparent)) {
                         AndroidView(
                             factory = {
-                                CalendarView(it).apply {
+                                CalendarView(ContextThemeWrapper(it, customTheme)).apply {
 
+                                    val date: Date = Date(date)
+                                    selectedDate = android.text.format.DateFormat.format("d-M-yyyy", date) as String
+                                }
+                            },
+                            update = {
+                                it.apply {
+                                    dateTextAppearance = dayTheme
+                                    weekDayTextAppearance = weekTheme
+
+                                    setOnDateChangeListener { view, year, month, dayOfMonth ->
+                                        selectedDate = "$dayOfMonth-${month.inc()}-$year"
+                                        Timber.tag(TAG).d(selectedDate)
+                                    }
                                 }
                             })
                     }
 
-                    HistoryCompose(history = historyUIState.data)
+                    HistoryCompose(history = historyUIState.data, selectedDate = selectedDate)
                 }
             }
         }
@@ -122,7 +147,7 @@ fun HistoryScreen(modifier: Modifier = Modifier,
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun HistoryCompose(modifier: Modifier = Modifier, history: History = History()) {
+private fun HistoryCompose(modifier: Modifier = Modifier, history: History = History(), selectedDate: String = "") {
     Card(border = BorderStroke(width = .5.dp, color = MaterialTheme.colorScheme.outlineVariant),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent)) {
         Column(modifier = modifier
@@ -184,7 +209,11 @@ private fun HistoryCompose(modifier: Modifier = Modifier, history: History = His
                 )
             } else {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    history.data?.forEach {
+                    val filter = history.data?.filter {
+                        selectedDate == it?.date
+                    }
+
+                    filter?.forEach {
                         HistoryCard(history = it ?: return@forEach)
                     }
                 }

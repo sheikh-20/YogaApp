@@ -2,6 +2,7 @@ package com.bitvolper.yogazzz.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bitvolper.yogazzz.domain.model.AccountInfo
 import com.bitvolper.yogazzz.domain.model.History
 import com.bitvolper.yogazzz.domain.model.PopularYogaWithFlexibility
 import com.bitvolper.yogazzz.domain.model.UserData
@@ -130,7 +131,7 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase): V
         }
     }
 
-    fun getHistory(id: List<String>) = viewModelScope.launch {
+    fun getHistory(id: List<AccountInfo.HistoryData>) = viewModelScope.launch {
         try {
             homeUseCase.getHistory(id).collectLatest {
                 _historyUIState.value = it

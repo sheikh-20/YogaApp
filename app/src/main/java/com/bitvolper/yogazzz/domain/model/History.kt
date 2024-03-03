@@ -8,6 +8,7 @@ data class History(
         val title: String? = null,
         val image: String? = null,
         val duration: String? = null,
-        val category: String? = null
+        val category: String? = null,
+        val date: String? = null
     )
 }

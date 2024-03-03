@@ -11,5 +11,10 @@ data class AccountInfo(
     val currentWeight: Double? = null,
     val targetWeight: Double? = null,
 
-    val history: List<String>? = null
-)
+    val history: List<HistoryData>? = null
+) {
+    data class HistoryData(
+        val id: String? = null,
+        val date: String? = null
+    )
+}

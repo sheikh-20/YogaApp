@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.bitvolper.yogazzz.domain.model.AccountInfo
 import com.bitvolper.yogazzz.domain.model.AppThemePreference
 import com.bitvolper.yogazzz.domain.model.FaqQuestion
+import com.bitvolper.yogazzz.domain.model.History
 import com.bitvolper.yogazzz.domain.model.NotificationPreference
 import com.bitvolper.yogazzz.domain.model.Subscription
 import com.bitvolper.yogazzz.domain.usecase.AppThemeUseCase
@@ -24,6 +25,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.IOException
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
@@ -156,9 +159,13 @@ class AccountViewModel @Inject constructor(
     }
 
     fun updateHistory(id: String) {
-        val history = mutableListOf<String>().apply {
+
+        val formatter = DateTimeFormatter.ofPattern("d-M-yyyy")
+        val current = LocalDateTime.now().format(formatter)
+
+        val history = mutableListOf<AccountInfo.HistoryData>().apply {
             addAll(_accountInfoUIState.value.history ?: emptyList())
-            add(id)
+            add(AccountInfo.HistoryData(id = id, date = current))
         }
 
         _accountInfoUIState.update {
