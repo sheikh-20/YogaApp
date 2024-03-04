@@ -7,6 +7,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bitvolper.yogazzz.domain.model.AccountInfo
+import com.bitvolper.yogazzz.domain.usecase.HomeUseCase
 import com.bitvolper.yogazzz.domain.usecase.SignInEmailUseCase
 import com.bitvolper.yogazzz.domain.usecase.SignInGoogleUseCase
 import com.bitvolper.yogazzz.domain.usecase.SignUpEmailUseCase
@@ -24,13 +26,15 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.io.IOException
 import javax.inject.Inject
 
 data class OnboardUIState(val isEmailError: Boolean = false, val isPasswordError: Boolean = false)
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(private val signInGoogleUseCase: SignInGoogleUseCase,
                                               private val signInEmailUseCase: SignInEmailUseCase,
-                                              private val signUpEmailUseCase: SignUpEmailUseCase): ViewModel() {
+                                              private val signUpEmailUseCase: SignUpEmailUseCase,
+                                              private val homeUseCase: HomeUseCase): ViewModel() {
 
     private companion object {
         const val TAG = "OnboardingViewModel"
@@ -67,7 +71,6 @@ class OnboardingViewModel @Inject constructor(private val signInGoogleUseCase: S
             _socialSignIn.emit(it)
         }
     }
-
 
     fun signInEmail(email: String?, password: String?) = viewModelScope.launch {
         if (email.isNullOrEmpty()) {
@@ -110,10 +113,18 @@ class OnboardingViewModel @Inject constructor(private val signInGoogleUseCase: S
             signUpEmailUseCase(email = email, password = password).collectLatest {
                 Timber.tag(TAG).d("Email called")
                 _socialSignIn.emit(it)
+                updateUserProfile()
             }
         }
     }
 
+    fun updateUserProfile() = viewModelScope.launch {
+        try {
+            homeUseCase.updateUserInfo(auth.currentUser?.uid ?: return@launch, AccountInfo(fullName = auth.currentUser?.displayName ?: "", email = auth.currentUser?.email ?: ""))
+        } catch (exception: IOException) {
+            Timber.tag(TAG).e(exception)
+        }
+    }
 
     fun signOut() = viewModelScope.launch {
         auth.signOut()

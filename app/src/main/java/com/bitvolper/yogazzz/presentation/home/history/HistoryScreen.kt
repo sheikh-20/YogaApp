@@ -185,34 +185,35 @@ private fun HistoryCompose(modifier: Modifier = Modifier, history: History = His
 
             Divider()
 
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                val filter = history.data?.filter {
+                    selectedDate == it?.date
+                }
 
-            if (history.data?.isEmpty() == true) {
-                Image(painter = painterResource(id = R.drawable.ic_empty),
-                    contentDescription = null,
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .wrapContentWidth(align = Alignment.CenterHorizontally)
-                        .size(150.dp))
+                if (filter?.isEmpty() == true) {
 
-                Text(text = "Empty",
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.SemiBold)
+                    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                        Image(painter = painterResource(id = R.drawable.ic_empty),
+                            contentDescription = null,
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .wrapContentWidth(align = Alignment.CenterHorizontally)
+                                .size(150.dp))
 
+                        Text(text = "Empty",
+                            style = MaterialTheme.typography.titleMedium,
+                            modifier = modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center,
+                            fontWeight = FontWeight.SemiBold)
 
-                Text(
-                    text = "You did not exercise on this date",
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-                )
-            } else {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    val filter = history.data?.filter {
-                        selectedDate == it?.date
+                        Text(
+                            text = "You did not exercise on this date",
+                            style = MaterialTheme.typography.bodyMedium,
+                            modifier = modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center,
+                        )
                     }
-
+                } else {
                     filter?.forEach {
                         HistoryCard(history = it ?: return@forEach)
                     }

@@ -86,7 +86,8 @@ fun OnboardingApp(modifier: Modifier = Modifier,
                     onGoogleSignInClick = { activity, intent ->  onboardingViewModel.signInGoogle(activity, intent) },
                     onSocialSignIn = onSocialSignIn,
                     snackbarHostState = snackbarHostState,
-                    showDialog = { showOnboardDialog = it }
+                    showDialog = { showOnboardDialog = it },
+                    onUpdateUserProfile = onboardingViewModel::updateUserProfile
                 )
             }
 
@@ -103,7 +104,8 @@ fun OnboardingApp(modifier: Modifier = Modifier,
                     onEmailChange = onboardingViewModel::onEmailChange,
                     snackbarHostState = snackbarHostState,
                     loginUIState = loginUIState,
-                    showDialog = { showOnboardDialog = it }
+                    showDialog = { showOnboardDialog = it },
+                    onUpdateUserProfile = onboardingViewModel::updateUserProfile
                 )
             }
 
@@ -115,7 +117,8 @@ fun OnboardingApp(modifier: Modifier = Modifier,
                     onGoogleSignInClick = { activity, intent ->  onboardingViewModel.signInGoogle(activity, intent) },
                     onSocialSignIn = onSocialSignIn,
                     signupUIState = signupUIState,
-                    showDialog = { showOnboardDialog = it }
+                    showDialog = { showOnboardDialog = it },
+                    onUpdateUserProfile = onboardingViewModel::updateUserProfile
                 )
             }
         }
