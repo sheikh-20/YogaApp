@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccessTime
@@ -33,6 +34,9 @@ import androidx.compose.material.icons.rounded.ArrowForwardIos
 import androidx.compose.material.icons.rounded.LocalFireDepartment
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material.icons.rounded.SelfImprovement
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -46,6 +50,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -65,11 +70,13 @@ import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.domain.model.History
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.utility.Resource
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.Date
 
 private const val TAG = "HistoryScreen"
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun HistoryScreen(modifier: Modifier = Modifier,
                   paddingValues: PaddingValues = PaddingValues(),
@@ -83,65 +90,91 @@ fun HistoryScreen(modifier: Modifier = Modifier,
 
     var selectedDate by remember { mutableStateOf("") }
 
+    val coroutineScope = rememberCoroutineScope()
+
+    var isRefreshing by remember { mutableStateOf(false) }
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = isRefreshing,
+        onRefresh = {
+            coroutineScope.launch {
+                isRefreshing = !isRefreshing
+
+                onHistory()
+
+                delay(1_000L)
+                isRefreshing = !isRefreshing
+            }
+        })
+
     LaunchedEffect(key1 = Unit) {
         onHistory()
     }
 
-    Column(modifier = modifier
-        .fillMaxSize()
-        .wrapContentSize(align = Alignment.Center)) {
+    Box(modifier = modifier.fillMaxSize().pullRefresh(pullRefreshState), contentAlignment = Alignment.Center) {
 
-        when (historyUIState) {
-            is Resource.Loading -> {
-                CircularProgressIndicator()
-            }
+        Column(modifier = modifier
+            .fillMaxSize()
+            .wrapContentSize(align = Alignment.Center)
+        ) {
 
-            is Resource.Failure -> {
-                Text(text = historyUIState.throwable.toString())
-            }
+            when (historyUIState) {
+                is Resource.Loading -> {
+                    CircularProgressIndicator()
+                }
 
-            is Resource.Success -> {
+                is Resource.Failure -> {
+                    Text(text = historyUIState.throwable.toString())
+                }
 
-                Timber.tag(TAG).d(historyUIState.data.data.toString())
-                
-                Column(
-                    modifier = modifier
-                        .fillMaxSize()
-                        .padding(
-                            top = paddingValues.calculateTopPadding(),
-                            bottom = paddingValues.calculateBottomPadding(),
-                            start = 16.dp,
-                            end = 16.dp
-                        )
-                        .verticalScroll(rememberScrollState()),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                is Resource.Success -> {
 
-                    Card(border = BorderStroke(width = .5.dp, color = MaterialTheme.colorScheme.outlineVariant), colors = CardDefaults.cardColors(containerColor = Color.Transparent)) {
-                        AndroidView(
-                            factory = {
-                                CalendarView(ContextThemeWrapper(it, customTheme)).apply {
+                    Timber.tag(TAG).d(historyUIState.data.data.toString())
 
-                                    val date: Date = Date(date)
-                                    selectedDate = android.text.format.DateFormat.format("d-M-yyyy", date) as String
-                                }
-                            },
-                            update = {
-                                it.apply {
-                                    dateTextAppearance = dayTheme
-                                    weekDayTextAppearance = weekTheme
+                    Column(
+                        modifier = modifier
+                            .fillMaxSize()
+                            .padding(
+                                top = paddingValues.calculateTopPadding(),
+                                bottom = paddingValues.calculateBottomPadding(),
+                                start = 16.dp,
+                                end = 16.dp
+                            )
+                            .verticalScroll(rememberScrollState()),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)) {
 
-                                    setOnDateChangeListener { view, year, month, dayOfMonth ->
-                                        selectedDate = "$dayOfMonth-${month.inc()}-$year"
-                                        Timber.tag(TAG).d(selectedDate)
+                        Card(border = BorderStroke(width = .5.dp, color = MaterialTheme.colorScheme.outlineVariant), colors = CardDefaults.cardColors(containerColor = Color.Transparent)) {
+                            AndroidView(
+                                factory = {
+                                    CalendarView(ContextThemeWrapper(it, customTheme)).apply {
+
+                                        val date: Date = Date(date)
+                                        selectedDate = android.text.format.DateFormat.format("d-M-yyyy", date) as String
                                     }
-                                }
-                            })
-                    }
+                                },
+                                update = {
+                                    it.apply {
+                                        dateTextAppearance = dayTheme
+                                        weekDayTextAppearance = weekTheme
 
-                    HistoryCompose(history = historyUIState.data, selectedDate = selectedDate)
+                                        setOnDateChangeListener { view, year, month, dayOfMonth ->
+                                            selectedDate = "$dayOfMonth-${month.inc()}-$year"
+                                            Timber.tag(TAG).d(selectedDate)
+                                        }
+                                    }
+                                })
+                        }
+
+                        HistoryCompose(history = historyUIState.data, selectedDate = selectedDate)
+                    }
                 }
             }
         }
+
+        PullRefreshIndicator(
+            refreshing = isRefreshing,
+            state = pullRefreshState,
+            modifier = Modifier.align(Alignment.TopCenter)
+        )
     }
 }
 
