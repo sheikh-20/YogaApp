@@ -77,7 +77,8 @@ fun LoginWithPasswordScreen(modifier: Modifier = Modifier,
                             onEmailChange: (String) -> Unit = { _ -> },
                             snackbarHostState: SnackbarHostState = SnackbarHostState(),
                             loginUIState: OnboardUIState = OnboardUIState(),
-                            showDialog: (ShowOnboardDialog) -> Unit = { _ -> }
+                            showDialog: (ShowOnboardDialog) -> Unit = { _ -> },
+                            onUpdateUserProfile: () -> Unit = { }
                             ) {
 
     val focusManager = LocalFocusManager.current
@@ -129,6 +130,7 @@ fun LoginWithPasswordScreen(modifier: Modifier = Modifier,
                     Timber.tag("Login").d("Google Success")
 
                     if (it.data.additionalUserInfo?.isNewUser == true) {
+                        onUpdateUserProfile()
                         (context as Activity).finish()
                         AccountSetupActivity.startActivity(context as Activity)
                     } else {

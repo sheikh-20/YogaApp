@@ -72,7 +72,8 @@ fun LoginScreen(modifier: Modifier = Modifier,
                 onGoogleSignInClick: (Activity?, Intent?) -> Unit = { _, _ ->},
                 onSocialSignIn: SharedFlow<Resource<AuthResult>>? = null,
                 snackbarHostState: SnackbarHostState = SnackbarHostState(),
-                showDialog: (ShowOnboardDialog) -> Unit = {  _ -> }
+                showDialog: (ShowOnboardDialog) -> Unit = {  _ -> },
+                onUpdateUserProfile: () -> Unit = { }
 ) {
 
 
@@ -117,6 +118,7 @@ fun LoginScreen(modifier: Modifier = Modifier,
                     Timber.tag("Login").d("Google Success")
 
                     if (it.data.additionalUserInfo?.isNewUser == true) {
+                        onUpdateUserProfile()
                         (context as Activity).finish()
                         AccountSetupActivity.startActivity(context as Activity)
                     } else {
