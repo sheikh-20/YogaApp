@@ -113,7 +113,6 @@ class OnboardingViewModel @Inject constructor(private val signInGoogleUseCase: S
             signUpEmailUseCase(email = email, password = password).collectLatest {
                 Timber.tag(TAG).d("Email called")
                 _socialSignIn.emit(it)
-                updateUserProfile()
             }
         }
     }
