@@ -141,6 +141,10 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase): V
         }
     }
 
+    fun resetHistory() {
+        _historyUIState.value = Resource.Success(History(emptyList()))
+    }
+
     init {
         getSignedInUser()
     }

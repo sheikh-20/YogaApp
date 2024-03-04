@@ -192,7 +192,15 @@ fun HomeApp(modifier: Modifier = Modifier,
 
             composable(route = BottomNavigationScreens.History.route) {
                 HistoryScreen(paddingValues = paddingValues,
-                    onHistory = { homeViewModel.getHistory(accountInfoUIState.history ?: return@HistoryScreen) },
+                    onHistory = {
+
+                        accountViewModel.getUserProfile()
+
+                        if (accountInfoUIState.history == null) {
+                            homeViewModel.resetHistory()
+                        } else {
+                            homeViewModel.getHistory(accountInfoUIState.history ?: return@HistoryScreen)
+                        } },
                     historyUIState = historyUIState)
             }
 
