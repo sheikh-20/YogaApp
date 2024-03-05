@@ -43,7 +43,7 @@ import com.bitvolper.yogazzz.utility.AccountSetupContinueComposable
 fun SedentaryLifestyleScreen(modifier: Modifier = Modifier,
                              paddingValues: PaddingValues = PaddingValues(),
                              onSkipClick: () -> Unit = { },
-                             onContinueClick: () -> Unit = { }) {
+                             onContinueClick: (Boolean) -> Unit = { _ ->  }) {
 
     var isSedentaryLifestyle by remember { mutableStateOf(false) }
 
@@ -90,7 +90,7 @@ fun SedentaryLifestyleScreen(modifier: Modifier = Modifier,
 
         AccountSetupContinueComposable(
             onSkipClick = onSkipClick,
-            onContinueClick = onContinueClick
+            onContinueClick = { onContinueClick(isSedentaryLifestyle) }
         )
     }
 }

@@ -1,5 +1,6 @@
 package com.bitvolper.yogazzz.presentation.accountsetup
 
+import android.app.Activity
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -36,6 +37,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.presentation.home.BottomNavigationScreens
+import com.bitvolper.yogazzz.presentation.home.HomeActivity
 import com.bitvolper.yogazzz.presentation.home.discover.meditation.Meditation
 import com.bitvolper.yogazzz.presentation.viewmodel.AccountSetupUIState
 import com.bitvolper.yogazzz.presentation.viewmodel.AccountSetupViewModel
@@ -45,6 +47,8 @@ import com.bitvolper.yogazzz.utility.ACCOUNT_SETUP_MAX_SCREEN
 fun AccountSetupApp(modifier: Modifier = Modifier,
                     navController: NavHostController = rememberNavController(),
                     accountSetupViewModel: AccountSetupViewModel = viewModel()) {
+
+    val context = LocalContext.current
 
     val uiState by accountSetupViewModel.uiState.collectAsState()
     val accountInfoUIState by accountSetupViewModel.accountInfoUIState.collectAsState()
@@ -118,6 +122,7 @@ fun AccountSetupApp(modifier: Modifier = Modifier,
                     },
                     onContinueClick = {
                         accountSetupViewModel.updateCurrentScreen()
+                        accountSetupViewModel.updateCurrentBodyShape(it)
                         navController.navigate(AccountSetupScreen.DesiredBodyShape.name)
                     }
                 )
@@ -132,6 +137,7 @@ fun AccountSetupApp(modifier: Modifier = Modifier,
                     },
                     onContinueClick = {
                         accountSetupViewModel.updateCurrentScreen()
+                        accountSetupViewModel.updateDesiredBodyShape(it)
                         navController.navigate(AccountSetupScreen.ExperienceLevel.name)
                     }
                 )
@@ -146,6 +152,7 @@ fun AccountSetupApp(modifier: Modifier = Modifier,
                     },
                     onContinueClick = {
                         accountSetupViewModel.updateCurrentScreen()
+                        accountSetupViewModel.updateExperienceLevel(it)
                         navController.navigate(AccountSetupScreen.Sedentary.name)
                     }
                 )
@@ -160,6 +167,7 @@ fun AccountSetupApp(modifier: Modifier = Modifier,
                     },
                     onContinueClick = {
                         accountSetupViewModel.updateCurrentScreen()
+                        accountSetupViewModel.updateSedentaryLifestyle(it)
                         navController.navigate(AccountSetupScreen.Plank.name)
                     }
                 )
@@ -174,6 +182,7 @@ fun AccountSetupApp(modifier: Modifier = Modifier,
                     },
                     onContinueClick = {
                         accountSetupViewModel.updateCurrentScreen()
+                        accountSetupViewModel.updatePlank(it)
                         navController.navigate(AccountSetupScreen.LegRaises.name)
                     }
                 )
@@ -188,6 +197,7 @@ fun AccountSetupApp(modifier: Modifier = Modifier,
                     },
                     onContinueClick = {
                         accountSetupViewModel.updateCurrentScreen()
+                        accountSetupViewModel.updateLegRaise(it)
                         navController.navigate(AccountSetupScreen.Age.name)
                     }
                 )
@@ -216,6 +226,7 @@ fun AccountSetupApp(modifier: Modifier = Modifier,
                     },
                     onContinueClick = {
                         accountSetupViewModel.updateCurrentScreen()
+                        accountSetupViewModel.updateHeight(it)
                         navController.navigate(AccountSetupScreen.CurrentWeight.name)
                     }
                 )
@@ -230,6 +241,7 @@ fun AccountSetupApp(modifier: Modifier = Modifier,
                     },
                     onContinueClick = {
                         accountSetupViewModel.updateCurrentScreen()
+                        accountSetupViewModel.updateCurrentWeight(it)
                         navController.navigate(AccountSetupScreen.TargetWeight.name)
                     }
                 )
@@ -244,6 +256,7 @@ fun AccountSetupApp(modifier: Modifier = Modifier,
                     },
                     onContinueClick = {
                         accountSetupViewModel.updateCurrentScreen()
+                        accountSetupViewModel.updateTargetWeight(it)
                         navController.navigate(AccountSetupScreen.YogaPlan.name)
                     }
                 )
@@ -253,10 +266,23 @@ fun AccountSetupApp(modifier: Modifier = Modifier,
                 SetYogaPlanScreen(
                     paddingValues = paddingValues,
                     onSkipClick = {  },
-                    onContinueClick = {  }
+                    onContinueClick = {
+                        accountSetupViewModel.updateYogaWeekPlan(it)
+                        navController.navigate(AccountSetupScreen.DisplayYogaPlan.name)
+                    }
                 )
             }
 
+            composable(route = AccountSetupScreen.DisplayYogaPlan.name) {
+                DisplayYogaPlanScreen(
+                    paddingValues = paddingValues,
+                    onContinueClick = {
+                        accountSetupViewModel.updateUserProfile()
+                        (context as Activity).finish()
+                        HomeActivity.startActivity(context as Activity)
+                    }
+                )
+            }
         }
     }
 }
@@ -284,6 +310,13 @@ private fun AccountSetupTopAppBar(navController: NavHostController, navigateUp: 
                         fontWeight = FontWeight.SemiBold
                     )
                 }
+            )
+        }
+        AccountSetupScreen.DisplayYogaPlan.name -> {
+            CenterAlignedTopAppBar(
+                title = {   },
+                navigationIcon = {   },
+                actions = { }
             )
         }
         else -> {
@@ -317,6 +350,6 @@ enum class AccountSetupScreen {
     DesiredBodyShape, ExperienceLevel,
     Sedentary, Plank, LegRaises, Age,
     Height, CurrentWeight, TargetWeight,
-    YogaPlan
+    YogaPlan, DisplayYogaPlan
 
 }

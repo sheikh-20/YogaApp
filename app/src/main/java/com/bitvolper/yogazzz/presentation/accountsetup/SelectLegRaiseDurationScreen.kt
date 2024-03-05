@@ -43,7 +43,7 @@ import com.bitvolper.yogazzz.utility.AccountSetupContinueComposable
 fun SelectLegRaiseDurationScreen(modifier: Modifier = Modifier,
                                  paddingValues: PaddingValues = PaddingValues(),
                                  onSkipClick: () -> Unit = {  },
-                                 onContinueClick: () -> Unit = { }) {
+                                 onContinueClick: (Int) -> Unit = { _ -> }) {
 
     var currentPosition by remember {
         mutableIntStateOf(0)
@@ -84,10 +84,9 @@ fun SelectLegRaiseDurationScreen(modifier: Modifier = Modifier,
             }
         }
 
-
         AccountSetupContinueComposable(
             onSkipClick = onSkipClick, 
-            onContinueClick = onContinueClick
+            onContinueClick = { onContinueClick(currentPosition) }
         )
     }
 }
