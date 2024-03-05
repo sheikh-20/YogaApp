@@ -52,4 +52,10 @@ class AccountSetupViewModel: ViewModel() {
             it.copy(focusArea = focusArea)
         }
     }
+
+    fun updateYogaGoal(selectedIndex: List<Int>) {
+        _accountInfoUIState.update {
+            it.copy(yogaGoal = selectedIndex)
+        }
+    }
 }

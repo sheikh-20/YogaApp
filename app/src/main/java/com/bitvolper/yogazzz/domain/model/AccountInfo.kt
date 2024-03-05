@@ -6,6 +6,7 @@ data class AccountInfo(
     val gender: Int? = null,
     val birthdayDate: Long? = null,
     val focusArea: Int? = null,
+    val yogaGoal: List<Int?>? = null,
 
     val height: Int? = null,
     val currentWeight: Double? = null,

@@ -40,7 +40,7 @@ import com.bitvolper.yogazzz.utility.Goal
 fun YogaGoalScreen(modifier: Modifier = Modifier,
                    paddingValues: PaddingValues = PaddingValues(),
                    onSkipClick: () -> Unit = { },
-                   onContinueClick: () -> Unit = {  }
+                   onContinueClick: (List<Int>) -> Unit = { _ -> }
                    ) {
 
     val selectedIndexList = remember { mutableStateListOf(0) }
@@ -91,10 +91,9 @@ fun YogaGoalScreen(modifier: Modifier = Modifier,
 
         Spacer(modifier = modifier.weight(1f))
 
-
         AccountSetupContinueComposable(
             onSkipClick = onSkipClick, 
-            onContinueClick = onContinueClick
+            onContinueClick = { onContinueClick(selectedIndexList) }
         )
     }
 }

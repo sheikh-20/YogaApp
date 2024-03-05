@@ -2,6 +2,21 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="ExperienceLevelLightThemePreview">
+        <State />
+      </entry>
+      <entry key="SedentaryLifestyleLightThemePreview">
+        <State />
+      </entry>
+      <entry key="SelectCurrentBodyShapeDarkThemePreview">
+        <State />
+      </entry>
+      <entry key="SelectCurrentBodyShapeLightThemePreview">
+        <State />
+      </entry>
+      <entry key="SelectDesiredBodyShapeDarkThemePreview">
+        <State />
+      </entry>
       <entry key="app">
         <State>
           <targetSelectedWithDropDown>
