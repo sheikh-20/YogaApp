@@ -30,7 +30,7 @@ import com.bitvolper.yogazzz.utility.toImmutableWrapper
 fun SelectCurrentBodyWeightScreen(modifier: Modifier = Modifier,
                                   paddingValues: PaddingValues = PaddingValues(),
                                   onSkipClick: () -> Unit = {  },
-                                  onContinueClick: () -> Unit = {  }) {
+                                  onContinueClick: (Double) -> Unit = {  _ ->  }) {
 
     var value by remember { mutableStateOf("5") }
     val values = remember { (1..200).map { it.toString() } }
@@ -59,10 +59,9 @@ fun SelectCurrentBodyWeightScreen(modifier: Modifier = Modifier,
             verticalPadding = 8.dp,
         )
 
-
         AccountSetupContinueComposable(
             onSkipClick = onSkipClick,
-            onContinueClick = onContinueClick
+            onContinueClick = { onContinueClick(value.toDouble()) }
         )
     }
 }

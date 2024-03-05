@@ -52,7 +52,7 @@ import com.bitvolper.yogazzz.utility.AccountSetupContinueComposable
 fun SelectCurrentBodyShapeScreen(modifier: Modifier = Modifier,
                                  paddingValues: PaddingValues = PaddingValues(),
                                  onSkipClick: () -> Unit = {  },
-                                 onContinueClick: () -> Unit = {  }) {
+                                 onContinueClick: (Int) -> Unit = { _ -> }) {
 
     var currentPosition by remember {
         mutableIntStateOf(0)
@@ -84,11 +84,10 @@ fun SelectCurrentBodyShapeScreen(modifier: Modifier = Modifier,
 
         AccountSetupContinueComposable(
             onSkipClick = onSkipClick,
-            onContinueClick = onContinueClick
+            onContinueClick = { onContinueClick(currentPosition) }
         )
     }
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

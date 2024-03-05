@@ -45,7 +45,7 @@ import com.bitvolper.yogazzz.utility.Experience
 fun ExperienceLevelScreen(modifier: Modifier = Modifier,
                           paddingValues: PaddingValues = PaddingValues(),
                           onSkipClick: () -> Unit = { },
-                          onContinueClick: () -> Unit = {  }) {
+                          onContinueClick: (Int) -> Unit = { _ -> }) {
 
     var selectedExperienceLevel by remember { mutableIntStateOf(0) }
 
@@ -83,7 +83,7 @@ fun ExperienceLevelScreen(modifier: Modifier = Modifier,
 
         AccountSetupContinueComposable(
             onSkipClick = onSkipClick,
-            onContinueClick = onContinueClick
+            onContinueClick = { onContinueClick(selectedExperienceLevel) }
         )
     }
 }
