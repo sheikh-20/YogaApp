@@ -43,7 +43,7 @@ import com.bitvolper.yogazzz.utility.AccountSetupContinueComposable
 fun SelectPlankDurationScreen(modifier: Modifier = Modifier,
                               paddingValues: PaddingValues = PaddingValues(),
                               onSkipClick: () -> Unit = {  },
-                              onContinueClick: () -> Unit = { }) {
+                              onContinueClick: (Int) -> Unit = { _ -> }) {
 
     var currentPosition by remember {
         mutableIntStateOf(0)
@@ -86,7 +86,7 @@ fun SelectPlankDurationScreen(modifier: Modifier = Modifier,
 
         AccountSetupContinueComposable(
             onSkipClick = onSkipClick,
-            onContinueClick = onContinueClick
+            onContinueClick = { onContinueClick(currentPosition) }
         )
     }
 }

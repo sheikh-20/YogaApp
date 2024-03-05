@@ -7,6 +7,13 @@ data class AccountInfo(
     val birthdayDate: Long? = null,
     val focusArea: Int? = null,
     val yogaGoal: List<Int?>? = null,
+    val currentBodyShape: Int? = null,
+    val desiredBodyShape: Int? = null,
+    val experienceLevel: Int? = null,
+    val sedentaryLifestyle: Boolean? = null,
+    val plank: Int? = null,
+    val legRaise: Int? = null,
+    val yogaWeekDay: Int? = null,
 
     val height: Int? = null,
     val currentWeight: Double? = null,

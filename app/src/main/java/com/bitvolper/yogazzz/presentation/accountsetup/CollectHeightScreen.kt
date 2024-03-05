@@ -30,7 +30,7 @@ import com.bitvolper.yogazzz.utility.toImmutableWrapper
 fun CollectHeightScreen(modifier: Modifier = Modifier,
                         paddingValues: PaddingValues = PaddingValues(),
                         onSkipClick: () -> Unit = {  },
-                        onContinueClick: () -> Unit = { }) {
+                        onContinueClick: (Int) -> Unit = { _ -> }) {
 
     var value by remember { mutableStateOf("5") }
     val values = remember { (1..200).map { it.toString() } }
@@ -61,7 +61,7 @@ fun CollectHeightScreen(modifier: Modifier = Modifier,
 
         AccountSetupContinueComposable(
             onSkipClick = onSkipClick,
-            onContinueClick = onContinueClick
+            onContinueClick = { onContinueClick(value.toInt()) }
         )
     }
 }

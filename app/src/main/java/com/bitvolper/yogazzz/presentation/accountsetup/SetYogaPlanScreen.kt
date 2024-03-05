@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -30,7 +31,7 @@ import com.bitvolper.yogazzz.utility.toImmutableWrapper
 fun SetYogaPlanScreen(modifier: Modifier = Modifier,
                       paddingValues: PaddingValues = PaddingValues(),
                       onSkipClick: () -> Unit = { },
-                      onContinueClick: () -> Unit = {  }) {
+                      onContinueClick: (Int) -> Unit = { _ -> }) {
 
     var value by remember { mutableStateOf("5") }
     val values = remember { (1..200).map { it.toString() } }
@@ -44,9 +45,17 @@ fun SetYogaPlanScreen(modifier: Modifier = Modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally) {
 
-        Text(text = "Set Your Weekly Yoga Plan", style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.SemiBold)
+        Text(text = "Set Your Weekly Yoga Plan",
+            style = MaterialTheme.typography.headlineLarge,
+            fontWeight = FontWeight.SemiBold,
+            modifier = modifier.padding(horizontal = 16.dp),
+            textAlign = TextAlign.Center
+            )
 
-        Text(text = "How often can you dedicate time to yoga each week?", style = MaterialTheme.typography.bodyLarge)
+        Text(text = "How often can you dedicate time to yoga each week?",
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = modifier.padding(horizontal = 16.dp),
+            textAlign = TextAlign.Center)
 
         ListPicker(
             initialValue = value,
@@ -62,7 +71,7 @@ fun SetYogaPlanScreen(modifier: Modifier = Modifier,
 
         AccountSetupContinueComposable(
             onSkipClick = onSkipClick,
-            onContinueClick = onContinueClick
+            onContinueClick = { onContinueClick(value.toInt()) }
         )
     }
 }
