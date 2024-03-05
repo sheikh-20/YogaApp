@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.android.dagger.hilt)
     alias(libs.plugins.android.kotlin.serialize)
     alias(libs.plugins.google.service)
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -93,6 +94,7 @@ dependencies {
     implementation(libs.firebase.storage)
     implementation(libs.play.service)
     implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.message)
     implementation(libs.firebase.firestore.ktx)
     implementation(libs.androidx.media3.common)
