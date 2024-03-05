@@ -85,11 +85,11 @@ class HomeActivity : BaseActivity() {
                             modifier = Modifier.fillMaxSize(),
                             color = MaterialTheme.colorScheme.background
                         ) {
-                            if (onboardingViewModel.getUserInfo() != null) {
-                                HomeApp()
-                            } else {
+//                            if (onboardingViewModel.getUserInfo() != null) {
+//                                HomeApp()
+//                            } else {
                                 OnboardingApp()
-                            }
+//                            }
                         }
                     }
                 }

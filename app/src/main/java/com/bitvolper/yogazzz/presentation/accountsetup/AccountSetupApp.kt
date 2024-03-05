@@ -103,6 +103,7 @@ fun AccountSetupApp(modifier: Modifier = Modifier,
                     },
                     onContinueClick = {
                         accountSetupViewModel.updateCurrentScreen()
+                        accountSetupViewModel.updateYogaGoal(it)
                         navController.navigate(AccountSetupScreen.CurrentBodyShape.name)
                     }
                     )
