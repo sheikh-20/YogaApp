@@ -30,14 +30,11 @@ class BookmarkActivity: BaseActivity() {
         }
     }
 
-    private val homeViewModel: HomeViewModel by viewModels()
     private val accountViewModel: AccountViewModel by viewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        homeViewModel.getBookmarkYogaExercise()
 
         lifecycle.coroutineScope.launch {
             accountViewModel.appThemeIndex.collect {

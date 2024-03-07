@@ -36,8 +36,7 @@ class SerenityDetailActivity: BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        homeViewModel.getYogaExercise()
-        homeViewModel.getBookmarkYogaExercise()
+        homeViewModel.getSerenityFlow()
 
         lifecycle.coroutineScope.launch {
             accountViewModel.appThemeIndex.collect {

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.bitvolper.yogazzz.domain.model.AccountInfo
 import com.bitvolper.yogazzz.domain.model.History
 import com.bitvolper.yogazzz.domain.model.PopularYogaWithFlexibility
+import com.bitvolper.yogazzz.domain.model.SerenityData
 import com.bitvolper.yogazzz.domain.model.UserData
 import com.bitvolper.yogazzz.domain.model.YogaCategoryWithRecommendation
 import com.bitvolper.yogazzz.domain.model.YogaData
@@ -18,6 +19,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.IOException
@@ -45,8 +47,11 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase): V
     private var _yogaExerciseUIState = MutableStateFlow<Resource<YogaExercise>>(Resource.Loading)
     val yogaExerciseUIState: StateFlow<Resource<YogaExercise>> get() = _yogaExerciseUIState
 
-    private var _bookmarkUIState = MutableStateFlow<Resource<YogaExercise>>(Resource.Loading)
-    val bookmarkUIState: StateFlow<Resource<YogaExercise>> get() = _bookmarkUIState
+    private var _serenityFlowUIState = MutableStateFlow<Resource<SerenityData>>(Resource.Loading)
+    val serenityFlowUIState: StateFlow<Resource<SerenityData>> get() = _serenityFlowUIState
+
+    private var _bookmarkUIState = MutableStateFlow<Resource<SerenityData>>(Resource.Loading)
+    val bookmarkUIState: StateFlow<Resource<SerenityData>> get() = _bookmarkUIState
 
     private var _yogaCategoryUIState = MutableStateFlow<Resource<YogaData>>(Resource.Loading)
     val yogaCategoryUIState: StateFlow<Resource<YogaData>> get() = _yogaCategoryUIState
@@ -109,23 +114,22 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase): V
         }
     }
 
-    fun getBookmarkYogaExercise() = viewModelScope.launch {
+    fun getSerenityFlow() = viewModelScope.launch {
         try {
             Timber.tag(TAG).d("View model called")
-            homeUseCase.getBookmarkYogaExercise().collectLatest {
-                _bookmarkUIState.value = it
+            homeUseCase.getSerenityFlow("c0fdad9b-307c-4000-a342-346cb8f8abac").collectLatest {
+                _serenityFlowUIState.value = it
             }
         } catch (exception: IOException) {
             Timber.tag(TAG).e(exception)
         }
     }
 
-
-    fun updateBookmarkYogaExercise(bookmark: Boolean) = viewModelScope.launch {
+    fun getBookmark(id: List<String>) = viewModelScope.launch {
         try {
-            Timber.tag(TAG).d("View model called")
-            homeUseCase.updateBookmarkYogaExercise(bookmark)
-            getBookmarkYogaExercise()
+            homeUseCase.getBookmarkYogaExercise(id).collectLatest {
+                _bookmarkUIState.value = it
+            }
         } catch (exception: IOException) {
             Timber.tag(TAG).e(exception)
         }
@@ -145,7 +149,26 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase): V
         _historyUIState.value = Resource.Success(History(emptyList()))
     }
 
+    private fun getUserProfile() = viewModelScope.launch {
+        try {
+            homeUseCase.getUserInfo(auth.currentUser?.uid ?: return@launch).collectLatest {
+                when (it) {
+                    is Resource.Loading -> {  }
+                    is Resource.Failure -> {  }
+                    is Resource.Success -> {
+                        getBookmark(it.data.bookmark ?: return@collectLatest)
+                    }
+                }
+            }
+
+        } catch (exception: IOException) {
+            Timber.tag(TAG).e(exception)
+        }
+    }
+
+
     init {
         getSignedInUser()
+        getUserProfile()
     }
 }

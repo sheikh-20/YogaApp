@@ -26,8 +26,8 @@ android {
         applicationId = "com.bitvolper.yogazzz"
         minSdk = 21
         targetSdk = 34
-        versionCode = 17
-        versionName = "1.0.16"
+        versionCode = 19
+        versionName = "1.0.18"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
