@@ -151,11 +151,21 @@ class AccountSetupViewModel @Inject constructor(private val homeUseCase: HomeUse
         Timber.tag(TAG).d(accountInfoUIState.value.toString())
     }
 
+    private fun updateUserCredential() {
+        _accountInfoUIState.update {
+            it.copy(fullName = auth.currentUser?.displayName ?: "", email = auth.currentUser?.email ?: "")
+        }
+    }
+
     fun updateUserProfile() = viewModelScope.launch {
         try {
             homeUseCase.updateUserInfo(auth.currentUser?.uid ?: return@launch, accountInfoUIState.value)
         } catch (exception: IOException) {
             Timber.tag(TAG).e(exception)
         }
+    }
+
+    init {
+        updateUserCredential()
     }
 }

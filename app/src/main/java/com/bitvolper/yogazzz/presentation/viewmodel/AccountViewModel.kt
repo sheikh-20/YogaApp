@@ -183,6 +183,20 @@ class AccountViewModel @Inject constructor(
         }
     }
 
+    fun updateBookmark(id: String) = viewModelScope.launch {
+
+        val bookmark = mutableSetOf<String>().apply {
+            addAll(_accountInfoUIState.value.bookmark ?: emptyList())
+            add(id)
+        }
+
+        _accountInfoUIState.update {
+            it.copy(bookmark = bookmark.toList())
+        }
+
+        updateUserProfile()
+    }
+
     fun getUserProfile() = viewModelScope.launch {
         try {
             homeUseCase.getUserInfo(auth.currentUser?.uid ?: return@launch).collectLatest {

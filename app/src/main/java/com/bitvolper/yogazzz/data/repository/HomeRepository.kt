@@ -9,6 +9,7 @@ import com.bitvolper.yogazzz.domain.model.History
 import com.bitvolper.yogazzz.domain.model.Meditation
 import com.bitvolper.yogazzz.domain.model.PopularYoga
 import com.bitvolper.yogazzz.domain.model.PopularYogaWithFlexibility
+import com.bitvolper.yogazzz.domain.model.SerenityData
 import com.bitvolper.yogazzz.domain.model.StressRelief
 import com.bitvolper.yogazzz.domain.model.Subscription
 import com.bitvolper.yogazzz.domain.model.YogaCategory
@@ -47,7 +48,9 @@ interface HomeRepository {
 
     fun getYogaExercise(id: Int): Flow<Resource<YogaExercise>>
 
-    fun getBookmarkYogaExercise(): Flow<Resource<YogaExercise>>
+    fun getSerenityFlow(id: String): Flow<Resource<SerenityData>>
+
+    fun getBookmarkYogaExercise(id: List<String>): Flow<Resource<SerenityData>>
 
     suspend fun updateBookmarkYogaExercise(bookmark: Boolean)
 
@@ -394,7 +397,8 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
             emit(Resource.Failure(it))
         }
 
-    override fun getBookmarkYogaExercise(): Flow<Resource<YogaExercise>> = flow {
+
+    override fun getSerenityFlow(id: String): Flow<Resource<SerenityData>> = flow {
 
         Timber.tag(TAG).d("Called")
         emit(Resource.Loading)
@@ -403,15 +407,59 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
 
             Timber.tag(TAG).d("Repo called")
 
-            val result = database.getReference("yoga_exercise").get().await()
+            val result = firestore.collection("yoga_exercise")
+                .whereEqualTo("id", id)
+                .get()
+                .await()
 
-            val json = Gson().toJson(result.value)
+            val filter = result.documents.map {
+                Timber.tag(TAG).e(it.toString())
+                it.data
+            }
+
+            val json = Gson().toJson(filter)
             Timber.tag(TAG).d("Result -> $json")
 
-            val listType = object : TypeToken<List<YogaExercise.Data>>() {}.type
-            val data = Gson().fromJson<List<YogaExercise.Data>>(json, listType)
+            val listType = object : TypeToken<List<SerenityData.Data>>() {}.type
+            val data = Gson().fromJson<List<SerenityData.Data>>(json, listType)
 
-            emit(Resource.Success(YogaExercise(data = data.filter { it.bookmark == true })))
+            emit(Resource.Success(SerenityData(data = data)))
+        } catch (exception: Exception) {
+            throw Throwable(exception)
+        }
+    }
+        .catch {
+            Timber.tag(TAG).e(it)
+            it.printStackTrace()
+            emit(Resource.Failure(it))
+        }
+
+    override fun getBookmarkYogaExercise(id: List<String>): Flow<Resource<SerenityData>> = flow {
+
+        Timber.tag(TAG).d("Called")
+        emit(Resource.Loading)
+
+        try {
+
+            Timber.tag(TAG).d("Repo called")
+
+            val result = firestore.collection("yoga_exercise")
+                .whereIn("id", id)
+                .get()
+                .await()
+
+            val filter = result.documents.map {
+                Timber.tag(TAG).e(it.toString())
+                it.data
+            }
+
+            val json = Gson().toJson(filter)
+            Timber.tag(TAG).d("Result -> $json")
+
+            val listType = object : TypeToken<List<SerenityData.Data>>() {}.type
+            val data = Gson().fromJson<List<SerenityData.Data>>(json, listType)
+
+            emit(Resource.Success(SerenityData(data = data)))
         } catch (exception: Exception) {
             throw Throwable(exception)
         }

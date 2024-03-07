@@ -1,5 +1,8 @@
 package com.bitvolper.yogazzz.domain.model
 
+import java.io.Serializable
+
+
 data class AccountInfo(
     val fullName: String? = null,
     val email: String? = null,
@@ -19,10 +22,11 @@ data class AccountInfo(
     val currentWeight: Double? = null,
     val targetWeight: Double? = null,
 
-    val history: List<HistoryData>? = null
-) {
+    val history: List<HistoryData>? = null,
+    val bookmark: List<String>? = null
+): Serializable {
     data class HistoryData(
         val id: String? = null,
         val date: String? = null
-    )
+    ): Serializable
 }
