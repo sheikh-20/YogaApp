@@ -22,17 +22,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.bitvolper.yogazzz.presentation.viewmodel.AccountViewModel
 import com.bitvolper.yogazzz.presentation.viewmodel.HomeViewModel
 
 @Composable
-fun BookmarkApp(modifier: Modifier = Modifier, homeViewModel: HomeViewModel = hiltViewModel()) {
+fun BookmarkApp(modifier: Modifier = Modifier,
+                homeViewModel: HomeViewModel = hiltViewModel(),
+                accountViewModel: AccountViewModel = hiltViewModel()) {
 
     val bookmarkUIState by homeViewModel.bookmarkUIState.collectAsState()
 
     Scaffold(
         topBar = { BookmarkTopAppBar() }
     ) { paddingValues ->
-        BookmarkScreen(paddingValues = paddingValues, bookmarkUIState = bookmarkUIState)
+        BookmarkScreen(
+            paddingValues = paddingValues,
+            bookmarkUIState = bookmarkUIState
+            )
     }
 }
 

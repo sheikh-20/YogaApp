@@ -9,6 +9,7 @@ import com.bitvolper.yogazzz.domain.model.History
 import com.bitvolper.yogazzz.domain.model.Meditation
 import com.bitvolper.yogazzz.domain.model.PopularYoga
 import com.bitvolper.yogazzz.domain.model.PopularYogaWithFlexibility
+import com.bitvolper.yogazzz.domain.model.SerenityData
 import com.bitvolper.yogazzz.domain.model.StressRelief
 import com.bitvolper.yogazzz.domain.model.Subscription
 import com.bitvolper.yogazzz.domain.model.UserData
@@ -40,7 +41,9 @@ interface HomeUseCase {
 
     fun getYogaExercise(id: Int): Flow<Resource<YogaExercise>>
 
-    fun getBookmarkYogaExercise(): Flow<Resource<YogaExercise>>
+    fun getSerenityFlow(id: String): Flow<Resource<SerenityData>>
+
+    fun getBookmarkYogaExercise(id: List<String>): Flow<Resource<SerenityData>>
 
     suspend fun updateBookmarkYogaExercise(bookmark: Boolean)
 
@@ -102,8 +105,12 @@ class GetHomeUseCaseInteractors(private val repository: HomeRepository): HomeUse
         return repository.getYogaExercise(id)
     }
 
-    override fun getBookmarkYogaExercise(): Flow<Resource<YogaExercise>> {
-        return repository.getBookmarkYogaExercise()
+    override fun getSerenityFlow(id: String): Flow<Resource<SerenityData>> {
+        return repository.getSerenityFlow(id)
+    }
+
+    override fun getBookmarkYogaExercise(id: List<String>): Flow<Resource<SerenityData>> {
+        return repository.getBookmarkYogaExercise(id)
     }
 
     override suspend fun updateBookmarkYogaExercise(bookmark: Boolean) {

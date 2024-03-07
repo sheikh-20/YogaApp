@@ -21,6 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -33,28 +34,36 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.bitvolper.yogazzz.R
+import com.bitvolper.yogazzz.domain.model.AccountInfo
+import com.bitvolper.yogazzz.domain.model.SerenityData
 import com.bitvolper.yogazzz.domain.model.YogaExercise
 import com.bitvolper.yogazzz.domain.model.YogaRecommendation
 import com.bitvolper.yogazzz.presentation.home.RecommendationCard
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.utility.Resource
 import com.google.accompanist.pager.ExperimentalPagerApi
+import timber.log.Timber
 
+private const val TAG = "BookmarkScreen"
 @Composable
 fun BookmarkScreen(modifier: Modifier = Modifier,
                    paddingValues: PaddingValues = PaddingValues(),
-                   bookmarkUIState: Resource<YogaExercise> = Resource.Loading) {
+                   bookmarkUIState: Resource<SerenityData> = Resource.Loading) {
+
     Column(modifier = modifier
         .fillMaxSize()
         .wrapContentSize(align = Alignment.Center)) {
         when (bookmarkUIState) {
             is Resource.Loading -> {
                 CircularProgressIndicator()
+                Timber.tag(TAG).d("Loading")
             }
             is Resource.Failure -> {
                 Text(text = bookmarkUIState.throwable.toString())
             }
             is Resource.Success -> {
+                Timber.tag(TAG).d("Success")
+
                 Column(modifier = modifier
                     .fillMaxSize()
                     .padding(
@@ -80,7 +89,7 @@ fun BookmarkScreen(modifier: Modifier = Modifier,
 @Preview(showBackground = true)
 @Composable
 private fun BookmarkCard(modifier: Modifier = Modifier,
-                         yoga: YogaExercise.Data = YogaExercise.Data()) {
+                         yoga: SerenityData.Data = SerenityData.Data()) {
 
     val context = LocalContext.current
 
@@ -92,7 +101,7 @@ private fun BookmarkCard(modifier: Modifier = Modifier,
 
             AsyncImage(
                 model = ImageRequest.Builder(context = LocalContext.current)
-                    .data(yoga.backdropImage)
+                    .data(yoga.image)
                     .crossfade(true)
                     .build(),
                 error = painterResource(id = R.drawable.ic_broken_image),
@@ -106,7 +115,7 @@ private fun BookmarkCard(modifier: Modifier = Modifier,
 
         Column(modifier = modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(
-                text = yoga.yogaTitle ?: "",
+                text = yoga.title ?: "",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.SemiBold,
                 overflow = TextOverflow.Ellipsis,
@@ -114,9 +123,9 @@ private fun BookmarkCard(modifier: Modifier = Modifier,
             )
 
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(text = "", style = MaterialTheme.typography.bodyMedium)
+                Text(text = yoga.duration ?: "", style = MaterialTheme.typography.bodyMedium)
                 Text(text = ".", style = MaterialTheme.typography.bodySmall)
-                Text(text = "", style = MaterialTheme.typography.bodyMedium)
+                Text(text = yoga.level ?: "", style = MaterialTheme.typography.bodyMedium)
             }
         }
 

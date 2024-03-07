@@ -16,7 +16,11 @@ import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Apps
+import androidx.compose.material.icons.rounded.Apps
+import androidx.compose.material.icons.rounded.ArrowForwardIos
 import androidx.compose.material.icons.rounded.LocalFireDepartment
 import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material.icons.rounded.SelfImprovement
@@ -25,6 +29,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -37,20 +42,23 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.bitvolper.yogazzz.R
+import com.bitvolper.yogazzz.domain.model.SerenityData
 import com.bitvolper.yogazzz.domain.model.YogaExercise
 import com.bitvolper.yogazzz.presentation.serenitydetail.yogaexercise.YogaExerciseActivity
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.utility.Resource
+import com.google.accompanist.pager.ExperimentalPagerApi
 
 @Composable
 fun SerenityDetailScreen(modifier: Modifier = Modifier,
                          paddingValues: PaddingValues = PaddingValues(),
-                         yogaExerciseUIState: Resource<YogaExercise> = Resource.Loading,
+                         yogaExerciseUIState: Resource<SerenityData> = Resource.Loading,
                        ) {
 
     val context = LocalContext.current
@@ -58,12 +66,16 @@ fun SerenityDetailScreen(modifier: Modifier = Modifier,
 
     when (yogaExerciseUIState) {
         is Resource.Loading -> {
-            CircularProgressIndicator(modifier = modifier.fillMaxSize().wrapContentSize(align = Alignment.Center))
+            CircularProgressIndicator(modifier = modifier
+                .fillMaxSize()
+                .wrapContentSize(align = Alignment.Center))
         }
 
         is Resource.Failure -> {
             Text(text = yogaExerciseUIState.throwable.toString(),
-                modifier = modifier.fillMaxSize().wrapContentSize(align = Alignment.Center))
+                modifier = modifier
+                    .fillMaxSize()
+                    .wrapContentSize(align = Alignment.Center))
         }
 
         is Resource.Success -> {
@@ -73,7 +85,7 @@ fun SerenityDetailScreen(modifier: Modifier = Modifier,
 
                     AsyncImage(
                         model = ImageRequest.Builder(context = LocalContext.current)
-                            .data(yogaExerciseUIState.data.data?.first()?.backdropImage ?: "")
+                            .data(yogaExerciseUIState.data.data?.first()?.image ?: "")
                             .crossfade(true)
                             .build(),
                         error = painterResource(id = R.drawable.ic_broken_image),
@@ -82,14 +94,14 @@ fun SerenityDetailScreen(modifier: Modifier = Modifier,
                         modifier = modifier.requiredHeight(250.dp),
                         contentScale = ContentScale.Crop)
 
-                    Text(text = yogaExerciseUIState.data.data?.first()?.yogaTitle ?: "",
+                    Text(text = yogaExerciseUIState.data.data?.first()?.title ?: "",
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.SemiBold,
                         modifier = modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp))
 
-                    Text(text = yogaExerciseUIState.data.data?.first()?.yogaDescription ?: "",
+                    Text(text = yogaExerciseUIState.data.data?.first()?.description ?: "",
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = modifier
                             .fillMaxWidth()
@@ -113,7 +125,7 @@ fun SerenityDetailScreen(modifier: Modifier = Modifier,
                                 horizontalAlignment = Alignment.CenterHorizontally) {
                                 Icon(imageVector = Icons.Rounded.SelfImprovement, contentDescription = null)
 
-                                Text(text = "11",
+                                Text(text = yogaExerciseUIState.data.data?.first()?.moments ?: "",
                                     style = MaterialTheme.typography.bodyLarge,
                                     fontWeight = FontWeight.SemiBold)
 
@@ -132,7 +144,7 @@ fun SerenityDetailScreen(modifier: Modifier = Modifier,
                                 horizontalAlignment = Alignment.CenterHorizontally) {
                                 Icon(imageVector = Icons.Rounded.Schedule, contentDescription = null)
 
-                                Text(text = "11",
+                                Text(text = yogaExerciseUIState.data.data?.first()?.duration ?: "",
                                     style = MaterialTheme.typography.bodyLarge,
                                     fontWeight = FontWeight.SemiBold)
 
@@ -152,7 +164,7 @@ fun SerenityDetailScreen(modifier: Modifier = Modifier,
                                 horizontalAlignment = Alignment.CenterHorizontally) {
                                 Icon(imageVector = Icons.Rounded.LocalFireDepartment, contentDescription = null)
 
-                                Text(text = "200",
+                                Text(text = yogaExerciseUIState.data.data?.first()?.kcal ?: "",
                                     style = MaterialTheme.typography.bodyLarge,
                                     fontWeight = FontWeight.SemiBold)
 
@@ -160,9 +172,18 @@ fun SerenityDetailScreen(modifier: Modifier = Modifier,
                             }
                         }
                     }
+
+                    LazyColumn(contentPadding = PaddingValues(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        items(yogaExerciseUIState.data.data?.first()?.pose?.size ?: return@LazyColumn) {
+                            ExerciseCard(yoga = yogaExerciseUIState.data.data.first()?.pose?.get(it) ?: return@items)
+                        }
+                    }
                 }
 
-                Column(modifier = modifier.fillMaxSize().wrapContentSize(align = Alignment.BottomCenter).padding(bottom = 16.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
+                Column(modifier = modifier
+                    .fillMaxSize()
+                    .wrapContentSize(align = Alignment.BottomCenter)
+                    .padding(bottom = 16.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
 
                     Divider(modifier = modifier.fillMaxWidth())
 
@@ -178,7 +199,7 @@ fun SerenityDetailScreen(modifier: Modifier = Modifier,
                                 .weight(1f)
                                 .requiredHeight(50.dp)) {
 
-                            Text(text = "Continue")
+                            Text(text = "START")
                         }
                     }
                 }
@@ -186,6 +207,54 @@ fun SerenityDetailScreen(modifier: Modifier = Modifier,
         }
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalPagerApi::class)
+@Preview(showBackground = true)
+@Composable
+private fun ExerciseCard(modifier: Modifier = Modifier,
+                         yoga: SerenityData.Data.Pose = SerenityData.Data.Pose()) {
+
+    val context = LocalContext.current
+
+    Row(modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+        
+        Icon(imageVector = Icons.Outlined.Apps, contentDescription = null)
+
+        Card(onClick = { }, modifier = modifier.padding(vertical = 4.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.outlineVariant)) {
+
+            AsyncImage(
+                model = ImageRequest.Builder(context = LocalContext.current)
+                    .data(yoga.image)
+                    .crossfade(true)
+                    .build(),
+                error = painterResource(id = R.drawable.ic_broken_image),
+                placeholder = painterResource(id = R.drawable.ic_image_placeholder),
+                contentDescription = null,
+                modifier = modifier
+                    .size(height = 80.dp, width = 80.dp),
+                contentScale = ContentScale.Crop)
+
+        }
+
+        Column(modifier = modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(
+                text = yoga.title ?: "",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
+            )
+
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(text = yoga.duration ?: "", style = MaterialTheme.typography.bodyMedium)
+            }
+        }
+
+    }
+}
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
