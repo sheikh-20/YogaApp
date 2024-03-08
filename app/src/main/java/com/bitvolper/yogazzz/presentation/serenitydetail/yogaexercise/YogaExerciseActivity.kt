@@ -32,7 +32,6 @@ class YogaExerciseActivity: BaseActivity() {
 
     private val accountViewModel: AccountViewModel by viewModels()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

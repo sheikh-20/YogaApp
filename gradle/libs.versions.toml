@@ -61,6 +61,7 @@ vico-core = { module = "com.patrykandpatrick.vico:core", version.ref = "vico-cha
 
 gson = { module = "com.google.code.gson:gson", version.ref = "gson-version" }
 coil = { module = "io.coil-kt:coil-compose", version.ref = "coil-version"}
+coil-thumbnail = { module = "io.coil-kt:coil-video", version.ref="coil-version"}
 
 pref-datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore-version" }
 

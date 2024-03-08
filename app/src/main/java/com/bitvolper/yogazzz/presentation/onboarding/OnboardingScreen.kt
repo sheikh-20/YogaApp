@@ -1,6 +1,7 @@
 package com.bitvolper.yogazzz.presentation.onboarding
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -129,14 +130,17 @@ private fun OnboardingContent(modifier: Modifier = Modifier, state: PagerState =
 
     val datasource = listOf<HorizontalData>(
         HorizontalData(
+            image = R.drawable.ic_home_screen,
             title = "YogazzZ - Your Yoga Journey Starts Here",
             description = "Get ready to embark on a transformative yoga journey with YogazzZ. Discover a wide range of yogas, tailored to your goals."
         ),
         HorizontalData(
+            image = R.drawable.ic_home_screen2,
             title = "Tailored Exercise Plan for Your Needs",
             description = "YogazzZ personalizes yoga just for you. Whether you're a beginner or a yoga enthusiast, our app adapt to your needs"
         ),
         HorizontalData(
+            image = R.drawable.ic_home_screen,
             title = "Stay Informed About Your Yoga Progress",
             description = "Stay motivated and track your progress effortlessly. Start your yoga journey today and achieve the results you've always wanted"
         ),
@@ -151,7 +155,7 @@ private fun OnboardingContent(modifier: Modifier = Modifier, state: PagerState =
     }
 }
 
-data class HorizontalData(val title: String, val description: String)
+data class HorizontalData(@DrawableRes val image: Int, val title: String, val description: String)
 
 
 private val cropShape = GenericShape { size: Size, layoutDirection: LayoutDirection ->
@@ -166,7 +170,7 @@ private fun HorizontalContent(modifier: Modifier = Modifier, horizontalData: Hor
     Box(modifier = modifier.background(color = Color(0xFF655de6))) {
 
 
-            Image(painter = painterResource(id = R.drawable.ic_home_screen), contentDescription = null,
+            Image(painter = painterResource(id = horizontalData.image), contentDescription = null,
                 modifier = modifier
                     .fillMaxSize()
                     .offset(x = 0.dp, y = 50.dp)
