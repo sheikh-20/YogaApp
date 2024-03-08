@@ -30,125 +30,149 @@
         <activity
             android:name=".presentation.faq.FaqActivity"
             android:exported="true"
-            android:theme="@style/Theme.YogaApp" />
+            android:theme="@style/Theme.YogaApp"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".presentation.home.discover.body_focus.BodyFocusActivity"
             android:exported="true"
-            android:theme="@style/Theme.YogaApp" />
+            android:theme="@style/Theme.YogaApp"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".presentation.home.discover.meditation.MeditationActivity"
             android:exported="true"
-            android:theme="@style/Theme.YogaApp" />
+            android:theme="@style/Theme.YogaApp"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".presentation.serenitydetail.yogaexercise.YogaExerciseActivity"
             android:exported="true"
-            android:theme="@style/Theme.YogaApp" />
+            android:theme="@style/Theme.YogaApp"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".presentation.home.discover.stress_relief.StressReliefActivity"
             android:exported="true"
-            android:theme="@style/Theme.YogaApp" />
+            android:theme="@style/Theme.YogaApp"
+            android:screenOrientation="portrait"/>
 
 
         <activity
             android:name=".presentation.home.discover.flexiblity_strength.FlexibilityStrengthActivity"
             android:exported="true"
-            android:theme="@style/Theme.YogaApp" />
+            android:theme="@style/Theme.YogaApp"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".presentation.home.discover.adjust_yoga.AdjustYogaActivity"
             android:exported="true"
-            android:theme="@style/Theme.YogaApp" />
+            android:theme="@style/Theme.YogaApp"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".presentation.home.discover.popular_yoga.PopularYogaActivity"
             android:exported="true"
-            android:theme="@style/Theme.YogaApp" />
+            android:theme="@style/Theme.YogaApp"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".presentation.home.recommendation.RecommendationActivity"
             android:exported="true"
-            android:theme="@style/Theme.YogaApp" />
+            android:theme="@style/Theme.YogaApp"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".presentation.serenitydetail.SerenityDetailActivity"
             android:exported="true"
-            android:theme="@style/Theme.YogaApp" />
+            android:theme="@style/Theme.YogaApp"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".presentation.categorydetail.CategoryDetailActivity"
             android:exported="true"
-            android:theme="@style/Theme.YogaApp" />
+            android:theme="@style/Theme.YogaApp"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".presentation.support.SupportActivity"
             android:exported="true"
-            android:theme="@style/Theme.YogaApp" />
+            android:theme="@style/Theme.YogaApp"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".presentation.analytics.AnalyticsActivity"
             android:exported="true"
-            android:theme="@style/Theme.YogaApp" />
+            android:theme="@style/Theme.YogaApp"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".presentation.appearance.AppearanceActivity"
             android:exported="true"
-            android:theme="@style/Theme.YogaApp" />
+            android:theme="@style/Theme.YogaApp"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".presentation.billing.BillingSubscriptionActivity"
             android:exported="true"
-            android:theme="@style/Theme.YogaApp" />
+            android:theme="@style/Theme.YogaApp"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".presentation.accountsecurity.AccountSecurityActivity"
             android:exported="true"
-            android:theme="@style/Theme.YogaApp" />
+            android:theme="@style/Theme.YogaApp"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".presentation.notifications.NotificationsActivity"
             android:exported="true"
-            android:theme="@style/Theme.YogaApp" />
+            android:theme="@style/Theme.YogaApp"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".presentation.mybody.MyBodyActivity"
             android:exported="true"
-            android:theme="@style/Theme.YogaApp" />
+            android:theme="@style/Theme.YogaApp"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".presentation.userprofile.UserProfileActivity"
             android:exported="true"
-            android:theme="@style/Theme.YogaApp" />
+            android:theme="@style/Theme.YogaApp"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".presentation.subscription.SubscriptionActivity"
             android:exported="true"
-            android:theme="@style/Theme.YogaApp" />
+            android:theme="@style/Theme.YogaApp"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".presentation.home.bookmark.BookmarkActivity"
             android:exported="true"
-            android:theme="@style/Theme.YogaApp" />
+            android:theme="@style/Theme.YogaApp"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".presentation.home.notification.NotificationSettingsActivity"
             android:exported="true"
-            android:theme="@style/Theme.YogaApp" />
+            android:theme="@style/Theme.YogaApp"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".presentation.accountsetup.AccountSetupActivity"
             android:exported="true"
-            android:theme="@style/Theme.YogaApp" >
+            android:theme="@style/Theme.YogaApp"
+            android:screenOrientation="portrait">
 
         </activity>
 
         <activity
             android:name=".presentation.home.HomeActivity"
             android:exported="true"
-            android:theme="@style/Theme.YogaApp.Splash">
+            android:theme="@style/Theme.YogaApp.Splash"
+            android:screenOrientation="portrait">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

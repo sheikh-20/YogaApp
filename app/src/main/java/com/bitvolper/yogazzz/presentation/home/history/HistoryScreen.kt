@@ -1,7 +1,6 @@
 package com.bitvolper.yogazzz.presentation.home.history
 
 import android.content.res.Configuration
-import android.icu.text.DateFormat
 import android.view.ContextThemeWrapper
 import android.widget.CalendarView
 import androidx.compose.foundation.BorderStroke
@@ -73,22 +72,27 @@ import com.bitvolper.yogazzz.utility.Resource
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.util.Calendar
 import java.util.Date
 
 private const val TAG = "HistoryScreen"
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
-fun HistoryScreen(modifier: Modifier = Modifier,
-                  paddingValues: PaddingValues = PaddingValues(),
-                  onHistory: () -> Unit = {  },
-                  historyUIState: Resource<History> = Resource.Loading,
-                  ) {
+fun HistoryScreen(
+    modifier: Modifier = Modifier,
+    paddingValues: PaddingValues = PaddingValues(),
+    onHistory: () -> Unit = { },
+    historyUIState: Resource<History> = Resource.Loading,
+) {
 
     val dayTheme = if (isSystemInDarkTheme()) R.style.CustomDayDark else R.style.CustomDay
     val weekTheme = if (isSystemInDarkTheme()) R.style.CustomWeekDark else R.style.CustomWeek
     val customTheme = if (isSystemInDarkTheme()) R.style.CustomCalendarDark else R.style.CustomCalendar
 
     var selectedDate by remember { mutableStateOf("") }
+    var selectedDay by remember {
+        mutableStateOf("")
+    }
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -110,7 +114,9 @@ fun HistoryScreen(modifier: Modifier = Modifier,
         onHistory()
     }
 
-    Box(modifier = modifier.fillMaxSize().pullRefresh(pullRefreshState), contentAlignment = Alignment.Center) {
+    Box(modifier = modifier
+        .fillMaxSize()
+        .pullRefresh(pullRefreshState), contentAlignment = Alignment.Center) {
 
         Column(modifier = modifier
             .fillMaxSize()
@@ -149,6 +155,7 @@ fun HistoryScreen(modifier: Modifier = Modifier,
 
                                         val date: Date = Date(date)
                                         selectedDate = android.text.format.DateFormat.format("d-M-yyyy", date) as String
+                                        selectedDay =  android.text.format.DateFormat.format("EEE MMM yy", date) as String
                                     }
                                 },
                                 update = {
@@ -159,12 +166,16 @@ fun HistoryScreen(modifier: Modifier = Modifier,
                                         setOnDateChangeListener { view, year, month, dayOfMonth ->
                                             selectedDate = "$dayOfMonth-${month.inc()}-$year"
                                             Timber.tag(TAG).d(selectedDate)
+
+                                            val calendar: Calendar = Calendar.getInstance()
+                                            calendar.set(year, month, dayOfMonth)
+                                            selectedDay =  android.text.format.DateFormat.format("EEE MMM yy", calendar.time) as String
                                         }
                                     }
                                 })
                         }
 
-                        HistoryCompose(history = historyUIState.data, selectedDate = selectedDate)
+                        HistoryCompose(history = historyUIState.data, selectedDate = selectedDate, selectedDay = selectedDay)
                     }
                 }
             }
@@ -180,7 +191,7 @@ fun HistoryScreen(modifier: Modifier = Modifier,
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun HistoryCompose(modifier: Modifier = Modifier, history: History = History(), selectedDate: String = "") {
+private fun HistoryCompose(modifier: Modifier = Modifier, history: History = History(), selectedDate: String = "5-5-2024", selectedDay: String = "Mon") {
     Card(border = BorderStroke(width = .5.dp, color = MaterialTheme.colorScheme.outlineVariant),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent)) {
         Column(modifier = modifier
@@ -191,7 +202,7 @@ private fun HistoryCompose(modifier: Modifier = Modifier, history: History = His
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(16.dp)) {
 
-                Text(text = "Tue Dec 5",
+                Text(text = selectedDay,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold)
 
@@ -259,8 +270,10 @@ private fun HistoryCompose(modifier: Modifier = Modifier, history: History = His
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
-private fun HistoryCard(modifier: Modifier = Modifier,
-                        history: History.Data = History.Data(), ) {
+private fun HistoryCard(
+    modifier: Modifier = Modifier,
+    history: History.Data = History.Data(),
+) {
 
     val context = LocalContext.current
 
