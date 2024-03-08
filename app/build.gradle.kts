@@ -26,8 +26,8 @@ android {
         applicationId = "com.bitvolper.yogazzz"
         minSdk = 21
         targetSdk = 34
-        versionCode = 19
-        versionName = "1.0.18"
+        versionCode = 20
+        versionName = "1.0.19"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -147,6 +147,7 @@ dependencies {
 
     // Coil
     implementation(libs.coil)
+    implementation(libs.coil.thumbnail)
 
     // Preferences datastore
     implementation(libs.pref.datastore)

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -36,17 +37,26 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.ImageLoader
+import coil.compose.AsyncImage
+import coil.decode.VideoFrameDecoder
 import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 
 @Composable
 fun StartYogaScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = PaddingValues()) {
 
+    val imageLoader = ImageLoader.Builder(LocalContext.current)
+        .components {
+            add(VideoFrameDecoder.Factory())
+        }
+        .build()
 
     Column(modifier = modifier
         .fillMaxSize()
@@ -58,15 +68,14 @@ fun StartYogaScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues 
         ),
         verticalArrangement = Arrangement.spacedBy(100.dp)) {
 
-        Image(
-            painter = painterResource(id = R.drawable.ic_yoga_exercise),
+        AsyncImage(
+            model = R.drawable.ic_yoga_exercise,
+            imageLoader = imageLoader,
+            error = painterResource(id = R.drawable.ic_broken_image),
+            placeholder = painterResource(id = R.drawable.ic_image_placeholder),
             contentDescription = null,
-            modifier = modifier
-                .fillMaxWidth()
-                .size(250.dp)
-                .clip(RoundedCornerShape(10)),
-            contentScale = ContentScale.Crop
-            )
+            modifier = modifier.fillMaxWidth().size(250.dp).clip(RoundedCornerShape(10)),
+            contentScale = ContentScale.Crop)
 
         Spacer(modifier = modifier.weight(1f))
 

@@ -29,6 +29,12 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.bitvolper.yogazzz.R
+import timber.log.Timber
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Date
 import java.util.concurrent.TimeUnit
 
 sealed class Resource<out T: Any> {
@@ -176,3 +182,24 @@ fun Long.formatMinSec(): String {
     }
 }
 
+
+fun String.getDayOfWeek(): String {
+    val format1 = SimpleDateFormat("d-M-yyyy")
+    val dt1 = format1.parse(this)
+    val format2: DateFormat = SimpleDateFormat("EEEE")
+    return format2.format(dt1 ?: "")
+}
+
+//fun String.checkTodayDay(): String {
+//    val format = SimpleDateFormat("EEE MMM yy")
+//    val currentDate = format.parse(this)
+//
+//
+//
+////    val localDate = LocalDate.now().format(DateTimeFormatter.ofPattern("EEE MMM yy"))
+////
+////    if (currentDate == localDate) {
+////
+////    }
+//
+//}
