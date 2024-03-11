@@ -6,9 +6,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -26,17 +28,33 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.ImageLoader
+import coil.compose.AsyncImage
+import coil.decode.VideoFrameDecoder
 import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
+import com.bitvolper.yogazzz.presentation.viewmodel.ExerciseUIState
 
 @Composable
 fun PauseYogaScreen(modifier: Modifier = Modifier,
-                    paddingValues: PaddingValues = PaddingValues()) {
+                    paddingValues: PaddingValues = PaddingValues(),
+                    currentYogaExercise: ExerciseUIState = ExerciseUIState(),
+                    onResumeClick: () -> Unit = { }) {
+
+
+    val imageLoader = ImageLoader.Builder(LocalContext.current)
+        .components {
+            add(VideoFrameDecoder.Factory())
+        }
+        .build()
+
+
     Column(modifier = modifier
         .fillMaxSize()
         .padding(
@@ -47,15 +65,17 @@ fun PauseYogaScreen(modifier: Modifier = Modifier,
         ),
         verticalArrangement = Arrangement.spacedBy(16.dp)) {
 
-        Image(
-            painter = painterResource(id = R.drawable.ic_yoga_exercise),
+        AsyncImage(
+            model = currentYogaExercise.exercise.file,
+            imageLoader = imageLoader,
+            error = painterResource(id = R.drawable.ic_broken_image),
+            placeholder = painterResource(id = R.drawable.ic_image_placeholder),
             contentDescription = null,
             modifier = modifier
                 .fillMaxWidth()
                 .size(250.dp)
                 .clip(RoundedCornerShape(10)),
-            contentScale = ContentScale.Crop
-        )
+            contentScale = ContentScale.Crop)
 
         Column(modifier = modifier
             .fillMaxWidth()
@@ -69,7 +89,7 @@ fun PauseYogaScreen(modifier: Modifier = Modifier,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Warrior 1",
+                    text = currentYogaExercise.exercise.title ?: "",
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onBackground,
                     fontWeight = FontWeight.SemiBold
@@ -90,14 +110,16 @@ fun PauseYogaScreen(modifier: Modifier = Modifier,
             )
         }
 
-        Button(onClick = { /*TODO*/ }, modifier = modifier.fillMaxWidth()) {
+        Spacer(modifier = modifier.weight(1f))
+
+        Button(onClick = onResumeClick, modifier = modifier.fillMaxWidth().requiredHeight(50.dp)) {
             Text(text = "RESUME")
         }
 
-        OutlinedButton(onClick = { /*TODO*/ }, modifier = modifier.fillMaxWidth()) {
+        OutlinedButton(onClick = { /*TODO*/ }, modifier = modifier.fillMaxWidth().requiredHeight(50.dp)) {
             Text(text = "Restart")
         }
-        OutlinedButton(onClick = { /*TODO*/ }, modifier = modifier.fillMaxWidth()) {
+        OutlinedButton(onClick = { /*TODO*/ }, modifier = modifier.fillMaxWidth().requiredHeight(50.dp)) {
             Text(text = "Quit")
         }
     }

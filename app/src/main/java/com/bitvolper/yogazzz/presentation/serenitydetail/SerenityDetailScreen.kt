@@ -61,6 +61,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 fun SerenityDetailScreen(modifier: Modifier = Modifier,
                          paddingValues: PaddingValues = PaddingValues(),
                          yogaExerciseUIState: Resource<SerenityData> = Resource.Loading,
+                         onStartClick: (List<SerenityData.Data.Pose?>) -> Unit = {  _ ->  }
                        ) {
 
     val context = LocalContext.current
@@ -199,7 +200,7 @@ fun SerenityDetailScreen(modifier: Modifier = Modifier,
                         horizontalArrangement = Arrangement.spacedBy(16.dp)) {
 
                         Button(
-                            onClick = {  YogaExerciseActivity.startActivity(context as Activity) },
+                            onClick = { onStartClick(yogaExerciseUIState.data.data?.first()?.pose ?: return@Button) },
                             modifier = modifier
                                 .weight(1f)
                                 .requiredHeight(50.dp)) {
