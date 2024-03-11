@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -35,10 +36,10 @@ import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 
 @Composable
-fun YogaCompletedScreen(modifier: Modifier = Modifier) {
+fun YogaCompletedScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = PaddingValues()) {
     Column(modifier = modifier
         .fillMaxSize()
-        .padding(top = 0.dp, start = 0.dp, end = 0.dp, bottom = 16.dp),
+        .padding(top = paddingValues.calculateTopPadding(), start = 0.dp, end = 0.dp, bottom = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp)) {
 

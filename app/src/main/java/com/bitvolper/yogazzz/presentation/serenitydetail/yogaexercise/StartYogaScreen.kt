@@ -1,8 +1,8 @@
 package com.bitvolper.yogazzz.presentation.serenitydetail.yogaexercise
 
 import android.content.res.Configuration
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,10 +21,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowForwardIos
-import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Pause
+import androidx.compose.material.icons.rounded.SkipNext
+import androidx.compose.material.icons.rounded.SkipPrevious
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
@@ -47,10 +49,17 @@ import coil.ImageLoader
 import coil.compose.AsyncImage
 import coil.decode.VideoFrameDecoder
 import com.bitvolper.yogazzz.R
+import com.bitvolper.yogazzz.domain.model.SerenityData
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
+import com.bitvolper.yogazzz.presentation.viewmodel.ExerciseUIState
+import com.bitvolper.yogazzz.utility.Resource
 
 @Composable
-fun StartYogaScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = PaddingValues()) {
+fun StartYogaScreen(modifier: Modifier = Modifier,
+                    paddingValues: PaddingValues = PaddingValues(),
+                    currentYogaExercise: ExerciseUIState = ExerciseUIState(),
+                    onPauseClick: () -> Unit = { }
+) {
 
     val imageLoader = ImageLoader.Builder(LocalContext.current)
         .components {
@@ -69,26 +78,50 @@ fun StartYogaScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues 
         verticalArrangement = Arrangement.spacedBy(100.dp)) {
 
         AsyncImage(
-            model = R.drawable.ic_yoga_exercise,
+            model = currentYogaExercise.exercise.file,
             imageLoader = imageLoader,
             error = painterResource(id = R.drawable.ic_broken_image),
             placeholder = painterResource(id = R.drawable.ic_image_placeholder),
             contentDescription = null,
-            modifier = modifier.fillMaxWidth().size(250.dp).clip(RoundedCornerShape(10)),
+            modifier = modifier
+                .fillMaxWidth()
+                .size(250.dp)
+                .clip(RoundedCornerShape(10)),
             contentScale = ContentScale.Crop)
 
         Spacer(modifier = modifier.weight(1f))
 
-        GetReadyCompose()
+        if (currentYogaExercise.showExerciseDetails) {
+            YogaStartCompose(
+                exerciseTitle = currentYogaExercise.exercise.title ?: "",
+                timer = currentYogaExercise.exerciseTimer.toString() ?: "",
+                onPauseClick = onPauseClick)
+        } else {
+            GetReadyCompose(exercisetitle = currentYogaExercise.exercise.title ?: "", timer = currentYogaExercise.timer.toString())
+        }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun GetReadyCompose(modifier: Modifier = Modifier) {
+private fun GetReadyCompose(modifier: Modifier = Modifier, exercisetitle: String = "", timer: String = "") {
 
     val unfilledColor = Color.Gray
     val filledColor = MaterialTheme.colorScheme.primary
+
+    val calculatePercentage = when(timer.toInt()) {
+        10 -> { 0f }
+        9 -> { 36f }
+        8  -> { 72f }
+        7  -> { 108f }
+        6  -> { 144f }
+        5  -> { 180f }
+        4  -> { 216f }
+        3  -> { 252f }
+        2  -> { 288f }
+        1  -> { 324f }
+        else -> { 360f }
+    }
 
     Column(modifier = modifier
         .fillMaxWidth()
@@ -105,7 +138,7 @@ private fun GetReadyCompose(modifier: Modifier = Modifier) {
             .fillMaxWidth()
             .wrapContentWidth(align = Alignment.CenterHorizontally),
             verticalAlignment = Alignment.CenterVertically) {
-            Text(text = "Warrior 1",
+            Text(text = exercisetitle,
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onBackground,
                 fontWeight = FontWeight.SemiBold)
@@ -144,8 +177,8 @@ private fun GetReadyCompose(modifier: Modifier = Modifier) {
 
                     drawArc(
                         color = filledColor,
-                        90f,
-                        200f,
+                        -90f,
+                        calculatePercentage,
                         false,
                         style = Stroke(12.dp.toPx(), cap = StrokeCap.Round),
                         size = Size(size.width, size.height)
@@ -153,7 +186,7 @@ private fun GetReadyCompose(modifier: Modifier = Modifier) {
                 }
 
                 androidx.compose.material3.Text(
-                    text = "7",
+                    text = timer,
                     style = MaterialTheme.typography.displayMedium,
                     fontWeight = FontWeight.Bold,
                     modifier = modifier
@@ -175,7 +208,11 @@ private fun GetReadyCompose(modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-private fun YogaStartCompose(modifier: Modifier = Modifier) {
+private fun YogaStartCompose(modifier: Modifier = Modifier,
+                             exerciseTitle: String = "",
+                             timer: String = "",
+                             onPauseClick: () -> Unit = { },
+                             ) {
     Column(modifier = modifier
         .fillMaxWidth()
         .wrapContentSize(align = Alignment.Center),
@@ -185,7 +222,7 @@ private fun YogaStartCompose(modifier: Modifier = Modifier) {
             .fillMaxWidth()
             .wrapContentWidth(align = Alignment.CenterHorizontally),
             verticalAlignment = Alignment.CenterVertically) {
-            Text(text = "Warrior 1",
+            Text(text = exerciseTitle,
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onBackground,
                 fontWeight = FontWeight.SemiBold)
@@ -195,36 +232,45 @@ private fun YogaStartCompose(modifier: Modifier = Modifier) {
             }
         }
 
-        Text(text = "00:46",
+        Text(text = timer,
             style = MaterialTheme.typography.displaySmall,
             color = MaterialTheme.colorScheme.onBackground,
             fontWeight = FontWeight.SemiBold,
             modifier = modifier.fillMaxWidth(),
             textAlign = TextAlign.Center)
 
-        Button(onClick = { /*TODO*/ }, modifier = modifier.fillMaxWidth(), ) {
+        Button(onClick = onPauseClick, modifier = modifier.fillMaxWidth().requiredHeight(50.dp), ) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Icon(imageVector = Icons.Rounded.Pause, contentDescription = null)
-                Text(text = "PAUSE")
+                Text(text = "PAUSE", fontWeight = FontWeight.SemiBold)
             }
         }
 
         Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            OutlinedButton(onClick = { /*TODO*/ }, modifier = modifier.weight(1f)) {
+            OutlinedButton(
+                onClick = { /*TODO*/ },
+                modifier = modifier.weight(1f).requiredHeight(50.dp),
+                border = BorderStroke(0.dp, Color.Transparent),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
+
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Icon(imageVector = Icons.Rounded.Pause, contentDescription = null)
-                    Text(text = "PREVIOUS")
+                    Icon(imageVector = Icons.Rounded.SkipPrevious, contentDescription = null)
+                    Text(text = "Previous", color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)
                 }
             }
 
-            OutlinedButton(onClick = { /*TODO*/ }, modifier = modifier.weight(1f)) {
+            OutlinedButton(
+                onClick = { /*TODO*/ },
+                modifier = modifier.weight(1f).requiredHeight(50.dp),
+                border = BorderStroke(0.dp, Color.Transparent),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
+
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Icon(imageVector = Icons.Rounded.Pause, contentDescription = null)
-                    Text(text = "SKIP")
+                    Text(text = "Skip", color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)
+                    Icon(imageVector = Icons.Rounded.SkipNext, contentDescription = null)
                 }
             }
         }
-
     }
 }
 
