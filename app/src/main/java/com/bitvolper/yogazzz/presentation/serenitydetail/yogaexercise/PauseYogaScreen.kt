@@ -101,7 +101,7 @@ fun PauseYogaScreen(modifier: Modifier = Modifier,
             }
 
             Text(
-                text = "00:46",
+                text = currentYogaExercise.exerciseTimer.toString(),
                 style = MaterialTheme.typography.displaySmall,
                 color = MaterialTheme.colorScheme.onBackground,
                 fontWeight = FontWeight.SemiBold,

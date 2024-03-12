@@ -26,8 +26,8 @@ android {
         applicationId = "com.bitvolper.yogazzz"
         minSdk = 21
         targetSdk = 34
-        versionCode = 20
-        versionName = "1.0.19"
+        versionCode = 21
+        versionName = "1.0.20"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -163,4 +163,6 @@ dependencies {
 
 //    implementation(libs.calendar.view)
     implementation("com.google.android.material:material:1.11.0")
+
+    implementation(libs.congrats.greeting)
 }

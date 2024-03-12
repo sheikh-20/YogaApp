@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.Divider
 import androidx.compose.material.Switch
 import androidx.compose.material.icons.Icons
@@ -19,6 +21,7 @@ import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Mic
 import androidx.compose.material.icons.rounded.MusicNote
 import androidx.compose.material.icons.rounded.Share
+import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.VolumeOff
 import androidx.compose.material.icons.rounded.VolumeUp
 import androidx.compose.material3.BottomSheetDefaults
@@ -69,7 +72,9 @@ import com.bitvolper.yogazzz.presentation.viewmodel.HomeViewModel
 import com.bitvolper.yogazzz.presentation.viewmodel.YogaExerciseViewModel
 import com.bitvolper.yogazzz.utility.Resource
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
+private const val TAG = "SerenityDetailApp"
 @Composable
 fun SerenityDetailApp(modifier: Modifier = Modifier,
                       navController: NavHostController = rememberNavController(),
@@ -103,8 +108,27 @@ fun SerenityDetailApp(modifier: Modifier = Modifier,
                 }
             )
         }
-        BottomSheet.Subscription -> { }
+        BottomSheet.Subscription -> {
+            BottomSheet(
+                onDismiss = {
+                    showBottomSheet = BottomSheet.Default
+                },
+                onNegativeClick = {
+                    showBottomSheet = BottomSheet.Default
+                },
+                onPositiveClick = { showBottomSheet = BottomSheet.Default },
+                contentSheet = { onPositiveClick, onNegativeClick ->
+                    BottomSheetSubscriptionContent(
+                        onPositiveClick = onPositiveClick,
+                        onNegativeClick = onNegativeClick
+                    )
+                }
+            )
+        }
     }
+
+
+    Timber.tag(TAG).d(yogaExerciseViewModel.currentExerciseIndex.inc().div(yogaExerciseViewModel.totalExerciseSize.toFloat()).toString())
 
     Scaffold(
         topBar = {
@@ -113,7 +137,7 @@ fun SerenityDetailApp(modifier: Modifier = Modifier,
                 yogaExerciseUIState = yogaExerciseUIState,
                 onBookmarkClick = { accountViewModel.updateBookmark(it) },
                 showSoundEffect = { showBottomSheet = BottomSheet.SoundEffect },
-                currentExerciseIndex = (0.1).toFloat())
+                currentExerciseIndex = yogaExerciseViewModel.currentExerciseIndex.inc().div(yogaExerciseViewModel.totalExerciseSize.toFloat()))
         }
     ) { paddingValues ->
 
@@ -137,26 +161,49 @@ fun SerenityDetailApp(modifier: Modifier = Modifier,
                 StartYogaScreen(
                     paddingValues = paddingValues,
                     currentYogaExercise = currentExerciseUIState,
-                    onPauseClick = { navController.navigate(YogaExercise.Pause.name) })
+                    onPauseClick = {
+                        yogaExerciseViewModel.pauseExerciseTimer(
+                            nextScreen = { navController.navigate(YogaExercise.Next.name) },
+                            completeScreen = { navController.navigate(YogaExercise.Complete.name) }
+                        )
+                        navController.navigate(YogaExercise.Pause.name) },
+                    onSkipClick = { yogaExerciseViewModel.skipExercise(
+                        nextScreen = { navController.navigate(YogaExercise.Next.name) },
+                        completeScreen = { navController.navigate(YogaExercise.Complete.name) }
+                    ) },
+                    onPreviousClick = { yogaExerciseViewModel.previousExercise(
+                        nextScreen = { navController.navigate(YogaExercise.Next.name) },
+                        completeScreen = { navController.navigate(YogaExercise.Complete.name) }
+                    ) },
+                    player = yogaExerciseViewModel.player,
+                    onPlay = { yogaExerciseViewModel.playerStart(it) })
             }
 
             composable(route = YogaExercise.Pause.name) {
                 PauseYogaScreen(
                     paddingValues = paddingValues,
                     currentYogaExercise = currentExerciseUIState,
-                    onResumeClick = { navController.navigateUp() })
+                    onResumeClick = {
+                        yogaExerciseViewModel.resumeExerciseTimer()
+                        navController.navigateUp()
+                    })
             }
 
             composable(route = YogaExercise.Next.name) {
                 NextYogaScreen(
                     paddingValues = paddingValues,
                     currentYogaExercise = currentExerciseUIState,
-                    onSkipClick = { navController.navigateUp() }
+                    onSkipClick = {
+                        navController.navigateUp()
+                        yogaExerciseViewModel.startTimer()
+                    }
                 )
             }
 
             composable(route = YogaExercise.Complete.name) {
-                YogaCompletedScreen(paddingValues = paddingValues)
+                YogaCompletedScreen(
+                    paddingValues = paddingValues,
+                    showSubscriptionSheet = { showBottomSheet = BottomSheet.Subscription })
             }
         }
     }
@@ -277,6 +324,56 @@ private fun BottomSheetContent(modifier: Modifier = Modifier, onNegativeClick: (
     }
 }
 
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun BottomSheetSubscriptionContent(modifier: Modifier = Modifier, onNegativeClick: () -> Unit = { }, onPositiveClick: () -> Unit = {}) {
+    Column(modifier = modifier
+        .padding(16.dp)
+        .systemBarsPadding(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+
+        Icon(
+            imageVector = Icons.Rounded.Star,
+            contentDescription = null,
+            modifier = modifier
+                .fillMaxWidth()
+                .wrapContentWidth(align = Alignment.CenterHorizontally)
+                .size(80.dp),
+            tint = MaterialTheme.colorScheme.primary
+        )
+
+        Text(text = "Unlock Premium Benefits",
+            style = MaterialTheme.typography.headlineSmall,
+            textAlign = TextAlign.Center,
+            modifier = modifier.fillMaxWidth(),
+            fontWeight = FontWeight.Bold)
+
+        Text(text = "Upgrade to YogazzZ Premium to unlock even more amazing benefits to supercharge your yoga journey",
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Center,
+            modifier = modifier.fillMaxWidth(),
+            )
+
+        Divider()
+
+        Row(modifier = modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically) {
+
+            OutlinedButton(onClick = onNegativeClick, modifier = modifier
+                .weight(1f)
+                .requiredHeight(50.dp)) {
+                Text(text = "Not now")
+            }
+
+            Button(onClick = onPositiveClick, modifier = modifier
+                .weight(1f)
+                .requiredHeight(50.dp)) {
+                Text(text = "Upgrade")
+            }
+        }
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
@@ -285,6 +382,7 @@ private fun SerenityDetailTopAppBar(navController: NavHostController? = null,
                                     onBookmarkClick: (String) -> Unit = { },
                                     showSoundEffect: () -> Unit = {  },
                                     currentExerciseIndex: Float = 0f) {
+
     val context = LocalContext.current
 
     when (navController?.currentBackStackEntryAsState()?.value?.destination?.route) {
