@@ -1,6 +1,8 @@
 package com.bitvolper.yogazzz.presentation.serenitydetail.yogaexercise
 
 import android.content.res.Configuration
+import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
@@ -31,6 +33,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,6 +48,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.media3.common.Player
+import androidx.media3.ui.PlayerView
 import coil.ImageLoader
 import coil.compose.AsyncImage
 import coil.decode.VideoFrameDecoder
@@ -58,7 +64,11 @@ import com.bitvolper.yogazzz.utility.Resource
 fun StartYogaScreen(modifier: Modifier = Modifier,
                     paddingValues: PaddingValues = PaddingValues(),
                     currentYogaExercise: ExerciseUIState = ExerciseUIState(),
-                    onPauseClick: () -> Unit = { }
+                    onPauseClick: () -> Unit = { },
+                    onSkipClick: () -> Unit = {  },
+                    onPreviousClick: () -> Unit = {  },
+                    player: Player? = null,
+                    onPlay: (String) -> Unit = { _ -> }
 ) {
 
     val imageLoader = ImageLoader.Builder(LocalContext.current)
@@ -66,6 +76,10 @@ fun StartYogaScreen(modifier: Modifier = Modifier,
             add(VideoFrameDecoder.Factory())
         }
         .build()
+
+    if (currentYogaExercise.exerciseTimer <= 0) {
+        player?.pause()
+    }
 
     Column(modifier = modifier
         .fillMaxSize()
@@ -77,25 +91,53 @@ fun StartYogaScreen(modifier: Modifier = Modifier,
         ),
         verticalArrangement = Arrangement.spacedBy(100.dp)) {
 
-        AsyncImage(
-            model = currentYogaExercise.exercise.file,
-            imageLoader = imageLoader,
-            error = painterResource(id = R.drawable.ic_broken_image),
-            placeholder = painterResource(id = R.drawable.ic_image_placeholder),
-            contentDescription = null,
-            modifier = modifier
-                .fillMaxWidth()
-                .size(250.dp)
-                .clip(RoundedCornerShape(10)),
-            contentScale = ContentScale.Crop)
+        if (currentYogaExercise.showExerciseDetails) {
+            AndroidView(
+                factory = { context ->
+                    PlayerView(context).also {
+                        it.player = player
+                        it.layoutParams =
+                            FrameLayout.LayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                ViewGroup.LayoutParams.MATCH_PARENT
+                            )
+                        it.useController = false
+                    }
+                },
+                update = {},
+                modifier = modifier
+                    .fillMaxWidth()
+                    .size(250.dp)
+                    .clip(RoundedCornerShape(10)))
+        } else {
+            AsyncImage(
+                model = currentYogaExercise.exercise.file,
+                imageLoader = imageLoader,
+                error = painterResource(id = R.drawable.ic_broken_image),
+                placeholder = painterResource(id = R.drawable.ic_image_placeholder),
+                contentDescription = null,
+                modifier = modifier
+                    .fillMaxWidth()
+                    .size(250.dp)
+                    .clip(RoundedCornerShape(10)),
+                contentScale = ContentScale.Crop)
+        }
+
 
         Spacer(modifier = modifier.weight(1f))
 
         if (currentYogaExercise.showExerciseDetails) {
+
+            LaunchedEffect(key1 = Unit) {
+                onPlay(currentYogaExercise.exercise.file ?: return@LaunchedEffect)
+            }
+
             YogaStartCompose(
                 exerciseTitle = currentYogaExercise.exercise.title ?: "",
                 timer = currentYogaExercise.exerciseTimer.toString() ?: "",
-                onPauseClick = onPauseClick)
+                onPauseClick = onPauseClick,
+                onSkipClick = onSkipClick,
+                onPreviousClick = onPreviousClick)
         } else {
             GetReadyCompose(exercisetitle = currentYogaExercise.exercise.title ?: "", timer = currentYogaExercise.timer.toString())
         }
@@ -212,7 +254,10 @@ private fun YogaStartCompose(modifier: Modifier = Modifier,
                              exerciseTitle: String = "",
                              timer: String = "",
                              onPauseClick: () -> Unit = { },
+                             onSkipClick: () -> Unit = {  },
+                             onPreviousClick: () -> Unit = {  },
                              ) {
+
     Column(modifier = modifier
         .fillMaxWidth()
         .wrapContentSize(align = Alignment.Center),
@@ -239,7 +284,9 @@ private fun YogaStartCompose(modifier: Modifier = Modifier,
             modifier = modifier.fillMaxWidth(),
             textAlign = TextAlign.Center)
 
-        Button(onClick = onPauseClick, modifier = modifier.fillMaxWidth().requiredHeight(50.dp), ) {
+        Button(onClick = onPauseClick, modifier = modifier
+            .fillMaxWidth()
+            .requiredHeight(50.dp), ) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Icon(imageVector = Icons.Rounded.Pause, contentDescription = null)
                 Text(text = "PAUSE", fontWeight = FontWeight.SemiBold)
@@ -248,8 +295,10 @@ private fun YogaStartCompose(modifier: Modifier = Modifier,
 
         Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             OutlinedButton(
-                onClick = { /*TODO*/ },
-                modifier = modifier.weight(1f).requiredHeight(50.dp),
+                onClick = onPreviousClick,
+                modifier = modifier
+                    .weight(1f)
+                    .requiredHeight(50.dp),
                 border = BorderStroke(0.dp, Color.Transparent),
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
 
@@ -260,8 +309,10 @@ private fun YogaStartCompose(modifier: Modifier = Modifier,
             }
 
             OutlinedButton(
-                onClick = { /*TODO*/ },
-                modifier = modifier.weight(1f).requiredHeight(50.dp),
+                onClick = onSkipClick,
+                modifier = modifier
+                    .weight(1f)
+                    .requiredHeight(50.dp),
                 border = BorderStroke(0.dp, Color.Transparent),
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
 
