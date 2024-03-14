@@ -39,7 +39,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -64,6 +67,10 @@ fun MeditationStartScreen(modifier: Modifier = Modifier,
                           paddingValues: PaddingValues = PaddingValues(),
                           meditationUIState: Resource<Meditation> = Resource.Loading,
                           onCardClick: (Meditation.Data) -> Unit = { _ ->  }) {
+
+    var selectedCategory by remember {
+        mutableStateOf("All")
+    }
 
     Column(
         modifier = modifier.fillMaxSize(),
@@ -110,8 +117,10 @@ fun MeditationStartScreen(modifier: Modifier = Modifier,
                 .padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Chip(onClick = { /*TODO*/ }, colors = ChipDefaults.chipColors(backgroundColor = Color.Transparent), border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outline)) {
-                    Text(text = "All")
+
+                Chip(onClick = { /*TODO*/ },
+                    colors = ChipDefaults.chipColors()) {
+                    Text(text = "All", color = Color.Black)
                 }
                 Chip(onClick = { /*TODO*/ }, colors = ChipDefaults.chipColors(backgroundColor = Color.Transparent), border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outline)) {
                     Text(text = "Calm")
@@ -132,8 +141,9 @@ fun MeditationStartScreen(modifier: Modifier = Modifier,
                 .padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Chip(onClick = { /*TODO*/ }, colors = ChipDefaults.chipColors(backgroundColor = Color.Transparent), border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outline)) {
-                    Text(text = "All")
+                Chip(onClick = { /*TODO*/ },
+                    colors = ChipDefaults.chipColors()) {
+                    Text(text = "All", color = Color.Black)
                 }
                 Chip(onClick = { /*TODO*/ }, colors = ChipDefaults.chipColors(backgroundColor = Color.Transparent), border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outline)) {
                     Text(text = "< 10 mins")
@@ -182,7 +192,12 @@ fun MeditationCard(modifier: Modifier = Modifier,
     val context = LocalContext.current
 
 
-    Row(modifier = modifier.fillMaxWidth().clickable(onClick = { onCardClick(meditation) }, interactionSource = remember { MutableInteractionSource() }, indication = null),
+    Row(modifier = modifier
+        .fillMaxWidth()
+        .clickable(onClick = { onCardClick(meditation) },
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null
+        ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)) {
 
@@ -204,7 +219,8 @@ fun MeditationCard(modifier: Modifier = Modifier,
             }
 
             IconButton(onClick = { /*TODO*/ },
-                modifier = modifier.fillMaxSize()
+                modifier = modifier
+                    .fillMaxSize()
                     .wrapContentSize(align = Alignment.Center)
                     .background(color = Color(0xFFE5E5E5), shape = RoundedCornerShape(50))) {
                 Icon(imageVector = Icons.Rounded.PlayArrow, contentDescription = null, modifier = modifier.size(30.dp), tint = MaterialTheme.colorScheme.primary)
