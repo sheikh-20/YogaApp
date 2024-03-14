@@ -1,9 +1,11 @@
 package com.bitvolper.yogazzz.presentation.accountsetup
 
 import android.content.res.Configuration
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -12,7 +14,11 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.FastForward
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
@@ -27,7 +33,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -49,6 +58,8 @@ fun SelectDesiredBodyShapeScreen(modifier: Modifier = Modifier,
         mutableIntStateOf(0)
     }
 
+    val outlineColor = MaterialTheme.colorScheme.outline
+
     Column(modifier = modifier
         .fillMaxSize()
         .padding(
@@ -62,14 +73,53 @@ fun SelectDesiredBodyShapeScreen(modifier: Modifier = Modifier,
 
         Text(text = "What's your ideal aspiration?", style = MaterialTheme.typography.bodyLarge)
 
-        Row(modifier = modifier.fillMaxWidth().weight(1f), verticalAlignment = Alignment.CenterVertically) {
-            Image(painter = painterResource(id = R.drawable.ic_lean), contentDescription = null,
-                modifier = modifier.fillMaxHeight().weight(1f),
+
+        Box(modifier = modifier
+            .fillMaxWidth()
+            .weight(1f) ) {
+
+            Image(imageVector = Icons.Rounded.FastForward,
+                contentDescription = null,
+                modifier = modifier.fillMaxSize().wrapContentSize(align = Alignment.Center).size(250.dp),
+                colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.primary),
                 contentScale = ContentScale.Crop)
 
-            Image(painter = painterResource(id = R.drawable.ic_obese), contentDescription = null,
-                modifier = modifier.fillMaxHeight().weight(1f),
-                contentScale = ContentScale.Crop)
+
+            Row(modifier = modifier
+                .fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+
+
+                Box(modifier = modifier.fillMaxHeight().weight(1f)) {
+
+                    Canvas(modifier = Modifier.fillMaxSize()) {
+
+                        val canvasSize = 350.dp.toPx()
+
+                        drawOval(color = outlineColor, size = Size(width = size.width / 1.5f, height = 80.dp.toPx()), topLeft = Offset(x = size.width / 6f, y = canvasSize))
+                    }
+
+                    Image(painter = painterResource(id = R.drawable.ic_lean), contentDescription = null,
+                        modifier = modifier
+                            .fillMaxSize(),
+                        contentScale = ContentScale.Crop)
+                }
+
+
+                Box(modifier = modifier.fillMaxHeight().weight(1f)) {
+
+                    Canvas(modifier = Modifier.fillMaxSize()) {
+
+                        val canvasSize = 350.dp.toPx()
+
+                        drawOval(color = outlineColor, size = Size(width = size.width / 1.5f, height = 80.dp.toPx()), topLeft = Offset(x = size.width / 6f, y = canvasSize))
+                    }
+
+                    Image(painter = painterResource(id = R.drawable.ic_obese), contentDescription = null,
+                        modifier = modifier
+                            .fillMaxSize(),
+                        contentScale = ContentScale.Crop)
+                }
+            }
         }
 
         Column(modifier = modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp)) {

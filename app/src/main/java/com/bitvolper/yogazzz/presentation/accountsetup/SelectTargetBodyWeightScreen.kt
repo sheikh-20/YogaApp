@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,8 +33,8 @@ fun SelectTargetBodyWeightScreen(modifier: Modifier = Modifier,
                                  onSkipClick: () -> Unit = { },
                                  onContinueClick: (Double) -> Unit = { }) {
 
-    var value by remember { mutableStateOf("5") }
-    val values = remember { (1..200).map { it.toString() } }
+    var value by remember { mutableStateOf("50") }
+    val values = remember { (10..200).map { it.toString() } }
 
 
     Column(modifier = modifier
@@ -49,14 +50,15 @@ fun SelectTargetBodyWeightScreen(modifier: Modifier = Modifier,
 
         Text(text = "Where would you like to be?", style = MaterialTheme.typography.bodyLarge)
 
-        ListPicker(
+        com.bitvolper.yogazzz.presentation.accountsetup.utility.ListPicker(
             initialValue = value,
             list = values.toImmutableWrapper(),
-            modifier = Modifier.weight(1f),
+            modifier = modifier.weight(1f).requiredWidth(200.dp).padding(vertical = 8.dp),
             onValueChange = {
                 value = it
             },
             textStyle = TextStyle(fontSize = 32.sp),
+            outOfBoundsPageCount = 4,
             verticalPadding = 8.dp,
         )
 

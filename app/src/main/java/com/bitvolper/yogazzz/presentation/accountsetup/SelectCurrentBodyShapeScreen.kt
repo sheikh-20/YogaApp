@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -34,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.layout.ContentScale
@@ -58,6 +60,8 @@ fun SelectCurrentBodyShapeScreen(modifier: Modifier = Modifier,
         mutableIntStateOf(0)
     }
 
+    val outlineColor = MaterialTheme.colorScheme.outline
+
     Column(modifier = modifier
         .fillMaxSize()
         .padding(
@@ -71,10 +75,23 @@ fun SelectCurrentBodyShapeScreen(modifier: Modifier = Modifier,
 
         Text(text = "Help us understand your starting point.", style = MaterialTheme.typography.bodyLarge)
 
-        Image(painter = painterResource(id = R.drawable.ic_obese),
-            contentDescription = null,
-            modifier = modifier.weight(1f),
-            contentScale = ContentScale.Crop)
+
+        Box(modifier = Modifier.weight(1f)) {
+
+            Canvas(modifier = Modifier.fillMaxSize()) {
+
+                val canvasSize = 350.dp.toPx()
+
+                drawOval(color = outlineColor, size = Size(width = size.width / 3f, height = 80.dp.toPx()), topLeft = Offset(x = size.width / 3f, y = canvasSize))
+            }
+
+            Image(painter = painterResource(id = R.drawable.ic_obese),
+                contentDescription = null,
+                modifier = modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop)
+        }
+
+
 
         Column(modifier = modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp)) {
             ForecastSlider(dates = listOf("Muscular", "Ideal", "Normal", "Fat", "Obeses"), currentPosition.toFloat()) {
