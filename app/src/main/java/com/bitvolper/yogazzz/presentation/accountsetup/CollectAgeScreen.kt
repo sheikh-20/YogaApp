@@ -6,9 +6,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,9 +27,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.bitvolper.yogazzz.presentation.accountsetup.utility.ListPicker
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.utility.AccountSetupContinueComposable
-import com.bitvolper.yogazzz.utility.ListPicker
 import com.bitvolper.yogazzz.utility.toImmutableWrapper
 import com.chargemap.compose.numberpicker.NumberPicker
 
@@ -55,11 +58,12 @@ fun CollectAgeScreen(modifier: Modifier = Modifier,
         ListPicker(
             initialValue = value,
             list = values.toImmutableWrapper(),
-            modifier = Modifier.weight(1f),
+            modifier = modifier.weight(1f).requiredWidth(200.dp).padding(vertical = 8.dp),
             onValueChange = {
                 value = it
             },
             textStyle = TextStyle(fontSize = 32.sp),
+            outOfBoundsPageCount = 4,
             verticalPadding = 8.dp,
         )
 
@@ -68,6 +72,28 @@ fun CollectAgeScreen(modifier: Modifier = Modifier,
             onContinueClick = onContinueClick
         )
     }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewListPicker3() {
+    YogaAppTheme(darkTheme = false) {
+
+            var value by remember { mutableStateOf("5") }
+            val list = remember { (1..10).map { it.toString() } }
+            com.bitvolper.yogazzz.presentation.accountsetup.utility.ListPicker(
+                initialValue = value,
+                list = list.toImmutableWrapper(),
+                modifier = Modifier,
+                onValueChange = {
+                    value = it
+                },
+                outOfBoundsPageCount = 2,
+                textStyle = TextStyle(fontSize = 32.sp),
+                verticalPadding = 8.dp,
+            )
+        }
 }
 
 @Preview(showBackground = true, showSystemUi = true)
