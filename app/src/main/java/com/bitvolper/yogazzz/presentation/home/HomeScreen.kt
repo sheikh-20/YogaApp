@@ -121,7 +121,7 @@ fun HomeScreen(modifier: Modifier = Modifier,
                                     fontWeight = FontWeight.SemiBold)
 
                                 Button(onClick = {
-                                    SerenityDetailActivity.startActivity(context as Activity)
+                                    SerenityDetailActivity.startActivity(context as Activity, null)
                                 }) {
                                     Text(text = "Get Started")
                                 }
@@ -354,7 +354,14 @@ fun RecommendationCard(modifier: Modifier = Modifier,
 
     val context = LocalContext.current
 
-    Row(modifier = modifier.fillMaxWidth(),
+    Row(modifier = modifier.fillMaxWidth()
+        .clickable(
+            onClick = {
+                SerenityDetailActivity.startActivity(context as Activity, null)
+            },
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null
+        ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)) {
 

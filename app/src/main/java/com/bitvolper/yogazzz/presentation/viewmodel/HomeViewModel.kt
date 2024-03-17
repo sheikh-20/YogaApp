@@ -53,8 +53,8 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase): V
     private var _bookmarkUIState = MutableStateFlow<Resource<SerenityData>>(Resource.Loading)
     val bookmarkUIState: StateFlow<Resource<SerenityData>> get() = _bookmarkUIState
 
-    private var _yogaCategoryUIState = MutableStateFlow<Resource<YogaData>>(Resource.Loading)
-    val yogaCategoryUIState: StateFlow<Resource<YogaData>> get() = _yogaCategoryUIState
+    private var _yogaCategoryUIState = MutableStateFlow<Resource<SerenityData>>(Resource.Loading)
+    val yogaCategoryUIState: StateFlow<Resource<SerenityData>> get() = _yogaCategoryUIState
 
     private var _historyUIState = MutableStateFlow<Resource<History>>(Resource.Loading)
     val historyUIState: StateFlow<Resource<History>> get() = _historyUIState
@@ -114,10 +114,10 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase): V
         }
     }
 
-    fun getSerenityFlow() = viewModelScope.launch {
+    fun getSerenityFlow(id: String = "c0fdad9b-307c-4000-a342-346cb8f8abac") = viewModelScope.launch {
         try {
             Timber.tag(TAG).d("View model called")
-            homeUseCase.getSerenityFlow("c0fdad9b-307c-4000-a342-346cb8f8abac").collectLatest {
+            homeUseCase.getSerenityFlow(id).collectLatest {
                 _serenityFlowUIState.value = it
             }
         } catch (exception: IOException) {

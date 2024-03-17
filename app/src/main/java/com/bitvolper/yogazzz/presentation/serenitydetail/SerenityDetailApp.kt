@@ -1,6 +1,7 @@
 package com.bitvolper.yogazzz.presentation.serenitydetail
 
 import android.app.Activity
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,11 +22,13 @@ import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Mic
 import androidx.compose.material.icons.rounded.MusicNote
 import androidx.compose.material.icons.rounded.Share
+import androidx.compose.material.icons.rounded.SkipPrevious
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.VolumeOff
 import androidx.compose.material.icons.rounded.VolumeUp
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -309,16 +312,21 @@ private fun BottomSheetContent(modifier: Modifier = Modifier, onNegativeClick: (
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically) {
 
-            OutlinedButton(onClick = onNegativeClick, modifier = modifier
-                .weight(1f)
-                .requiredHeight(50.dp)) {
+            OutlinedButton(
+                onClick = onNegativeClick,
+                modifier = modifier
+                    .weight(1f)
+                    .requiredHeight(50.dp),
+                border = BorderStroke(0.dp, Color.Transparent),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
+
                 Text(text = stringResource(id = R.string.cancel))
             }
 
             Button(onClick = onPositiveClick, modifier = modifier
                 .weight(1f)
                 .requiredHeight(50.dp)) {
-                Text(text = stringResource(R.string.yes_logout))
+                Text(text = "Okay")
             }
         }
     }
