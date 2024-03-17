@@ -60,7 +60,7 @@ interface HomeRepository {
 
     fun getMeditation(): Flow<Resource<Meditation>>
 
-    fun getYogaExerciseByCategory(category: String): Flow<Resource<YogaData>>
+    fun getYogaExerciseByCategory(category: String): Flow<Resource<SerenityData>>
 
     suspend fun updateUserInfo(userId: String, accountInfo: AccountInfo)
 
@@ -621,7 +621,7 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
         }
 
 
-    override fun getYogaExerciseByCategory(category: String): Flow<Resource<YogaData>> = flow {
+    override fun getYogaExerciseByCategory(category: String): Flow<Resource<SerenityData>> = flow {
 
         Timber.tag(TAG).d("Called")
         emit(Resource.Loading)
@@ -644,10 +644,10 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
             val json = Gson().toJson(filter)
             Timber.tag(TAG).d("Result -> $json")
 
-            val listType = object : TypeToken<List<YogaData.Data>>() {}.type
-            val data = Gson().fromJson<List<YogaData.Data>>(json, listType)
+            val listType = object : TypeToken<List<SerenityData.Data>>() {}.type
+            val data = Gson().fromJson<List<SerenityData.Data>>(json, listType)
 
-            emit(Resource.Success(YogaData(data = data)))
+            emit(Resource.Success(SerenityData(data = data)))
         } catch (exception: Exception) {
             throw Throwable(exception)
         }

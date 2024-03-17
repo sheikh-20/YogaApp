@@ -24,8 +24,12 @@ import kotlinx.coroutines.launch
 class SerenityDetailActivity: BaseActivity() {
 
     companion object {
-        fun startActivity(activity: Activity?) {
+
+        const val YOGA_ID = "yoga_id"
+
+        fun startActivity(activity: Activity?, yogaId: String?) {
             val intent = Intent(activity, SerenityDetailActivity::class.java)
+            intent.putExtra(YOGA_ID, yogaId)
             activity?.startActivity(intent)
         }
     }
@@ -36,7 +40,7 @@ class SerenityDetailActivity: BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        homeViewModel.getSerenityFlow()
+        homeViewModel.getSerenityFlow(id = intent.getStringExtra(YOGA_ID) ?: "c0fdad9b-307c-4000-a342-346cb8f8abac")
 
         lifecycle.coroutineScope.launch {
             accountViewModel.appThemeIndex.collect {

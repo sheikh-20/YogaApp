@@ -69,6 +69,7 @@ import com.bitvolper.yogazzz.domain.model.FlexibilityStrength
 import com.bitvolper.yogazzz.domain.model.PopularYoga
 import com.bitvolper.yogazzz.domain.model.PopularYogaWithFlexibility
 import com.bitvolper.yogazzz.domain.model.StressRelief
+import com.bitvolper.yogazzz.presentation.categorydetail.CategoryDetailActivity
 import com.bitvolper.yogazzz.presentation.home.discover.adjust_yoga.AdjustYogaActivity
 import com.bitvolper.yogazzz.presentation.home.discover.body_focus.BodyFocusActivity
 import com.bitvolper.yogazzz.presentation.home.discover.flexiblity_strength.FlexibilityStrengthActivity
@@ -76,6 +77,7 @@ import com.bitvolper.yogazzz.presentation.home.discover.meditation.MeditationAct
 import com.bitvolper.yogazzz.presentation.home.discover.popular_yoga.PopularYogaActivity
 import com.bitvolper.yogazzz.presentation.home.discover.stress_relief.StressReliefActivity
 import com.bitvolper.yogazzz.presentation.home.recommendation.RecommendationActivity
+import com.bitvolper.yogazzz.presentation.serenitydetail.SerenityDetailActivity
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.utility.Body
 import com.bitvolper.yogazzz.utility.Resource
@@ -182,7 +184,14 @@ fun PopularYogaCard(modifier: Modifier = Modifier,
     val context = LocalContext.current
 
 
-    Row(modifier = modifier.fillMaxWidth(),
+    Row(modifier = modifier.fillMaxWidth()
+        .clickable(
+            onClick = {
+                SerenityDetailActivity.startActivity(context as Activity, null)
+            },
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null
+        ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)) {
 
@@ -200,7 +209,7 @@ fun PopularYogaCard(modifier: Modifier = Modifier,
                 contentScale = ContentScale.Crop)
         }
 
-        Column(modifier = modifier.weight(1f)) {
+        Column(modifier = modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(
                 text = popularYoga.title ?: "",
                 style = MaterialTheme.typography.titleLarge,
@@ -209,7 +218,7 @@ fun PopularYogaCard(modifier: Modifier = Modifier,
                 overflow = TextOverflow.Ellipsis
             )
 
-            Row {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(text = popularYoga.duration ?: "", style = MaterialTheme.typography.bodySmall)
                 Text(text = ".", style = MaterialTheme.typography.bodySmall)
                 Text(text = popularYoga.level ?: "", style = MaterialTheme.typography.bodySmall)
@@ -321,7 +330,14 @@ fun AdjustYogaLevelCard(modifier: Modifier = Modifier,
     val context = LocalContext.current
 
 
-    Row(modifier = modifier.fillMaxWidth(),
+    Row(modifier = modifier.fillMaxWidth()
+        .clickable(
+            onClick = {
+                SerenityDetailActivity.startActivity(context as Activity, null)
+            },
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null
+        ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)) {
 
@@ -339,7 +355,7 @@ fun AdjustYogaLevelCard(modifier: Modifier = Modifier,
                 contentScale = ContentScale.Crop)
         }
 
-        Column(modifier = modifier.weight(1f)) {
+        Column(modifier = modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(
                 text = adjustYogaLevel.title ?: "",
                 style = MaterialTheme.typography.titleLarge,
@@ -348,7 +364,7 @@ fun AdjustYogaLevelCard(modifier: Modifier = Modifier,
                 overflow = TextOverflow.Ellipsis
             )
 
-            Row {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(text = adjustYogaLevel.duration ?: "", style = MaterialTheme.typography.bodySmall)
                 Text(text = ".", style = MaterialTheme.typography.bodySmall)
                 Text(text = adjustYogaLevel.level ?: "", style = MaterialTheme.typography.bodySmall)
@@ -380,7 +396,7 @@ private fun BodyFocusScreen(modifier: Modifier = Modifier) {
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             items(Body.bodyPartsImage.size) {
-                Card(modifier = modifier.requiredHeight(100.dp), onClick = { BodyFocusActivity.startActivity(context as Activity) }) {
+                Card(modifier = modifier.requiredHeight(100.dp), onClick = { CategoryDetailActivity.startActivity(context as Activity) }) {
                     Box() {
                         Image(painter = painterResource(id = Body.bodyPartsImage[it].image),
                             contentDescription = null,
@@ -448,7 +464,14 @@ fun FlexibilityStrengthCard(modifier: Modifier = Modifier,
     val context = LocalContext.current
 
 
-    Row(modifier = modifier.fillMaxWidth(),
+    Row(modifier = modifier.fillMaxWidth()
+        .clickable(
+            onClick = {
+                SerenityDetailActivity.startActivity(context as Activity, null)
+            },
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null
+        ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)) {
 
@@ -466,7 +489,7 @@ fun FlexibilityStrengthCard(modifier: Modifier = Modifier,
                 contentScale = ContentScale.Crop)
         }
 
-        Column(modifier = modifier.weight(1f)) {
+        Column(modifier = modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(
                 text = flexibilityStrength.title ?: "",
                 style = MaterialTheme.typography.titleLarge,
@@ -475,7 +498,7 @@ fun FlexibilityStrengthCard(modifier: Modifier = Modifier,
                 overflow = TextOverflow.Ellipsis
             )
 
-            Row {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(text = flexibilityStrength.duration ?: "", style = MaterialTheme.typography.bodySmall)
                 Text(text = ".", style = MaterialTheme.typography.bodySmall)
                 Text(text = flexibilityStrength.level ?: "", style = MaterialTheme.typography.bodySmall)
@@ -538,7 +561,14 @@ fun StressReliefCard(modifier: Modifier = Modifier,
     val context = LocalContext.current
 
 
-    Row(modifier = modifier.fillMaxWidth(),
+    Row(modifier = modifier.fillMaxWidth()
+        .clickable(
+            onClick = {
+                SerenityDetailActivity.startActivity(context as Activity, null)
+            },
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null
+        ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)) {
 
@@ -556,7 +586,7 @@ fun StressReliefCard(modifier: Modifier = Modifier,
                 contentScale = ContentScale.Crop)
         }
 
-        Column(modifier = modifier.weight(1f)) {
+        Column(modifier = modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(
                 text = stressRelief.title ?: "",
                 style = MaterialTheme.typography.titleLarge,
@@ -565,7 +595,7 @@ fun StressReliefCard(modifier: Modifier = Modifier,
                 overflow = TextOverflow.Ellipsis
             )
 
-            Row {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(text = stressRelief.duration ?: "", style = MaterialTheme.typography.bodySmall)
                 Text(text = ".", style = MaterialTheme.typography.bodySmall)
                 Text(text = stressRelief.level ?: "", style = MaterialTheme.typography.bodySmall)
