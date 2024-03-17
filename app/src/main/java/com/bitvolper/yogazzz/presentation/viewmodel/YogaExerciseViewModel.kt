@@ -274,7 +274,7 @@ class YogaExerciseViewModel @Inject constructor(val player: Player): ViewModel()
 
     override fun onCleared() {
         super.onCleared()
-        stopTimer()
+//        stopTimer()
         player.release()
     }
 

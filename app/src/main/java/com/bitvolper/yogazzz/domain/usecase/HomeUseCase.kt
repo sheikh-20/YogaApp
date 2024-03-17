@@ -53,7 +53,7 @@ interface HomeUseCase {
 
     fun getMeditation(): Flow<Resource<Meditation>>
 
-    fun getYogaExerciseByCategory(category: String): Flow<Resource<YogaData>>
+    fun getYogaExerciseByCategory(category: String): Flow<Resource<SerenityData>>
 
     suspend fun updateUserInfo(userId: String, accountInfo: AccountInfo)
 
@@ -129,7 +129,7 @@ class GetHomeUseCaseInteractors(private val repository: HomeRepository): HomeUse
         return repository.getMeditation()
     }
 
-    override fun getYogaExerciseByCategory(category: String): Flow<Resource<YogaData>> {
+    override fun getYogaExerciseByCategory(category: String): Flow<Resource<SerenityData>> {
         return repository.getYogaExerciseByCategory(category)
     }
 
