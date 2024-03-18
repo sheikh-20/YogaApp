@@ -28,6 +28,12 @@
         </service>
 
         <activity
+            android:name=".presentation.bodyfocus.BodyFocusDetailActivity"
+            android:exported="true"
+            android:theme="@style/Theme.YogaApp"
+            android:screenOrientation="portrait"/>
+
+        <activity
             android:name=".presentation.faq.FaqActivity"
             android:exported="true"
             android:theme="@style/Theme.YogaApp"

@@ -1,5 +1,6 @@
 package com.bitvolper.yogazzz.presentation.serenitydetail.yogaexercise
 
+import android.app.Activity
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -30,6 +31,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,6 +50,8 @@ import java.util.concurrent.TimeUnit
 fun YogaCompletedScreen(modifier: Modifier = Modifier,
                         paddingValues: PaddingValues = PaddingValues(),
                         showSubscriptionSheet: () -> Unit = {  }) {
+
+    val context = LocalContext.current
 
     LaunchedEffect(key1 = Unit) {
         delay(3_000L)
@@ -167,7 +171,7 @@ fun YogaCompletedScreen(modifier: Modifier = Modifier,
                     horizontalArrangement = Arrangement.spacedBy(16.dp)) {
 
 
-                    OutlinedButton(onClick = {  }, modifier = modifier
+                    OutlinedButton(onClick = { (context as Activity).finish() }, modifier = modifier
                         .weight(1f)
                         .requiredHeight(50.dp)) {
                         Text(text = "Go to Homepage")

@@ -1,5 +1,6 @@
 package com.bitvolper.yogazzz.data.repository
 
+import android.net.Uri
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bitvolper.yogazzz.domain.model.AccountInfo
 import com.bitvolper.yogazzz.domain.model.AdjustYogaLevel
@@ -20,6 +21,8 @@ import com.bitvolper.yogazzz.domain.model.YogaRecommendation
 import com.bitvolper.yogazzz.utility.Resource
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.UploadTask
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.flow.Flow
@@ -64,12 +67,19 @@ interface HomeRepository {
 
     suspend fun updateUserInfo(userId: String, accountInfo: AccountInfo)
 
+    fun uploadPhoto(userId: String, uri: Uri): Flow<Resource<UploadTask.TaskSnapshot>>
+
+    fun getPhoto(userId: String): Flow<Resource<Uri>>
+
     fun getUserInfo(userId: String): Flow<Resource<AccountInfo>>
 
     fun getHistory(id: List<AccountInfo.HistoryData>): Flow<Resource<History>>
 }
 
-class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatabase, private val firestore: FirebaseFirestore): HomeRepository {
+class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatabase,
+                                             private val firestore: FirebaseFirestore,
+                                             private val storage: FirebaseStorage
+): HomeRepository {
     private companion object {
         const val TAG = "HomeRepositoryImpl"
     }
@@ -620,6 +630,32 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
             emit(Resource.Failure(it))
         }
 
+    override fun uploadPhoto(userId: String, uri: Uri): Flow<Resource<UploadTask.TaskSnapshot>> =
+        flow {
+            emit(Resource.Loading)
+
+            val storageUri = storage.reference.child(userId).putFile(uri).await()
+            emit(Resource.Success(storageUri))
+        }
+            .catch {
+                Timber.tag(TAG).e(it)
+                it.printStackTrace()
+                emit(Resource.Failure(it))
+            }
+
+    override fun getPhoto(userId: String): Flow<Resource<Uri>> = flow {
+        emit(Resource.Loading)
+
+        val storageUri = storage.reference.child(userId).downloadUrl.await()
+
+        Timber.tag(TAG).d(storageUri.toString())
+        emit(Resource.Success(storageUri))
+    }
+        .catch {
+            Timber.tag(TAG).e(it)
+            it.printStackTrace()
+            emit(Resource.Failure(it))
+        }
 
     override fun getYogaExerciseByCategory(category: String): Flow<Resource<SerenityData>> = flow {
 

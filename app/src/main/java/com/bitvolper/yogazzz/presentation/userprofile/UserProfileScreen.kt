@@ -1,6 +1,9 @@
 package com.bitvolper.yogazzz.presentation.userprofile
 
 import android.content.res.Configuration
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -22,6 +25,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.rounded.CalendarMonth
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.ExpandMore
@@ -42,6 +46,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -49,10 +54,15 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
+import com.bitvolper.yogazzz.utility.Resource
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
+private const val TAG = "UserProfileScreen"
 @Composable
 fun UserProfileScreen(modifier: Modifier = Modifier,
                       paddingValues: PaddingValues = PaddingValues(),
@@ -66,10 +76,22 @@ fun UserProfileScreen(modifier: Modifier = Modifier,
                       birthdayDate: Long = 0L,
 
                       onUpdateButtonClick: () -> Unit = { },
-                      onCalendarButtonClick: () -> Unit = {  }
+                      onCalendarButtonClick: () -> Unit = {  },
+
+                      onProfileClick: (Uri) -> Unit = { _ -> },
+                      profileUIState: Resource<Uri> = Resource.Loading,
                       ) {
 
     val focusManager = LocalFocusManager.current
+
+
+    val getContent = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
+        it?.let { uri ->
+            Timber.tag(TAG).d(uri.toString())
+            onProfileClick(uri)
+        }
+    }
+
 
     val fullNameInteractionSource = remember { MutableInteractionSource() }
     val emailInteractionSource = remember { MutableInteractionSource() }
@@ -92,14 +114,36 @@ fun UserProfileScreen(modifier: Modifier = Modifier,
             verticalArrangement = Arrangement.spacedBy(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally) {
 
-            Image(
-                painter = painterResource(id = R.drawable.profile_pic),
-                contentDescription = null,
-                modifier = modifier
-                    .size(80.dp)
-                    .clip(RoundedCornerShape(50)),
-                contentScale = ContentScale.Crop
-            )
+            IconButton(onClick = { getContent.launch("image/*") }, modifier = modifier.size(80.dp)) {
+
+                when (profileUIState) {
+                    is Resource.Loading -> {
+                        Icon(painterResource(id = R.drawable.ic_image_placeholder),
+                            contentDescription = null,
+                            modifier = modifier.size(80.dp).clip(RoundedCornerShape(50)))
+                    }
+
+                    is Resource.Failure -> {
+                        Icon(imageVector = Icons.Outlined.AccountCircle,
+                            contentDescription = null,
+                            modifier = modifier.size(80.dp).clip(RoundedCornerShape(50)))
+                    }
+
+                    is Resource.Success -> {
+                        AsyncImage(
+                            model = ImageRequest.Builder(context = LocalContext.current)
+                                .data(profileUIState.data)
+                                .crossfade(true)
+                                .build(),
+                            error = painterResource(id = R.drawable.ic_broken_image),
+                            placeholder = painterResource(id = R.drawable.ic_image_placeholder),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = modifier.size(80.dp).clip(RoundedCornerShape(50)),
+                        )
+                    }
+                }
+            }
 
 
             Column {
