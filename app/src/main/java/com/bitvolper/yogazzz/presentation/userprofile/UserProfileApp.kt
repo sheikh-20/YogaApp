@@ -54,6 +54,7 @@ import kotlinx.coroutines.launch
 fun UserProfileApp(modifier: Modifier = Modifier, accountViewModel: AccountViewModel = hiltViewModel()) {
 
     val accountInfoUIState by accountViewModel.accountInfoUIState.collectAsState()
+    val profileUIState by accountViewModel.profilePhotoUIState.collectAsState()
 
     var showBottomSheet by remember {
         mutableStateOf(false)
@@ -127,7 +128,10 @@ fun UserProfileApp(modifier: Modifier = Modifier, accountViewModel: AccountViewM
             gender = accountInfoUIState.gender ?: 0,
             onGenderButtonClick = { showBottomSheet = true },
             onCalendarButtonClick = { openDialog = true },
-            birthdayDate = accountInfoUIState.birthdayDate ?: 0L)
+            birthdayDate = accountInfoUIState.birthdayDate ?: 0L,
+
+            onProfileClick = accountViewModel::uploadProfilePhoto,
+            profileUIState = profileUIState,)
     }
 }
 

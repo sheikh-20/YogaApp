@@ -78,6 +78,7 @@ import com.bitvolper.yogazzz.presentation.viewmodel.AccountViewModel
 import com.bitvolper.yogazzz.presentation.viewmodel.DiscoverViewModel
 import com.bitvolper.yogazzz.presentation.viewmodel.HomeViewModel
 import com.bitvolper.yogazzz.presentation.viewmodel.OnboardingViewModel
+import com.bitvolper.yogazzz.utility.Resource
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.launch
@@ -99,6 +100,7 @@ fun HomeApp(modifier: Modifier = Modifier,
 
 
     val profileUiState by homeViewModel.profileInfoUiState.collectAsState()
+    val profilePhotoUIState by accountViewModel.profilePhotoUIState.collectAsState()
 
     val homeUIState by homeViewModel.homeUIState.collectAsState()
     val discoverUIState by discoverViewModel.discoverUIState.collectAsState()
@@ -209,7 +211,8 @@ fun HomeApp(modifier: Modifier = Modifier,
                     uiState = profileUiState,
                     onSignOutClick = {
                         showBottomSheet = BottomSheet.Logout
-                    })
+                    },
+                    profileUIState = profilePhotoUIState)
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.bitvolper.yogazzz.presentation.viewmodel
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bitvolper.yogazzz.domain.model.AccountInfo
@@ -19,6 +20,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -69,6 +71,9 @@ class AccountViewModel @Inject constructor(
 
     private var _accountInfoUIState = MutableStateFlow<AccountInfo>(AccountInfo())
     val accountInfoUIState: StateFlow<AccountInfo> get() = _accountInfoUIState
+
+    private var _profilePhotoUIState = MutableStateFlow<Resource<Uri>>(Resource.Loading)
+    val profilePhotoUIState get() = _profilePhotoUIState.asStateFlow()
 
     fun saveDailyReminderPreference(value: Boolean) = viewModelScope.launch {
         pushNotificationUseCase.saveDailyReminderPreference(value)
@@ -197,6 +202,32 @@ class AccountViewModel @Inject constructor(
         updateUserProfile()
     }
 
+    fun uploadProfilePhoto(uri: Uri) = viewModelScope.launch {
+        try {
+            homeUseCase.uploadProfilePhoto(auth.currentUser?.uid ?: return@launch, uri).collectLatest {
+                when (it) {
+                    is Resource.Loading -> {  }
+                    is Resource.Failure -> {  }
+                    is Resource.Success -> {
+                        getProfilePhoto()
+                    }
+                }
+            }
+        } catch (exception: IOException) {
+            Timber.tag(TAG).e(exception)
+        }
+    }
+
+    fun getProfilePhoto() = viewModelScope.launch {
+        try {
+            homeUseCase.getPhoto(auth.currentUser?.uid ?: return@launch).collectLatest {
+                _profilePhotoUIState.value = it
+            }
+        } catch (exception: IOException) {
+            Timber.tag(TAG).e(exception)
+        }
+    }
+
     fun getUserProfile() = viewModelScope.launch {
         try {
             homeUseCase.getUserInfo(auth.currentUser?.uid ?: return@launch).collectLatest {
@@ -220,6 +251,7 @@ class AccountViewModel @Inject constructor(
 
 
     init {
+        getProfilePhoto()
         getUserProfile()
     }
 }
