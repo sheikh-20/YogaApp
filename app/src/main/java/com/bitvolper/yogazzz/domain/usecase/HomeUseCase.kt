@@ -1,5 +1,6 @@
 package com.bitvolper.yogazzz.domain.usecase
 
+import android.net.Uri
 import com.bitvolper.yogazzz.data.repository.HomeRepository
 import com.bitvolper.yogazzz.domain.model.AccountInfo
 import com.bitvolper.yogazzz.domain.model.AdjustYogaLevel
@@ -19,6 +20,7 @@ import com.bitvolper.yogazzz.domain.model.YogaData
 import com.bitvolper.yogazzz.domain.model.YogaExercise
 import com.bitvolper.yogazzz.domain.model.YogaRecommendation
 import com.bitvolper.yogazzz.utility.Resource
+import com.google.firebase.storage.UploadTask
 import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
 
@@ -56,6 +58,10 @@ interface HomeUseCase {
     fun getYogaExerciseByCategory(category: String): Flow<Resource<SerenityData>>
 
     suspend fun updateUserInfo(userId: String, accountInfo: AccountInfo)
+
+    fun uploadProfilePhoto(userId: String, uri: Uri): Flow<Resource<UploadTask.TaskSnapshot>>
+
+    fun getPhoto(userId: String): Flow<Resource<Uri>>
 
     fun getUserInfo(userId: String): Flow<Resource<AccountInfo>>
 
@@ -136,6 +142,10 @@ class GetHomeUseCaseInteractors(private val repository: HomeRepository): HomeUse
     override suspend fun updateUserInfo(userId: String, accountInfo: AccountInfo) {
         repository.updateUserInfo(userId, accountInfo)
     }
+
+    override fun uploadProfilePhoto(userId: String, uri: Uri): Flow<Resource<UploadTask.TaskSnapshot>> = repository.uploadPhoto(userId, uri)
+
+    override fun getPhoto(userId: String): Flow<Resource<Uri>> = repository.getPhoto(userId)
 
     override fun getUserInfo(userId: String): Flow<Resource<AccountInfo>> {
         return repository.getUserInfo(userId)

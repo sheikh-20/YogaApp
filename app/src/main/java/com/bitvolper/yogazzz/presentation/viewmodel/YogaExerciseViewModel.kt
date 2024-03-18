@@ -51,7 +51,7 @@ class YogaExerciseViewModel @Inject constructor(val player: Player): ViewModel()
             it.copy(exercise = serenityData[currentExerciseIndex] ?: return)
         }
         totalExerciseSize = serenityData.size
-        serenityDataList.addAll(serenityDataList)
+        serenityDataList.addAll(serenityData)
 
         timer = object : CountDownTimer(TIME_LEFT_MILLI_SEC, 1_000L) {
             override fun onTick(millisUntilFinished: Long) {
@@ -133,6 +133,7 @@ class YogaExerciseViewModel @Inject constructor(val player: Player): ViewModel()
     }
 
     fun pauseExerciseTimer(completeScreen: () -> Unit = {  }, nextScreen: () -> Unit = {  }) {
+        player.pause()
         stopTimer()
         exerciseTimeInMilliSec = timeInMilliSec
 
@@ -179,8 +180,22 @@ class YogaExerciseViewModel @Inject constructor(val player: Player): ViewModel()
 
 
     fun skipExercise(completeScreen: () -> Unit = {  }, nextScreen: () -> Unit = {  }) {
+
+        Timber.tag(TAG).d("Serenity List -> ${serenityDataList.toList()}")
+
         if (serenityDataList.getOrNull(currentExerciseIndex.inc()) != null) {
+            playerStop()
             stopTimer()
+
+            currentExerciseIndex += 1
+            Timber.tag(TAG).d("Next screen -> Size: ${serenityDataList.size} Index: $currentExerciseIndex")
+            _currentExercise.update {
+                it.copy(
+                    exerciseTimer = 30,
+                    exercise = serenityDataList[currentExerciseIndex] ?: SerenityData.Data.Pose()
+                )
+            }
+
 
             timer = object : CountDownTimer(exerciseTimeInMilliSec, 1_000L) {
                 override fun onTick(millisUntilFinished: Long) {
@@ -217,6 +232,9 @@ class YogaExerciseViewModel @Inject constructor(val player: Player): ViewModel()
                     }
                 }
             }
+
+            playerStart(currentExercise.value.exercise.file ?: return)
+            startTimer()
         }
     }
 
@@ -224,6 +242,16 @@ class YogaExerciseViewModel @Inject constructor(val player: Player): ViewModel()
         if (serenityDataList.getOrNull(currentExerciseIndex.dec()) != null) {
             stopTimer()
 
+            currentExerciseIndex -= 1
+            Timber.tag(TAG).d("Next screen -> Size: ${serenityDataList.size} Index: $currentExerciseIndex")
+            _currentExercise.update {
+                it.copy(
+                    exerciseTimer = 30,
+                    exercise = serenityDataList[currentExerciseIndex] ?: SerenityData.Data.Pose()
+                )
+            }
+
+
             timer = object : CountDownTimer(exerciseTimeInMilliSec, 1_000L) {
                 override fun onTick(millisUntilFinished: Long) {
                     timeInMilliSec = millisUntilFinished
@@ -259,6 +287,9 @@ class YogaExerciseViewModel @Inject constructor(val player: Player): ViewModel()
                     }
                 }
             }
+
+            playerStart(currentExercise.value.exercise.file ?: return)
+            startTimer()
         }
     }
 

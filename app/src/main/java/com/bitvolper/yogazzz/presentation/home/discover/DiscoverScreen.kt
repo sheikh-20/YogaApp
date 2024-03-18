@@ -69,6 +69,7 @@ import com.bitvolper.yogazzz.domain.model.FlexibilityStrength
 import com.bitvolper.yogazzz.domain.model.PopularYoga
 import com.bitvolper.yogazzz.domain.model.PopularYogaWithFlexibility
 import com.bitvolper.yogazzz.domain.model.StressRelief
+import com.bitvolper.yogazzz.presentation.bodyfocus.BodyFocusDetailActivity
 import com.bitvolper.yogazzz.presentation.categorydetail.CategoryDetailActivity
 import com.bitvolper.yogazzz.presentation.home.discover.adjust_yoga.AdjustYogaActivity
 import com.bitvolper.yogazzz.presentation.home.discover.body_focus.BodyFocusActivity
@@ -396,7 +397,15 @@ private fun BodyFocusScreen(modifier: Modifier = Modifier) {
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             items(Body.bodyPartsImage.size) {
-                Card(modifier = modifier.requiredHeight(100.dp), onClick = { CategoryDetailActivity.startActivity(context as Activity) }) {
+                Card(modifier = modifier.requiredHeight(100.dp),
+                    onClick = {
+                        BodyFocusDetailActivity.startActivity(
+                            activity = context as Activity,
+                            title = Body.bodyPartsImage[it].part,
+                            image = Body.bodyPartsImage[it].image,
+                            color = Body.bodyPartsImage[it].color)
+                    }) {
+
                     Box() {
                         Image(painter = painterResource(id = Body.bodyPartsImage[it].image),
                             contentDescription = null,
