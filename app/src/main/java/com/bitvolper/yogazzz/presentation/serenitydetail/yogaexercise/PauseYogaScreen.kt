@@ -1,5 +1,6 @@
 package com.bitvolper.yogazzz.presentation.serenitydetail.yogaexercise
 
+import android.app.Activity
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -45,8 +46,10 @@ import com.bitvolper.yogazzz.presentation.viewmodel.ExerciseUIState
 fun PauseYogaScreen(modifier: Modifier = Modifier,
                     paddingValues: PaddingValues = PaddingValues(),
                     currentYogaExercise: ExerciseUIState = ExerciseUIState(),
-                    onResumeClick: () -> Unit = { }) {
+                    onResumeClick: () -> Unit = { },
+                    onRestartClick: () -> Unit = { }) {
 
+    val context = LocalContext.current
 
     val imageLoader = ImageLoader.Builder(LocalContext.current)
         .components {
@@ -116,10 +119,10 @@ fun PauseYogaScreen(modifier: Modifier = Modifier,
             Text(text = "RESUME")
         }
 
-        OutlinedButton(onClick = { /*TODO*/ }, modifier = modifier.fillMaxWidth().requiredHeight(50.dp)) {
+        OutlinedButton(onClick = onRestartClick, modifier = modifier.fillMaxWidth().requiredHeight(50.dp)) {
             Text(text = "Restart")
         }
-        OutlinedButton(onClick = { /*TODO*/ }, modifier = modifier.fillMaxWidth().requiredHeight(50.dp)) {
+        OutlinedButton(onClick = { (context as Activity).finish() }, modifier = modifier.fillMaxWidth().requiredHeight(50.dp)) {
             Text(text = "Quit")
         }
     }
