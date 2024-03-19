@@ -178,6 +178,20 @@ class YogaExerciseViewModel @Inject constructor(val player: Player): ViewModel()
         startTimer()
     }
 
+    fun restartExerciseTimer() {
+        stopTimer()
+        player.pause()
+
+        _currentExercise.update {
+            it.copy(
+                timer = 10,
+                showExerciseDetails = false,
+                exerciseTimer = 30
+            )
+        }
+
+//        exerciseTimer(serenityDataList, nextScreen, completeScreen)
+    }
 
     fun skipExercise(completeScreen: () -> Unit = {  }, nextScreen: () -> Unit = {  }) {
 
