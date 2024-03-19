@@ -49,11 +49,13 @@ import java.util.concurrent.TimeUnit
 @Composable
 fun YogaCompletedScreen(modifier: Modifier = Modifier,
                         paddingValues: PaddingValues = PaddingValues(),
-                        showSubscriptionSheet: () -> Unit = {  }) {
+                        showSubscriptionSheet: () -> Unit = {  },
+                        updateReports: () -> Unit = { }) {
 
     val context = LocalContext.current
 
     LaunchedEffect(key1 = Unit) {
+        updateReports()
         delay(3_000L)
         showSubscriptionSheet()
     }
