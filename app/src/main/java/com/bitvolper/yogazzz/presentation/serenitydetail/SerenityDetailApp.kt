@@ -189,6 +189,11 @@ fun SerenityDetailApp(modifier: Modifier = Modifier,
                     onResumeClick = {
                         yogaExerciseViewModel.resumeExerciseTimer()
                         navController.navigateUp()
+                    },
+                    onRestartClick = {
+                        yogaExerciseViewModel.restartExerciseTimer(
+                        )
+                        navController.popBackStack(YogaExercise.Detail.name, false)
                     })
             }
 
