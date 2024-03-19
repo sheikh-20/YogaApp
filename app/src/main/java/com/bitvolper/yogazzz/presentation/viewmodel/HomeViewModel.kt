@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.bitvolper.yogazzz.domain.model.AccountInfo
 import com.bitvolper.yogazzz.domain.model.History
 import com.bitvolper.yogazzz.domain.model.PopularYogaWithFlexibility
+import com.bitvolper.yogazzz.domain.model.Reports
 import com.bitvolper.yogazzz.domain.model.SerenityData
 import com.bitvolper.yogazzz.domain.model.UserData
 import com.bitvolper.yogazzz.domain.model.YogaCategoryWithRecommendation
@@ -58,6 +59,9 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase): V
 
     private var _historyUIState = MutableStateFlow<Resource<History>>(Resource.Loading)
     val historyUIState: StateFlow<Resource<History>> get() = _historyUIState
+
+    private var _reportsUIState = MutableStateFlow<Resource<Reports>>(Resource.Loading)
+    val reportsUIState: StateFlow<Resource<Reports>> get() = _reportsUIState
 
     private fun getSignedInUser() {
         auth.currentUser?.apply {
@@ -147,6 +151,20 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase): V
 
     fun resetHistory() {
         _historyUIState.value = Resource.Success(History(emptyList()))
+    }
+
+    fun getReports(id: List<AccountInfo.Reports>) = viewModelScope.launch {
+        try {
+            homeUseCase.getReports(id).collectLatest {
+                _reportsUIState.value = it
+            }
+        } catch (exception: IOException) {
+            Timber.tag(TAG).e(exception)
+        }
+    }
+
+    fun resetReports() {
+        _reportsUIState.value = Resource.Success(Reports(emptyList()))
     }
 
     private fun getUserProfile() = viewModelScope.launch {
