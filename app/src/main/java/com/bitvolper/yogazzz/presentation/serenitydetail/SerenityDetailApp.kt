@@ -150,14 +150,16 @@ fun SerenityDetailApp(modifier: Modifier = Modifier,
             composable(route = YogaExercise.Detail.name) {
                 SerenityDetailScreen(
                     paddingValues = paddingValues,
-                    yogaExerciseUIState = yogaExerciseUIState
-                ) {
-                    yogaExerciseViewModel.startExercise(
-                        serenityData = it,
-                        nextScreen = { navController.navigate(YogaExercise.Next.name) },
-                        completeScreen = { navController.navigate(YogaExercise.Complete.name) })
-                    navController.navigate(YogaExercise.Start.name)
-                }
+                    yogaExerciseUIState = yogaExerciseUIState,
+                    onStartClick = {
+                        yogaExerciseViewModel.startExercise(
+                            serenityData = it,
+                            nextScreen = { navController.navigate(YogaExercise.Next.name) },
+                            completeScreen = { navController.navigate(YogaExercise.Complete.name) })
+                        navController.navigate(YogaExercise.Start.name)
+                    },
+                    updateYogaId = accountViewModel::updateReports
+                )
             }
 
             composable(route = YogaExercise.Start.name) {
@@ -211,7 +213,8 @@ fun SerenityDetailApp(modifier: Modifier = Modifier,
             composable(route = YogaExercise.Complete.name) {
                 YogaCompletedScreen(
                     paddingValues = paddingValues,
-                    showSubscriptionSheet = { showBottomSheet = BottomSheet.Subscription })
+                    showSubscriptionSheet = { showBottomSheet = BottomSheet.Subscription },
+                    updateReports = accountViewModel::updateUserProfile)
             }
         }
     }

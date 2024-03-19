@@ -108,6 +108,7 @@ fun HomeApp(modifier: Modifier = Modifier,
     var notificationPermissionState = rememberMultiplePermissionsState(permissions = listOf())
 
     val historyUIState by homeViewModel.historyUIState.collectAsState()
+    val reportsUIState by homeViewModel.reportsUIState.collectAsState()
     val accountInfoUIState by accountViewModel.accountInfoUIState.collectAsState()
 
 
@@ -189,7 +190,17 @@ fun HomeApp(modifier: Modifier = Modifier,
             }
 
             composable(route = BottomNavigationScreens.Reports.route) {
-                ReportsScreen(paddingValues = paddingValues)
+                ReportsScreen(paddingValues = paddingValues,
+                    onReports = {
+                        accountViewModel.getUserProfile()
+
+                        if (accountInfoUIState.reports == null) {
+                            homeViewModel.resetReports()
+                        } else {
+                            homeViewModel.getReports(accountInfoUIState.reports ?: return@ReportsScreen)
+                        }
+                    },
+                    reportsUIState = reportsUIState)
             }
 
             composable(route = BottomNavigationScreens.History.route) {

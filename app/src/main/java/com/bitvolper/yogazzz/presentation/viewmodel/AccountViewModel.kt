@@ -180,6 +180,17 @@ class AccountViewModel @Inject constructor(
         updateUserProfile()
     }
 
+    fun updateReports(id: String) {
+        val reports = mutableListOf<AccountInfo.Reports>().apply {
+            addAll(_accountInfoUIState.value.reports ?: emptyList())
+            add(AccountInfo.Reports(id = id))
+        }
+
+        _accountInfoUIState.update {
+            it.copy(reports = reports)
+        }
+    }
+
     fun updateUserProfile() = viewModelScope.launch {
         try {
             homeUseCase.updateUserInfo(auth.currentUser?.uid ?: return@launch, accountInfoUIState.value)

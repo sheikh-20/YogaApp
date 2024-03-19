@@ -10,6 +10,7 @@ import com.bitvolper.yogazzz.domain.model.History
 import com.bitvolper.yogazzz.domain.model.Meditation
 import com.bitvolper.yogazzz.domain.model.PopularYoga
 import com.bitvolper.yogazzz.domain.model.PopularYogaWithFlexibility
+import com.bitvolper.yogazzz.domain.model.Reports
 import com.bitvolper.yogazzz.domain.model.SerenityData
 import com.bitvolper.yogazzz.domain.model.StressRelief
 import com.bitvolper.yogazzz.domain.model.Subscription
@@ -66,6 +67,8 @@ interface HomeUseCase {
     fun getUserInfo(userId: String): Flow<Resource<AccountInfo>>
 
     fun getHistory(id: List<AccountInfo.HistoryData>): Flow<Resource<History>>
+
+    fun getReports(id: List<AccountInfo.Reports>): Flow<Resource<Reports>>
 }
 
 class GetHomeUseCaseInteractors(private val repository: HomeRepository): HomeUseCase {
@@ -153,5 +156,9 @@ class GetHomeUseCaseInteractors(private val repository: HomeRepository): HomeUse
 
     override fun getHistory(id: List<AccountInfo.HistoryData>): Flow<Resource<History>> {
         return repository.getHistory(id)
+    }
+
+    override fun getReports(id: List<AccountInfo.Reports>): Flow<Resource<Reports>> {
+        return repository.getReports(id)
     }
 }

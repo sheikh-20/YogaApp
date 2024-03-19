@@ -10,6 +10,7 @@ import com.bitvolper.yogazzz.domain.model.History
 import com.bitvolper.yogazzz.domain.model.Meditation
 import com.bitvolper.yogazzz.domain.model.PopularYoga
 import com.bitvolper.yogazzz.domain.model.PopularYogaWithFlexibility
+import com.bitvolper.yogazzz.domain.model.Reports
 import com.bitvolper.yogazzz.domain.model.SerenityData
 import com.bitvolper.yogazzz.domain.model.StressRelief
 import com.bitvolper.yogazzz.domain.model.Subscription
@@ -74,6 +75,8 @@ interface HomeRepository {
     fun getUserInfo(userId: String): Flow<Resource<AccountInfo>>
 
     fun getHistory(id: List<AccountInfo.HistoryData>): Flow<Resource<History>>
+
+    fun getReports(id: List<AccountInfo.Reports>): Flow<Resource<Reports>>
 }
 
 class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatabase,
@@ -629,6 +632,44 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
             it.printStackTrace()
             emit(Resource.Failure(it))
         }
+
+    override fun getReports(id: List<AccountInfo.Reports>): Flow<Resource<Reports>> = flow {
+
+        Timber.tag(TAG).d("Called")
+        emit(Resource.Loading)
+
+        try {
+
+            Timber.tag(TAG).d("Repo called")
+
+            val result = firestore.collection("yoga_exercise")
+                .whereIn("id", id.map { it.id })
+                .get()
+                .await()
+
+            val filter = result.documents.map {
+                Timber.tag(TAG).e(it.toString())
+                it.data
+            }
+
+            val json = Gson().toJson(filter)
+            Timber.tag(TAG).d("Result -> $json")
+
+            val listType = object : TypeToken<List<Reports.Data>>() {}.type
+            val data = Gson().fromJson<List<Reports.Data>>(json, listType)
+
+            Timber.tag(TAG).d(data.toString())
+            emit(Resource.Success(Reports(data = data)))
+        } catch (exception: Exception) {
+            throw Throwable(exception)
+        }
+    }
+        .catch {
+            Timber.tag(TAG).e(it)
+            it.printStackTrace()
+            emit(Resource.Failure(it))
+        }
+
 
     override fun uploadPhoto(userId: String, uri: Uri): Flow<Resource<UploadTask.TaskSnapshot>> =
         flow {

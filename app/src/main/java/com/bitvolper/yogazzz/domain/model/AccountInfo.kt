@@ -23,10 +23,17 @@ data class AccountInfo(
     val targetWeight: Double? = null,
 
     val history: List<HistoryData>? = null,
-    val bookmark: List<String>? = null
+    val bookmark: List<String>? = null,
+
+    val reports: List<Reports>? = null
+
 ): Serializable {
     data class HistoryData(
         val id: String? = null,
         val date: String? = null
     ): Serializable
+
+    data class Reports(
+        val id: String? = null,
+    )
 }
