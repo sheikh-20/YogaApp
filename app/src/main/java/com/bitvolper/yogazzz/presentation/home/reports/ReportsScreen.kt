@@ -11,9 +11,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Chip
+import androidx.compose.material.ChipDefaults
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccessTime
@@ -42,6 +45,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,12 +55,18 @@ import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.utility.Resource
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
-import com.patrykandpatrick.vico.compose.chart.Chart
-import com.patrykandpatrick.vico.compose.chart.column.columnChart
-import com.patrykandpatrick.vico.compose.chart.line.lineChart
-import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
-import com.patrykandpatrick.vico.core.entry.entryModelOf
-import com.patrykandpatrick.vico.core.entry.entryOf
+import com.patrykandpatrick.vico.compose.chart.CartesianChartHost
+import com.patrykandpatrick.vico.compose.chart.layer.rememberColumnCartesianLayer
+import com.patrykandpatrick.vico.compose.chart.layer.rememberLineCartesianLayer
+import com.patrykandpatrick.vico.compose.chart.layout.fullWidth
+import com.patrykandpatrick.vico.compose.chart.rememberCartesianChart
+import com.patrykandpatrick.vico.core.axis.AxisItemPlacer
+import com.patrykandpatrick.vico.core.axis.AxisPosition
+import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
+import com.patrykandpatrick.vico.core.chart.values.AxisValueOverrider
+import com.patrykandpatrick.vico.core.model.CartesianChartModelProducer
+import com.patrykandpatrick.vico.core.model.columnSeries
+import com.patrykandpatrick.vico.core.model.lineSeries
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
@@ -114,7 +124,9 @@ fun ReportsScreen(modifier: Modifier = Modifier,
                         .fillMaxSize()
                         .padding(
                             top = paddingValues.calculateTopPadding(),
-                            bottom = paddingValues.calculateBottomPadding(), start = 16.dp, end = 16.dp
+                            bottom = paddingValues.calculateBottomPadding(),
+                            start = 16.dp,
+                            end = 16.dp
                         )
                         .verticalScroll(rememberScrollState()),
                         verticalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -138,39 +150,38 @@ private fun TitleCardCompose(modifier: Modifier = Modifier, reports: Reports = R
             .fillMaxWidth()
             .padding(16.dp), horizontalArrangement = Arrangement.SpaceEvenly) {
             Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Icon(imageVector = Icons.Rounded.SelfImprovement, contentDescription = null)
-                Text(text = "${reports.data?.size ?: 0}", style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
+                Icon(imageVector = Icons.Rounded.SelfImprovement, contentDescription = null, tint = Color(0xFFf54336))
+                Text(text = "${reports.data?.size ?: 0}", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
                 Text(text = "yoga", style = MaterialTheme.typography.bodySmall)
             }
 
             Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Icon(imageVector = Icons.Rounded.AccessTime, contentDescription = null)
-                Text(text = "${reports.data?.sumBy { it?.duration?.toInt() ?: 0 }}", style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
+                Icon(imageVector = Icons.Rounded.AccessTime, contentDescription = null, tint = Color(0xFF4db05a))
+                Text(text = "${reports.data?.sumBy { it?.duration?.toInt() ?: 0 }}", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
                 Text(text = "minutes", style = MaterialTheme.typography.bodySmall)
             }
 
             Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Icon(imageVector = Icons.Rounded.LocalFireDepartment, contentDescription = null)
-                Text(text = "${reports.data?.sumBy { it?.kcal?.toInt() ?: 0 }}", style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
+                Icon(imageVector = Icons.Rounded.LocalFireDepartment, contentDescription = null, tint = Color(0xFFfe9e26))
+                Text(text = "${reports.data?.sumBy { it?.kcal?.toInt() ?: 0 }}", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
                 Text(text = "kcal", style = MaterialTheme.typography.bodySmall)
             }
         }
     }
 }
 
-fun getRandomEntries() = List(4) { entryOf(it, Random.nextFloat() * 16f) }
-
+@OptIn(ExperimentalMaterialApi::class)
 @Preview(showBackground = true)
 @Composable
 private fun StatisticsCardCompose(modifier: Modifier = Modifier) {
 
-    val chartEntryModelProducer = ChartEntryModelProducer(getRandomEntries())
-
+    val modelProducer = remember { CartesianChartModelProducer.build() }
+    LaunchedEffect(Unit) { modelProducer.tryRunTransaction { columnSeries { series(4, 12, 8, 16) } } }
 
     Card(border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)) {
         Column(modifier = modifier
             .fillMaxWidth()
-            .padding(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            .padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(text = "Statistics",
@@ -180,7 +191,10 @@ private fun StatisticsCardCompose(modifier: Modifier = Modifier) {
 
                 Spacer(modifier = modifier.weight(1f))
 
-                OutlinedButton(onClick = { /*TODO*/ }, border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)) {
+                Chip(onClick = { /*TODO*/ },
+                    modifier = modifier.then(modifier.requiredHeight(30.dp)),
+                    border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outline),
+                    colors = ChipDefaults.chipColors(backgroundColor = Color.Transparent)) {
                     Row {
                         Text(text = "This Week", style = MaterialTheme.typography.titleMedium)
                         Icon(imageVector = Icons.Rounded.KeyboardArrowDown, contentDescription = null)
@@ -188,32 +202,34 @@ private fun StatisticsCardCompose(modifier: Modifier = Modifier) {
                 }
             }
 
-            Divider()
+            Divider(color = MaterialTheme.colorScheme.outline)
 
-            Chart(
-                chart = columnChart(),
-                chartModelProducer = chartEntryModelProducer,
-                startAxis = rememberStartAxis(),
-                bottomAxis = rememberBottomAxis(),
+            CartesianChartHost(
+                rememberCartesianChart(
+                    rememberColumnCartesianLayer(),
+                    startAxis = rememberStartAxis(),
+                    bottomAxis = rememberBottomAxis(),
+                ),
+                modelProducer,
             )
 
-            Divider()
+            Divider(color = MaterialTheme.colorScheme.outline)
 
             Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceEvenly) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
 
-                    Icon(imageVector = Icons.Rounded.Rectangle, contentDescription = null)
+                    Icon(imageVector = Icons.Rounded.Rectangle, contentDescription = null, tint = Color(0xFFf54336))
 
                     Text(text = "Yoga", style = MaterialTheme.typography.bodyMedium)
                 }
 
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Icon(imageVector = Icons.Rounded.Rectangle, contentDescription = null)
+                    Icon(imageVector = Icons.Rounded.Rectangle, contentDescription = null, tint = Color(0xFF4db05a))
                     Text(text = "Minutes", style = MaterialTheme.typography.bodyMedium)
                 }
 
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Icon(imageVector = Icons.Rounded.Rectangle, contentDescription = null)
+                    Icon(imageVector = Icons.Rounded.Rectangle, contentDescription = null, tint = Color(0xFFfe9e26))
 
                     Text(text = "Kcal", style = MaterialTheme.typography.bodyMedium)
                 }
@@ -222,16 +238,22 @@ private fun StatisticsCardCompose(modifier: Modifier = Modifier) {
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Preview(showBackground = true)
 @Composable
 private fun WeightCardCompose(modifier: Modifier = Modifier) {
 
-    val chartEntryModel = entryModelOf(4f, 12f, 8f, 16f)
+    val modelProducer = remember { CartesianChartModelProducer.build() }
+    LaunchedEffect(Unit) { modelProducer.tryRunTransaction { lineSeries { series(78, 66, 75, 78, 70, 78) } } }
+
+    val daysOfWeek = listOf("Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+    val bottomAxisValueFormatter =
+        AxisValueFormatter<AxisPosition.Horizontal.Bottom> { x, _, _ -> daysOfWeek[x.toInt() % daysOfWeek.size] }
 
     Card(border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)) {
         Column(modifier = modifier
             .fillMaxWidth()
-            .padding(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            .padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(text = "Weight",
@@ -241,7 +263,10 @@ private fun WeightCardCompose(modifier: Modifier = Modifier) {
 
                 Spacer(modifier = modifier.weight(1f))
 
-                OutlinedButton(onClick = { /*TODO*/ }, border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)) {
+                Chip(onClick = { /*TODO*/ },
+                    modifier = modifier.then(modifier.requiredHeight(30.dp)),
+                    border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outline),
+                    colors = ChipDefaults.chipColors(backgroundColor = Color.Transparent)) {
                     Row {
                         Text(text = "Last 6 Months", style = MaterialTheme.typography.titleMedium)
                         Icon(imageVector = Icons.Rounded.KeyboardArrowDown, contentDescription = null)
@@ -253,13 +278,24 @@ private fun WeightCardCompose(modifier: Modifier = Modifier) {
                 }
             }
 
-            Divider()
+            Divider(color = MaterialTheme.colorScheme.outline)
 
-            Chart(
-                chart = lineChart(),
-                model = chartEntryModel,
-                startAxis = rememberStartAxis(),
-                bottomAxis = rememberBottomAxis(),
+//            Chart(
+//                chart = lineChart(),
+//                model = chartEntryModel,
+//                startAxis = rememberStartAxis(),
+//                bottomAxis = rememberBottomAxis(),
+//                horizontalLayout = com.patrykandpatrick.vico.core.chart.layout.HorizontalLayout.fullWidth()
+//            )
+
+            CartesianChartHost(
+                rememberCartesianChart(
+                    rememberLineCartesianLayer(axisValueOverrider = AxisValueOverrider.fixed(minY = 55f, maxY = 80f)),
+                    startAxis = rememberStartAxis(itemPlacer = AxisItemPlacer.Vertical.step(step = { 5f }, false)),
+                    bottomAxis = rememberBottomAxis(valueFormatter = bottomAxisValueFormatter),
+                ),
+                modelProducer,
+//                horizontalLayout = com.patrykandpatrick.vico.core.chart.layout.HorizontalLayout.fullWidth()
             )
         }
     }
@@ -269,7 +305,8 @@ private fun WeightCardCompose(modifier: Modifier = Modifier) {
 @Composable
 private fun BmiCardCompose(modifier: Modifier = Modifier) {
 
-    val chartEntryModel = entryModelOf(4f, 12f, 8f, 16f)
+    val modelProducer = remember { CartesianChartModelProducer.build() }
+    LaunchedEffect(Unit) { modelProducer.tryRunTransaction { lineSeries { series(4, 12, 8, 16) } } }
 
     Card(border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)) {
         Column(modifier = modifier
@@ -291,11 +328,13 @@ private fun BmiCardCompose(modifier: Modifier = Modifier) {
 
             Divider()
 
-            Chart(
-                chart = lineChart(),
-                model = chartEntryModel,
-                startAxis = rememberStartAxis(),
-                bottomAxis = rememberBottomAxis(),
+            CartesianChartHost(
+                rememberCartesianChart(
+                    rememberLineCartesianLayer(),
+                    startAxis = rememberStartAxis(),
+                    bottomAxis = rememberBottomAxis(),
+                ),
+                modelProducer,
             )
         }
     }
