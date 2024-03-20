@@ -159,7 +159,7 @@ fun ForecastSlider(dates: List<String>, value: Float, onValueChange: (Int) -> Un
                     modifier = Modifier
                         .scale(scaleX = 1f, scaleY = 3f)
                         .clip(RoundedCornerShape(100)),
-                    sliderPositions = sliderPositions,
+                    sliderState = sliderPositions,
                     colors = SliderDefaults.colors(
                         activeTrackColor = Color.Transparent,
                         activeTickColor = MaterialTheme.colorScheme.outline,
