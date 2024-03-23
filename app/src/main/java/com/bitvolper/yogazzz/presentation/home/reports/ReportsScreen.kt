@@ -54,23 +54,42 @@ import com.bitvolper.yogazzz.domain.model.Reports
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.utility.Resource
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
+import com.patrykandpatrick.vico.compose.axis.horizontal.rememberTopAxis
+import com.patrykandpatrick.vico.compose.axis.vertical.rememberEndAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
 import com.patrykandpatrick.vico.compose.chart.CartesianChartHost
 import com.patrykandpatrick.vico.compose.chart.layer.rememberColumnCartesianLayer
 import com.patrykandpatrick.vico.compose.chart.layer.rememberLineCartesianLayer
+import com.patrykandpatrick.vico.compose.chart.layer.rememberLineSpec
 import com.patrykandpatrick.vico.compose.chart.layout.fullWidth
 import com.patrykandpatrick.vico.compose.chart.rememberCartesianChart
+import com.patrykandpatrick.vico.compose.chart.zoom.rememberVicoZoomState
+import com.patrykandpatrick.vico.compose.component.rememberLineComponent
+import com.patrykandpatrick.vico.compose.component.shape.roundedCornerShape
+import com.patrykandpatrick.vico.compose.component.shape.shader.color
 import com.patrykandpatrick.vico.core.axis.AxisItemPlacer
 import com.patrykandpatrick.vico.core.axis.AxisPosition
 import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
+import com.patrykandpatrick.vico.core.chart.DefaultPointConnector
+import com.patrykandpatrick.vico.core.chart.layer.ColumnCartesianLayer
 import com.patrykandpatrick.vico.core.chart.values.AxisValueOverrider
+import com.patrykandpatrick.vico.core.component.shape.Shapes
+import com.patrykandpatrick.vico.core.component.shape.shader.DynamicShaders
+import com.patrykandpatrick.vico.core.marker.Marker
+import com.patrykandpatrick.vico.core.marker.MarkerLabelFormatter
+import com.patrykandpatrick.vico.core.marker.MarkerVisibilityChangeListener
 import com.patrykandpatrick.vico.core.model.CartesianChartModelProducer
 import com.patrykandpatrick.vico.core.model.columnSeries
 import com.patrykandpatrick.vico.core.model.lineSeries
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import timber.log.Timber
+import java.util.Timer
 import kotlin.random.Random
 
+private const val TAG = "ReportsScreen"
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ReportsScreen(modifier: Modifier = Modifier,
@@ -176,7 +195,30 @@ private fun TitleCardCompose(modifier: Modifier = Modifier, reports: Reports = R
 private fun StatisticsCardCompose(modifier: Modifier = Modifier) {
 
     val modelProducer = remember { CartesianChartModelProducer.build() }
-    LaunchedEffect(Unit) { modelProducer.tryRunTransaction { columnSeries { series(4, 12, 8, 16) } } }
+
+
+    val datesOfWeek = listOf("16", "17", "18", "19", "20", "21", "22")
+    val bottomAxisValueFormatter =
+        AxisValueFormatter<AxisPosition.Horizontal.Bottom> { x, _, _ -> datesOfWeek[x.toInt() % datesOfWeek.size] }
+
+    LaunchedEffect(Unit) {
+        withContext(Dispatchers.Default) {
+            modelProducer.tryRunTransaction {
+                columnSeries {
+                    repeat(3) {
+                        series(
+                            List(Defaults.ENTRY_COUNT) {
+                                Defaults.COLUMN_LAYER_MIN_Y +
+                                        Random.nextFloat() * Defaults.COLUMN_LAYER_RELATIVE_MAX_Y
+                            },
+                        )
+                    }
+                }
+                lineSeries { series(List(Defaults.ENTRY_COUNT) { Random.nextFloat() * Defaults.MAX_Y }) }
+            }
+            delay(Defaults.TRANSACTION_INTERVAL_MS)
+        }
+    }
 
     Card(border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)) {
         Column(modifier = modifier
@@ -192,7 +234,7 @@ private fun StatisticsCardCompose(modifier: Modifier = Modifier) {
                 Spacer(modifier = modifier.weight(1f))
 
                 Chip(onClick = { /*TODO*/ },
-                    modifier = modifier.then(modifier.requiredHeight(30.dp)),
+                    modifier = modifier.then(modifier.requiredHeight(35.dp)),
                     border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outline),
                     colors = ChipDefaults.chipColors(backgroundColor = Color.Transparent)) {
                     Row {
@@ -205,12 +247,24 @@ private fun StatisticsCardCompose(modifier: Modifier = Modifier) {
             Divider(color = MaterialTheme.colorScheme.outline)
 
             CartesianChartHost(
+                chart =
                 rememberCartesianChart(
-                    rememberColumnCartesianLayer(),
-                    startAxis = rememberStartAxis(),
-                    bottomAxis = rememberBottomAxis(),
+                    rememberColumnCartesianLayer(
+                        columns =
+                        columnColors.map {
+                            rememberLineComponent(color = it, thickness = 8.dp, shape = Shapes.roundedCornerShape(10.dp))
+                        },
+                    ),
+                    bottomAxis = rememberBottomAxis(
+                        valueFormatter = bottomAxisValueFormatter
+                    ),
                 ),
-                modelProducer,
+                modelProducer = modelProducer,
+                modifier = modifier,
+                marker = rememberMarker(),
+                runInitialAnimation = false,
+                zoomState = rememberVicoZoomState(zoomEnabled = false),
+//                horizontalLayout = com.patrykandpatrick.vico.core.chart.layout.HorizontalLayout.fullWidth()
             )
 
             Divider(color = MaterialTheme.colorScheme.outline)
@@ -243,6 +297,11 @@ private fun StatisticsCardCompose(modifier: Modifier = Modifier) {
 @Composable
 private fun WeightCardCompose(modifier: Modifier = Modifier) {
 
+    val color = MaterialTheme.colorScheme.primary
+    val marker = rememberMarker().apply { labelFormatter = MarkerLabelFormatter { markedEntries, chartValues ->
+        markedEntries.map { it.entry.y }.joinToString().plus(" kg")
+    } }
+
     val modelProducer = remember { CartesianChartModelProducer.build() }
     LaunchedEffect(Unit) { modelProducer.tryRunTransaction { lineSeries { series(78, 66, 75, 78, 70, 78) } } }
 
@@ -264,7 +323,7 @@ private fun WeightCardCompose(modifier: Modifier = Modifier) {
                 Spacer(modifier = modifier.weight(1f))
 
                 Chip(onClick = { /*TODO*/ },
-                    modifier = modifier.then(modifier.requiredHeight(30.dp)),
+                    modifier = modifier.then(modifier.requiredHeight(35.dp)),
                     border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outline),
                     colors = ChipDefaults.chipColors(backgroundColor = Color.Transparent)) {
                     Row {
@@ -290,12 +349,23 @@ private fun WeightCardCompose(modifier: Modifier = Modifier) {
 
             CartesianChartHost(
                 rememberCartesianChart(
-                    rememberLineCartesianLayer(axisValueOverrider = AxisValueOverrider.fixed(minY = 55f, maxY = 80f)),
-                    startAxis = rememberStartAxis(itemPlacer = AxisItemPlacer.Vertical.step(step = { 5f }, false)),
-                    bottomAxis = rememberBottomAxis(valueFormatter = bottomAxisValueFormatter),
+                    rememberLineCartesianLayer(
+                        lines = listOf(rememberLineSpec(shader = DynamicShaders.color(color), thickness = 4.dp)),
+                        axisValueOverrider = AxisValueOverrider.fixed(minY = 55f, maxY = 80f)
+                    ),
+
+                    startAxis = rememberStartAxis(itemPlacer = AxisItemPlacer.Vertical.step(step = { 5f }, false), guideline = null),
+                    bottomAxis = rememberBottomAxis(
+                        valueFormatter = bottomAxisValueFormatter,
+                        itemPlacer = AxisItemPlacer.Horizontal.default(addExtremeLabelPadding = true),
+                        guideline = null,
+                        ),
+                    persistentMarkers = mapOf(PERSISTENT_MARKER_X to marker),
                 ),
                 modelProducer,
-//                horizontalLayout = com.patrykandpatrick.vico.core.chart.layout.HorizontalLayout.fullWidth()
+                horizontalLayout = com.patrykandpatrick.vico.core.chart.layout.HorizontalLayout.fullWidth(),
+                zoomState = rememberVicoZoomState(zoomEnabled = false),
+                marker = marker
             )
         }
     }
@@ -339,6 +409,12 @@ private fun BmiCardCompose(modifier: Modifier = Modifier) {
         }
     }
 }
+
+
+private const val PERSISTENT_MARKER_X = 3f
+
+
+private val columnColors = listOf(Color(0xFFf54336), Color(0xFF4db05a), Color(0xFFfe9e26))
 
 
 @Preview(showBackground = true, showSystemUi = true)

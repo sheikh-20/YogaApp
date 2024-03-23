@@ -140,7 +140,7 @@ private fun OnboardingContent(modifier: Modifier = Modifier, state: PagerState =
             description = "YogazzZ personalizes yoga just for you. Whether you're a beginner or a yoga enthusiast, our app adapt to your needs"
         ),
         HorizontalData(
-            image = R.drawable.ic_home_screen,
+            image = R.drawable.ic_home_screen3,
             title = "Stay Informed About Your Yoga Progress",
             description = "Stay motivated and track your progress effortlessly. Start your yoga journey today and achieve the results you've always wanted"
         ),
