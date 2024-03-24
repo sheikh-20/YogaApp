@@ -193,15 +193,9 @@ fun LoginWithPasswordScreen(modifier: Modifier = Modifier,
                     )
                 }
 
-                Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start) {
-                    Checkbox(checked = false, onCheckedChange = {})
-                    Text(text = "Remember me", style = MaterialTheme.typography.labelLarge)
 
-                    Spacer(modifier = modifier.weight(1f))
-
-                    TextButton(onClick = { /*TODO*/ }) {
-                        Text(text = "Forgot Password")
-                    }
+                TextButton(onClick = { /*TODO*/ }, modifier = modifier.fillMaxWidth().wrapContentWidth(align = Alignment.CenterHorizontally)) {
+                    Text(text = "Forgot Password")
                 }
             }
 
