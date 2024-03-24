@@ -12,12 +12,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Chip
 import androidx.compose.material.ChipDefaults
+import androidx.compose.material.DropdownMenu
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ExposedDropdownMenuDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccessTime
 import androidx.compose.material.icons.rounded.Edit
@@ -31,6 +34,9 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -189,13 +195,15 @@ private fun TitleCardCompose(modifier: Modifier = Modifier, reports: Reports = R
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 private fun StatisticsCardCompose(modifier: Modifier = Modifier) {
 
     val modelProducer = remember { CartesianChartModelProducer.build() }
 
+    var isExpanded by remember { mutableStateOf(false) }
+    var selectedPeriod by remember { mutableStateOf("This Week") }
 
     val datesOfWeek = listOf("16", "17", "18", "19", "20", "21", "22")
     val bottomAxisValueFormatter =
@@ -232,16 +240,13 @@ private fun StatisticsCardCompose(modifier: Modifier = Modifier) {
                 )
 
                 Spacer(modifier = modifier.weight(1f))
-
-                Chip(onClick = { /*TODO*/ },
-                    modifier = modifier.then(modifier.requiredHeight(35.dp)),
-                    border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outline),
-                    colors = ChipDefaults.chipColors(backgroundColor = Color.Transparent)) {
-                    Row {
-                        Text(text = "This Week", style = MaterialTheme.typography.titleMedium)
-                        Icon(imageVector = Icons.Rounded.KeyboardArrowDown, contentDescription = null)
-                    }
-                }
+                
+                ExposedBottomMenu(
+                    isExpanded = isExpanded,
+                    onExpand = { isExpanded = it },
+                    selectedPeriod = selectedPeriod,
+                    onSelectPeriod = { selectedPeriod = it }
+                )
             }
 
             Divider(color = MaterialTheme.colorScheme.outline)
@@ -297,6 +302,9 @@ private fun StatisticsCardCompose(modifier: Modifier = Modifier) {
 @Composable
 private fun WeightCardCompose(modifier: Modifier = Modifier) {
 
+    var isExpanded by remember { mutableStateOf(false) }
+    var selectedPeriod by remember { mutableStateOf("This Week") }
+
     val color = MaterialTheme.colorScheme.primary
     val marker = rememberMarker().apply { labelFormatter = MarkerLabelFormatter { markedEntries, chartValues ->
         markedEntries.map { it.entry.y }.joinToString().plus(" kg")
@@ -322,15 +330,12 @@ private fun WeightCardCompose(modifier: Modifier = Modifier) {
 
                 Spacer(modifier = modifier.weight(1f))
 
-                Chip(onClick = { /*TODO*/ },
-                    modifier = modifier.then(modifier.requiredHeight(35.dp)),
-                    border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outline),
-                    colors = ChipDefaults.chipColors(backgroundColor = Color.Transparent)) {
-                    Row {
-                        Text(text = "Last 6 Months", style = MaterialTheme.typography.titleMedium)
-                        Icon(imageVector = Icons.Rounded.KeyboardArrowDown, contentDescription = null)
-                    }
-                }
+                ExposedBottomMenu(
+                    isExpanded = isExpanded,
+                    onExpand = { isExpanded = it },
+                    selectedPeriod = selectedPeriod,
+                    onSelectPeriod = { selectedPeriod = it }
+                )
 
                 IconButton(onClick = { /*TODO*/ }) {
                     Icon(imageVector = Icons.Rounded.Edit, contentDescription = null)
@@ -375,9 +380,6 @@ private fun WeightCardCompose(modifier: Modifier = Modifier) {
 @Composable
 private fun BmiCardCompose(modifier: Modifier = Modifier) {
 
-    val modelProducer = remember { CartesianChartModelProducer.build() }
-    LaunchedEffect(Unit) { modelProducer.tryRunTransaction { lineSeries { series(4, 12, 8, 16) } } }
-
     Card(border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)) {
         Column(modifier = modifier
             .fillMaxWidth()
@@ -396,16 +398,13 @@ private fun BmiCardCompose(modifier: Modifier = Modifier) {
                 }
             }
 
-            Divider()
+            Divider(color = MaterialTheme.colorScheme.outline)
 
-            CartesianChartHost(
-                rememberCartesianChart(
-                    rememberLineCartesianLayer(),
-                    startAxis = rememberStartAxis(),
-                    bottomAxis = rememberBottomAxis(),
-                ),
-                modelProducer,
-            )
+            Spacer(modifier = modifier.requiredHeight(8.dp))
+
+            GaugeChart(modifier = modifier
+                .fillMaxWidth()
+                .requiredHeight(150.dp), percentValue = 10, primaryColor = Color.Red)
         }
     }
 }
