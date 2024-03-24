@@ -89,6 +89,8 @@ fun SignupWithPasswordScreen(modifier: Modifier = Modifier,
 
     var isLoading by remember { mutableStateOf(false) }
 
+    var isReadCondition by remember { mutableStateOf(false) }
+
     if (isLoading) {
         showDialog(ShowOnboardDialog.Signup)
     } else {
@@ -198,8 +200,7 @@ fun SignupWithPasswordScreen(modifier: Modifier = Modifier,
                 }
 
                 Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start) {
-                    Checkbox(checked = false, onCheckedChange = {})
-
+                    Checkbox(checked = isReadCondition, onCheckedChange = { isReadCondition = true })
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(text = "I agree to YogazzZ Terms & Conditions ", style = MaterialTheme.typography.labelLarge)
                     }
@@ -258,7 +259,8 @@ fun SignupWithPasswordScreen(modifier: Modifier = Modifier,
                     )
                     .fillMaxWidth()
                     .requiredHeight(50.dp)
-                    .padding(horizontal = 16.dp)) {
+                    .padding(horizontal = 16.dp),
+                enabled = isReadCondition) {
 
                 if (isLoading) {
                     CircularProgressIndicator(modifier = modifier.size(30.dp), strokeWidth = 2.dp, trackColor = Color.White)
