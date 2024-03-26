@@ -7,7 +7,11 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredWidth
+import androidx.compose.material.Chip
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +31,7 @@ import com.bitvolper.yogazzz.utility.AccountSetupContinueComposable
 import com.bitvolper.yogazzz.utility.ListPicker
 import com.bitvolper.yogazzz.utility.toImmutableWrapper
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun CollectHeightScreen(modifier: Modifier = Modifier,
                         paddingValues: PaddingValues = PaddingValues(),
@@ -49,10 +54,17 @@ fun CollectHeightScreen(modifier: Modifier = Modifier,
 
         Text(text = "How tall are you?", style = MaterialTheme.typography.bodyLarge)
 
+        Button(onClick = {  }) {
+            Text(text = "cm")
+        }
+
         com.bitvolper.yogazzz.presentation.accountsetup.utility.ListPicker(
             initialValue = value,
             list = values.toImmutableWrapper(),
-            modifier = modifier.weight(1f).requiredWidth(200.dp).padding(vertical = 8.dp),
+            modifier = modifier
+                .weight(1f)
+                .requiredWidth(200.dp)
+                .padding(vertical = 8.dp),
             onValueChange = {
                 value = it
             },

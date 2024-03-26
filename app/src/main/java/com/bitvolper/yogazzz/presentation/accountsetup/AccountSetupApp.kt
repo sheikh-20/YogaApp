@@ -135,6 +135,7 @@ fun AccountSetupApp(modifier: Modifier = Modifier,
                         accountSetupViewModel.updateCurrentScreen()
                         navController.navigate(AccountSetupScreen.ExperienceLevel.name)
                     },
+                    currentBodyShape = accountInfoUIState.currentBodyShape ?: 4,
                     onContinueClick = {
                         accountSetupViewModel.updateCurrentScreen()
                         accountSetupViewModel.updateDesiredBodyShape(it)

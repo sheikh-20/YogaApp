@@ -4,10 +4,12 @@ package com.bitvolper.yogazzz.presentation.accountsetup.utility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Divider
@@ -29,6 +31,7 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.bitvolper.yogazzz.utility.ImmutableWrapper
 import com.bitvolper.yogazzz.utility.fadingEdge
 import com.bitvolper.yogazzz.utility.toDp
@@ -47,8 +50,7 @@ fun <E> ListPicker(
     outOfBoundsPageCount: Int = 1,
     textStyle: TextStyle = LocalTextStyle.current,
     verticalPadding: Dp = 16.dp,
-    dividerColor: Color = MaterialTheme.colorScheme.outline,
-    dividerThickness: Dp = 1.dp
+    dividerThickness: Dp = 2.dp
 ) {
     val listSize = list.value.size
     val coercedOutOfBoundsPageCount = outOfBoundsPageCount.coerceIn(0..listSize / 2)
@@ -132,17 +134,20 @@ fun <E> ListPicker(
                         overflow = TextOverflow.Ellipsis,
                         style = textStyle,
                         modifier = Modifier.padding(vertical = verticalPadding),
-                        color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Bold
                     )
 
-                    in intervals[1]..<intervals[2] -> Text(
-                        text = list.value[(index - coercedOutOfBoundsPageCount) % listSize].format(),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        style = textStyle,
-                        modifier = Modifier.padding(vertical = verticalPadding),
-                    )
+                    in intervals[1]..<intervals[2] ->
+                            Text(
+                                text = list.value[(index - coercedOutOfBoundsPageCount) % listSize].format(),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                style = textStyle ,
+                                modifier = Modifier.padding(vertical = verticalPadding),
+                                color = if (list.value[(index - coercedOutOfBoundsPageCount) % listSize].format() == initialValue) MaterialTheme.colorScheme.primary else Color.Unspecified,
+                                fontWeight = if (list.value[(index - coercedOutOfBoundsPageCount) % listSize].format() == initialValue) FontWeight.Bold else FontWeight.Normal,
+                            )
+
 
                     in intervals[2]..<intervals[3] -> Text(
                         text = if (wrapSelectorWheel) list.value[(index - coercedOutOfBoundsPageCount) % listSize].format() else "",
@@ -150,7 +155,6 @@ fun <E> ListPicker(
                         overflow = TextOverflow.Ellipsis,
                         style = textStyle,
                         modifier = Modifier.padding(vertical = verticalPadding),
-                        color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Bold
                     )
                 }
