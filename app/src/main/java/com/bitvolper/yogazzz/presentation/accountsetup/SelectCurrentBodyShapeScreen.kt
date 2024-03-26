@@ -37,6 +37,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
@@ -57,10 +58,11 @@ fun SelectCurrentBodyShapeScreen(modifier: Modifier = Modifier,
                                  onContinueClick: (Int) -> Unit = { _ -> }) {
 
     var currentPosition by remember {
-        mutableIntStateOf(0)
+        mutableIntStateOf(4)
     }
 
     val outlineColor = MaterialTheme.colorScheme.outline
+
 
     Column(modifier = modifier
         .fillMaxSize()
@@ -85,10 +87,38 @@ fun SelectCurrentBodyShapeScreen(modifier: Modifier = Modifier,
                 drawOval(color = outlineColor, size = Size(width = size.width / 3f, height = 80.dp.toPx()), topLeft = Offset(x = size.width / 3f, y = canvasSize))
             }
 
-            Image(painter = painterResource(id = R.drawable.ic_obese),
-                contentDescription = null,
-                modifier = modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop)
+            when (currentPosition) {
+                0 -> {
+                    Image(painter = painterResource(id = R.drawable.ic_muscular),
+                        contentDescription = null,
+                        modifier = modifier.fillMaxSize())
+                }
+                1 -> {
+                    Image(painter = painterResource(id = R.drawable.ic_lean),
+                        contentDescription = null,
+                        modifier = modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop)
+                }
+                2 -> {
+                    Image(painter = painterResource(id = R.drawable.ic_lean),
+                        contentDescription = null,
+                        modifier = modifier.fillMaxSize().scale(1.05f, 1f),
+                        contentScale = ContentScale.Crop)
+                }
+                3 -> {
+                    Image(painter = painterResource(id = R.drawable.ic_lean),
+                        contentDescription = null,
+                        modifier = modifier.fillMaxSize().scale(1.2f, 1f),
+                        contentScale = ContentScale.Crop)
+                }
+                4 -> {
+                    Image(painter = painterResource(id = R.drawable.ic_obese),
+                        contentDescription = null,
+                        modifier = modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop)
+                }
+            }
+
         }
 
 

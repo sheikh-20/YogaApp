@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowForwardIos
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DatePicker
@@ -116,10 +117,13 @@ fun DisplayYogaPlanScreen(modifier: Modifier = Modifier,
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(16.dp)) {
 
-                OutlinedButton(onClick = onContinueClick, modifier = modifier
-                    .weight(1f)
-                    .requiredHeight(50.dp)) {
-                    Text(text = "Go to Homepage")
+                OutlinedButton(
+                    onClick = onContinueClick,
+                    modifier = modifier.weight(1f).requiredHeight(50.dp),
+                    border = BorderStroke(0.dp, Color.Transparent),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
+
+                    Text(text = "Go to Homepage", color = MaterialTheme.colorScheme.onPrimaryContainer)
                 }
 
                 Button(

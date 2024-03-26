@@ -52,6 +52,7 @@ import com.bitvolper.yogazzz.utility.AccountSetupContinueComposable
 fun SelectDesiredBodyShapeScreen(modifier: Modifier = Modifier,
                                  paddingValues: PaddingValues = PaddingValues(),
                                  onSkipClick: () -> Unit = {  },
+                                 currentBodyShape: Int = 4,
                                  onContinueClick: (Int) -> Unit = { _ -> }) {
 
     var currentPosition by remember {
@@ -98,12 +99,39 @@ fun SelectDesiredBodyShapeScreen(modifier: Modifier = Modifier,
                         drawOval(color = outlineColor, size = Size(width = size.width / 1.5f, height = 80.dp.toPx()), topLeft = Offset(x = size.width / 6f, y = canvasSize))
                     }
 
-                    Image(painter = painterResource(id = R.drawable.ic_lean), contentDescription = null,
-                        modifier = modifier
-                            .fillMaxSize(),
-                        contentScale = ContentScale.Crop)
+                    when (currentBodyShape) {
+                        0 -> {
+                            Image(painter = painterResource(id = R.drawable.ic_muscular),
+                                contentDescription = null,
+                                modifier = modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop)
+                        }
+                        1 -> {
+                            Image(painter = painterResource(id = R.drawable.ic_lean),
+                                contentDescription = null,
+                                modifier = modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop)
+                        }
+                        2 -> {
+                            Image(painter = painterResource(id = R.drawable.ic_lean),
+                                contentDescription = null,
+                                modifier = modifier.fillMaxSize().scale(1.05f, 1f),
+                                contentScale = ContentScale.Crop)
+                        }
+                        3 -> {
+                            Image(painter = painterResource(id = R.drawable.ic_lean),
+                                contentDescription = null,
+                                modifier = modifier.fillMaxSize().scale(1.2f, 1f),
+                                contentScale = ContentScale.Crop)
+                        }
+                        4 -> {
+                            Image(painter = painterResource(id = R.drawable.ic_obese),
+                                contentDescription = null,
+                                modifier = modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop)
+                        }
+                    }
                 }
-
 
                 Box(modifier = modifier.fillMaxHeight().weight(1f)) {
 
@@ -114,10 +142,38 @@ fun SelectDesiredBodyShapeScreen(modifier: Modifier = Modifier,
                         drawOval(color = outlineColor, size = Size(width = size.width / 1.5f, height = 80.dp.toPx()), topLeft = Offset(x = size.width / 6f, y = canvasSize))
                     }
 
-                    Image(painter = painterResource(id = R.drawable.ic_obese), contentDescription = null,
-                        modifier = modifier
-                            .fillMaxSize(),
-                        contentScale = ContentScale.Crop)
+                    when (currentPosition) {
+                        0 -> {
+                            Image(painter = painterResource(id = R.drawable.ic_muscular),
+                                contentDescription = null,
+                                modifier = modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop)
+                        }
+                        1 -> {
+                            Image(painter = painterResource(id = R.drawable.ic_lean),
+                                contentDescription = null,
+                                modifier = modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop)
+                        }
+                        2 -> {
+                            Image(painter = painterResource(id = R.drawable.ic_lean),
+                                contentDescription = null,
+                                modifier = modifier.fillMaxSize().scale(1.05f, 1f),
+                                contentScale = ContentScale.Crop)
+                        }
+                        3 -> {
+                            Image(painter = painterResource(id = R.drawable.ic_lean),
+                                contentDescription = null,
+                                modifier = modifier.fillMaxSize().scale(1.2f, 1f),
+                                contentScale = ContentScale.Crop)
+                        }
+                        4 -> {
+                            Image(painter = painterResource(id = R.drawable.ic_obese),
+                                contentDescription = null,
+                                modifier = modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop)
+                        }
+                    }
                 }
             }
         }

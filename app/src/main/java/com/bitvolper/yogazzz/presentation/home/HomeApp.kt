@@ -5,6 +5,7 @@ import android.app.Activity
 import android.os.Build
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -23,6 +24,7 @@ import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.Spa
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -287,8 +289,10 @@ private fun BottomSheetContent(modifier: Modifier = Modifier, onNegativeClick: (
 
             OutlinedButton(onClick = onNegativeClick, modifier = modifier
                 .weight(1f)
-                .requiredHeight(50.dp)) {
-                Text(text = stringResource(id = R.string.cancel))
+                .requiredHeight(50.dp),
+                border = BorderStroke(0.dp, Color.Transparent),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
+                Text(text = stringResource(id = R.string.cancel), color = MaterialTheme.colorScheme.onPrimaryContainer)
             }
 
             Button(onClick = onPositiveClick, modifier = modifier

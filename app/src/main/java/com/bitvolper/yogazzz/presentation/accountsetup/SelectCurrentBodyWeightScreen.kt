@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -48,6 +49,10 @@ fun SelectCurrentBodyWeightScreen(modifier: Modifier = Modifier,
         Text(text = "Your Current Weight", style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.SemiBold)
 
         Text(text = "Share your current weight.", style = MaterialTheme.typography.bodyLarge)
+
+        Button(onClick = {  }) {
+            Text(text = "kg")
+        }
 
         com.bitvolper.yogazzz.presentation.accountsetup.utility.ListPicker(
             initialValue = value,
