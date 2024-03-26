@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -49,6 +50,11 @@ fun SelectTargetBodyWeightScreen(modifier: Modifier = Modifier,
         Text(text = "Your Target Weight", style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.SemiBold)
 
         Text(text = "Where would you like to be?", style = MaterialTheme.typography.bodyLarge)
+
+
+        Button(onClick = {  }) {
+            Text(text = "kg")
+        }
 
         com.bitvolper.yogazzz.presentation.accountsetup.utility.ListPicker(
             initialValue = value,
