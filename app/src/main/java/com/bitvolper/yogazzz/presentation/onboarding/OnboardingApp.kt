@@ -28,6 +28,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.bitvolper.yogazzz.presentation.dialog.LoginDialog
 import com.bitvolper.yogazzz.presentation.dialog.SignupDialog
+import com.bitvolper.yogazzz.presentation.onboarding.forgotpassword.ContactDetailsScreen
 import com.bitvolper.yogazzz.presentation.onboarding.login.LoginScreen
 import com.bitvolper.yogazzz.presentation.onboarding.login.LoginWithPasswordScreen
 import com.bitvolper.yogazzz.presentation.onboarding.signup.SignupWithPasswordScreen
@@ -105,7 +106,8 @@ fun OnboardingApp(modifier: Modifier = Modifier,
                     snackbarHostState = snackbarHostState,
                     loginUIState = loginUIState,
                     showDialog = { showOnboardDialog = it },
-                    onUpdateUserProfile = onboardingViewModel::updateUserProfile
+                    onUpdateUserProfile = onboardingViewModel::updateUserProfile,
+                    onForgotPasswordClick = { navController.navigate(OnboardingScreen.ForgotPassword.name) }
                 )
             }
 
@@ -118,7 +120,16 @@ fun OnboardingApp(modifier: Modifier = Modifier,
                     onSocialSignIn = onSocialSignIn,
                     signupUIState = signupUIState,
                     showDialog = { showOnboardDialog = it },
-                    onUpdateUserProfile = onboardingViewModel::updateUserProfile
+                    onUpdateUserProfile = onboardingViewModel::updateUserProfile,
+                    onSignInClick = { navController.navigate(OnboardingScreen.LoginWithPassword.name) }
+                )
+            }
+
+            composable(route = OnboardingScreen.ForgotPassword.name) {
+                ContactDetailsScreen(
+                    email = onboardingViewModel.email,
+                    onPasswordResetOtp = onboardingViewModel::sendPasswordResetOtp,
+                    snackbarHostState = snackbarHostState
                 )
             }
         }
@@ -143,13 +154,13 @@ private fun OnboardingTopAppbar(navController: NavHostController) {
             )
         }
         else -> {
-        TopAppBar(
-            title = {  },
-            navigationIcon = { IconButton(onClick = { navController.navigateUp() }) {
-                Icon(imageVector = Icons.Outlined.ArrowBack, contentDescription = null)
-            } },
-            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
-        )
+            TopAppBar(
+                title = {  },
+                navigationIcon = { IconButton(onClick = { navController.navigateUp() }) {
+                    Icon(imageVector = Icons.Outlined.ArrowBack, contentDescription = null)
+                } },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+            )
         }
     }
 }
@@ -159,7 +170,7 @@ enum class ShowOnboardDialog {
 }
 
 enum class OnboardingScreen {
-    Start, Login, LoginWithPassword, SignupWithPassword,
+    Start, Login, LoginWithPassword, SignupWithPassword, ForgotPassword
 //    ResetPassword, CodeVerification, CreateNewPassword,
 
 }

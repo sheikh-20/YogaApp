@@ -4,11 +4,14 @@ import com.bitvolper.yogazzz.data.repository.AppThemePreferenceRepository
 import com.bitvolper.yogazzz.data.repository.AuthRepository
 import com.bitvolper.yogazzz.data.repository.HomeRepository
 import com.bitvolper.yogazzz.data.repository.NotificationPreferenceRepository
+import com.bitvolper.yogazzz.data.repository.PasswordResetRepository
 import com.bitvolper.yogazzz.domain.usecase.AppThemeUseCase
 import com.bitvolper.yogazzz.domain.usecase.GetAppThemeInteractors
 import com.bitvolper.yogazzz.domain.usecase.GetHomeUseCaseInteractors
+import com.bitvolper.yogazzz.domain.usecase.GetPasswordResetInteractors
 import com.bitvolper.yogazzz.domain.usecase.GetPushNotificationInteractors
 import com.bitvolper.yogazzz.domain.usecase.HomeUseCase
+import com.bitvolper.yogazzz.domain.usecase.PasswordResetUseCase
 import com.bitvolper.yogazzz.domain.usecase.PushNotificationUseCase
 import com.bitvolper.yogazzz.domain.usecase.SignInEmailInteractor
 import com.bitvolper.yogazzz.domain.usecase.SignInEmailUseCase
@@ -62,5 +65,11 @@ class UseCaseModule {
     @Singleton
     fun providesAppThemeUseCase(appThemePreferenceRepository: AppThemePreferenceRepository): AppThemeUseCase {
         return GetAppThemeInteractors(appThemePreferenceRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun providesPasswordResetUseCase(passwordResetRepository: PasswordResetRepository): PasswordResetUseCase {
+        return GetPasswordResetInteractors(passwordResetRepository)
     }
 }

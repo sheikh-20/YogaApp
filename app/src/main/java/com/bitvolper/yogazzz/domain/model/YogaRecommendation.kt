@@ -8,6 +8,7 @@ data class YogaRecommendation(
         val image: String? = null,
         val duration: String? = null,
         val level: String? = null,
-        val category: String? = null
+        val category: String? = null,
+        val vip: Boolean? = null
     )
 }
