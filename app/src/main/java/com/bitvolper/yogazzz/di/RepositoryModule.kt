@@ -8,6 +8,8 @@ import com.bitvolper.yogazzz.data.repository.GoogleRepositoryImpl
 import com.bitvolper.yogazzz.data.repository.HomeRepository
 import com.bitvolper.yogazzz.data.repository.HomeRepositoryImpl
 import com.bitvolper.yogazzz.data.repository.NotificationPreferenceRepository
+import com.bitvolper.yogazzz.data.repository.PasswordResetRepository
+import com.bitvolper.yogazzz.data.repository.PasswordResetRepositoryImpl
 import com.bitvolper.yogazzz.data.repository.SignInEmailRepositoryImpl
 import com.bitvolper.yogazzz.data.repository.SignUpEmailRepositoryImpl
 import dagger.Binds
@@ -43,5 +45,8 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun providesAppThemePreferenceImpl(getAppThemePreferenceRepositoryImpl: GetAppThemePreferenceRepositoryImpl): AppThemePreferenceRepository
+
+    @Binds
+    abstract fun providesResetPasswordRepositoryImpl(passwordResetRepositoryImpl: PasswordResetRepositoryImpl): PasswordResetRepository
 
 }

@@ -28,6 +28,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.ArrowForwardIos
+import androidx.compose.material.icons.rounded.Diamond
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -61,6 +62,7 @@ import com.bitvolper.yogazzz.domain.model.YogaRecommendation
 import com.bitvolper.yogazzz.presentation.categorydetail.CategoryDetailActivity
 import com.bitvolper.yogazzz.presentation.home.recommendation.RecommendationActivity
 import com.bitvolper.yogazzz.presentation.serenitydetail.SerenityDetailActivity
+import com.bitvolper.yogazzz.presentation.subscription.SubscriptionActivity
 import com.bitvolper.yogazzz.utility.Resource
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPagerIndicator
@@ -354,10 +356,15 @@ fun RecommendationCard(modifier: Modifier = Modifier,
 
     val context = LocalContext.current
 
-    Row(modifier = modifier.fillMaxWidth()
+    Row(modifier = modifier
+        .fillMaxWidth()
         .clickable(
             onClick = {
-                SerenityDetailActivity.startActivity(context as Activity, null)
+                if (recommendation.vip == true) {
+                    SubscriptionActivity.startActivity(context as Activity)
+                } else {
+                    SerenityDetailActivity.startActivity(context as Activity, null)
+                }
             },
             interactionSource = remember { MutableInteractionSource() },
             indication = null
@@ -367,17 +374,27 @@ fun RecommendationCard(modifier: Modifier = Modifier,
 
         Card(onClick = { }, modifier = modifier.padding(vertical = 4.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.outlineVariant)) {
 
-            AsyncImage(
-                model = ImageRequest.Builder(context = LocalContext.current)
-                    .data(recommendation.image)
-                    .crossfade(true)
-                    .build(),
-                error = painterResource(id = R.drawable.ic_broken_image),
-                placeholder = painterResource(id = R.drawable.ic_image_placeholder),
-                contentDescription = null,
-                modifier = modifier
-                    .size(height = 100.dp, width = 100.dp),
-                contentScale = ContentScale.Crop)
+            Box(modifier = modifier.size(height = 100.dp, width = 100.dp)) {
+                AsyncImage(
+                    model = ImageRequest.Builder(context = LocalContext.current)
+                        .data(recommendation.image)
+                        .crossfade(true)
+                        .build(),
+                    error = painterResource(id = R.drawable.ic_broken_image),
+                    placeholder = painterResource(id = R.drawable.ic_image_placeholder),
+                    contentDescription = null,
+                    modifier = modifier.size(height = 100.dp, width = 100.dp),
+                    contentScale = ContentScale.Crop)
+
+                if (recommendation.vip == true) {
+                    Icon(
+                        imageVector = Icons.Rounded.Diamond,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primaryContainer,
+                        modifier = modifier.fillMaxSize().wrapContentSize(align = Alignment.TopStart).padding(4.dp)
+                    )
+                }
+            }
 
         }
 

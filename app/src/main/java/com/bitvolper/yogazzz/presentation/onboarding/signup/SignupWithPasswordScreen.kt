@@ -80,7 +80,8 @@ fun SignupWithPasswordScreen(modifier: Modifier = Modifier,
                              onSocialSignIn: SharedFlow<Resource<AuthResult>>? = null,
                              signupUIState: OnboardUIState = OnboardUIState(),
                              showDialog: (ShowOnboardDialog) -> Unit = { _ -> },
-                             onUpdateUserProfile: () -> Unit = { }
+                             onUpdateUserProfile: () -> Unit = { },
+                             onSignInClick: () -> Unit = {  }
 ) {
 
     val context = LocalContext.current
@@ -210,7 +211,7 @@ fun SignupWithPasswordScreen(modifier: Modifier = Modifier,
                     .fillMaxWidth()
                     .wrapContentWidth(align = Alignment.CenterHorizontally), verticalAlignment = Alignment.CenterVertically) {
                     Text(text = "Already have an account?")
-                    TextButton(onClick = {  }) {
+                    TextButton(onClick = onSignInClick) {
                         Text(text = "Sign In", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
                     }
                 }

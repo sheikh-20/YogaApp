@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bitvolper.yogazzz.domain.model.AccountInfo
 import com.bitvolper.yogazzz.domain.usecase.HomeUseCase
+import com.bitvolper.yogazzz.domain.usecase.PasswordResetUseCase
 import com.bitvolper.yogazzz.domain.usecase.SignInEmailUseCase
 import com.bitvolper.yogazzz.domain.usecase.SignInGoogleUseCase
 import com.bitvolper.yogazzz.domain.usecase.SignUpEmailUseCase
@@ -34,7 +35,8 @@ data class OnboardUIState(val isEmailError: Boolean = false, val isPasswordError
 class OnboardingViewModel @Inject constructor(private val signInGoogleUseCase: SignInGoogleUseCase,
                                               private val signInEmailUseCase: SignInEmailUseCase,
                                               private val signUpEmailUseCase: SignUpEmailUseCase,
-                                              private val homeUseCase: HomeUseCase): ViewModel() {
+                                              private val homeUseCase: HomeUseCase,
+                                              private val passwordResetUseCase: PasswordResetUseCase): ViewModel() {
 
     private companion object {
         const val TAG = "OnboardingViewModel"
@@ -123,6 +125,11 @@ class OnboardingViewModel @Inject constructor(private val signInGoogleUseCase: S
         } catch (exception: IOException) {
             Timber.tag(TAG).e(exception)
         }
+    }
+
+
+    fun sendPasswordResetOtp() = viewModelScope.launch {
+        passwordResetUseCase.sendOtp(email)
     }
 
     fun signOut() = viewModelScope.launch {
