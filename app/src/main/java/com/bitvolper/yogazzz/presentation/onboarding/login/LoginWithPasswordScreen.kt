@@ -78,7 +78,8 @@ fun LoginWithPasswordScreen(modifier: Modifier = Modifier,
                             snackbarHostState: SnackbarHostState = SnackbarHostState(),
                             loginUIState: OnboardUIState = OnboardUIState(),
                             showDialog: (ShowOnboardDialog) -> Unit = { _ -> },
-                            onUpdateUserProfile: () -> Unit = { }
+                            onUpdateUserProfile: () -> Unit = { },
+                            onForgotPasswordClick: () -> Unit = { }
                             ) {
 
     val focusManager = LocalFocusManager.current
@@ -194,7 +195,7 @@ fun LoginWithPasswordScreen(modifier: Modifier = Modifier,
                 }
 
 
-                TextButton(onClick = { /*TODO*/ }, modifier = modifier.fillMaxWidth().wrapContentWidth(align = Alignment.CenterHorizontally)) {
+                TextButton(onClick = onForgotPasswordClick, modifier = modifier.fillMaxWidth().wrapContentWidth(align = Alignment.CenterHorizontally)) {
                     Text(text = "Forgot Password")
                 }
             }
