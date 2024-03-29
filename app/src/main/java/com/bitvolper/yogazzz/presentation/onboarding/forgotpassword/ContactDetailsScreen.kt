@@ -1,5 +1,6 @@
 package com.bitvolper.yogazzz.presentation.onboarding.forgotpassword
 
+import android.app.Activity
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -49,7 +50,8 @@ import kotlinx.coroutines.launch
 fun ContactDetailsScreen(modifier: Modifier = Modifier,
                          email: String = "",
                          onPasswordResetOtp: () -> Unit = { },
-                         snackbarHostState: SnackbarHostState = SnackbarHostState()) {
+                         snackbarHostState: SnackbarHostState = SnackbarHostState(),
+                         onComplete: () -> Unit = { }) {
 
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -98,11 +100,11 @@ fun ContactDetailsScreen(modifier: Modifier = Modifier,
                 Column {
                     Text(text = "Via email",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = Color.DarkGray)
+                        color = MaterialTheme.colorScheme.onBackground)
 
                     Text(text = email,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSecondary,
+                        color = MaterialTheme.colorScheme.onBackground,
                         fontWeight = FontWeight.Bold)
                 }
 
@@ -111,9 +113,10 @@ fun ContactDetailsScreen(modifier: Modifier = Modifier,
 
         Button(onClick = {
             onPasswordResetOtp()
-                       coroutineScope.launch {
-                           snackbarHostState.showSnackbar(message = "Password reset email sent successfully", duration = SnackbarDuration.Short)
-                       }
+            coroutineScope.launch {
+                snackbarHostState.showSnackbar(message = "Password reset email sent successfully", duration = SnackbarDuration.Short)
+                onComplete()
+            }
                          },
             modifier = modifier
                 .shadow(

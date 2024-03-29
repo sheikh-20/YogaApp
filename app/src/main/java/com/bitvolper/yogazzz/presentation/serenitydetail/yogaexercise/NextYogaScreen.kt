@@ -19,7 +19,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.SkipNext
-import androidx.compose.material.icons.rounded.SkipPrevious
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -27,6 +26,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,11 +44,17 @@ import coil.decode.VideoFrameDecoder
 import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.presentation.viewmodel.ExerciseUIState
+import timber.log.Timber
 
+private const val TAG = "NextYogaScreen"
 @Composable
 fun NextYogaScreen(modifier: Modifier = Modifier,
                    paddingValues: PaddingValues = PaddingValues(),
                    currentYogaExercise: ExerciseUIState = ExerciseUIState(),
+                   currentExerciseIndex: Int = 0,
+                   totalExerciseSize: Int = 0,
+                   onStartRestTimer: () -> Unit = {  },
+                   onStopRestTimer: () -> Unit = {  },
                    onSkipClick: () -> Unit = {  }) {
 
     val imageLoader = ImageLoader.Builder(LocalContext.current)
@@ -56,6 +62,16 @@ fun NextYogaScreen(modifier: Modifier = Modifier,
             add(VideoFrameDecoder.Factory())
         }
         .build()
+
+    LaunchedEffect(key1 = Unit) {
+        onStartRestTimer()
+    }
+
+    if (currentYogaExercise.restTimer <= 0) {
+        onStopRestTimer()
+        onSkipClick()
+        Timber.tag(TAG).d("Next yoga screen called!")
+    }
 
     Column(modifier = modifier
         .fillMaxSize()
@@ -70,7 +86,7 @@ fun NextYogaScreen(modifier: Modifier = Modifier,
 
 
         Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(text = "Next 4/11",
+            Text(text = "Next ${currentExerciseIndex.inc()}/$totalExerciseSize",
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center)
@@ -115,7 +131,7 @@ fun NextYogaScreen(modifier: Modifier = Modifier,
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.SemiBold)
 
-            Text(text = "00: 14",
+            Text(text = currentYogaExercise.restTimer.toString(),
                 style = MaterialTheme.typography.displaySmall,
                 modifier = modifier.fillMaxWidth(), 
                 textAlign = TextAlign.Center,

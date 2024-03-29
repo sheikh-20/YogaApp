@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Chip
@@ -40,6 +41,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -51,6 +53,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -68,9 +71,13 @@ fun MeditationStartScreen(modifier: Modifier = Modifier,
                           meditationUIState: Resource<Meditation> = Resource.Loading,
                           onCardClick: (Meditation.Data) -> Unit = { _ ->  }) {
 
-    var selectedCategory by remember {
-        mutableStateOf("All")
-    }
+    val category = listOf(Pair(0, "All"), Pair(1, "Calm"), Pair(2, "Breath"), Pair(3, "Gratitude"), Pair(4, "Morning"))
+    var selectedCategoryIndex by remember { mutableIntStateOf(0) }
+
+    val time = listOf(Pair(0, "All"), Pair(1, "< 10 mins"), Pair(2, "10 - 20 mins"), Pair(3, "> 20 mins"))
+    var selectedTimeIndex by remember { mutableIntStateOf(0) }
+
+    val color = MaterialTheme.colorScheme.primary
 
     Column(
         modifier = modifier.fillMaxSize(),
@@ -112,47 +119,41 @@ fun MeditationStartScreen(modifier: Modifier = Modifier,
         Column(modifier = modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(4.dp)) {
 
-            Row(modifier = modifier
-                .horizontalScroll(rememberScrollState())
-                .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            LazyRow(
+                modifier = modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp)
+            ) {
 
-                Chip(onClick = { /*TODO*/ },
-                    colors = ChipDefaults.chipColors()) {
-                    Text(text = "All", color = Color.Black)
-                }
-                Chip(onClick = { /*TODO*/ }, colors = ChipDefaults.chipColors(backgroundColor = Color.Transparent), border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outline)) {
-                    Text(text = "Calm")
-                }
-                Chip(onClick = { /*TODO*/ }, colors = ChipDefaults.chipColors(backgroundColor = Color.Transparent), border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outline)) {
-                    Text(text = "Breath")
-                }
-                Chip(onClick = { /*TODO*/ }, colors = ChipDefaults.chipColors(backgroundColor = Color.Transparent), border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outline)) {
-                    Text(text = "Gratitude")
-                }
-                Chip(onClick = { /*TODO*/ }, colors = ChipDefaults.chipColors(backgroundColor = Color.Transparent), border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outline)) {
-                    Text(text = "Morning")
+                items(category.size) {
+                    Chip(onClick = { selectedCategoryIndex = category[it].first },
+                        colors = ChipDefaults.chipColors(backgroundColor = if (selectedCategoryIndex == category[it].first) color else Color.Transparent),
+                        border = BorderStroke(width = 1.dp, color = if (selectedCategoryIndex == category[it].first) Color.Transparent else MaterialTheme.colorScheme.outline)
+                    ) {
+                        Text(text = category[it].second,
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.SemiBold,
+                            color = if (selectedCategoryIndex == category[it].first) Color.Black else Color.Unspecified)
+                    }
                 }
             }
 
-            Row(modifier = modifier
-                .horizontalScroll(rememberScrollState())
-                .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Chip(onClick = { /*TODO*/ },
-                    colors = ChipDefaults.chipColors()) {
-                    Text(text = "All", color = Color.Black)
-                }
-                Chip(onClick = { /*TODO*/ }, colors = ChipDefaults.chipColors(backgroundColor = Color.Transparent), border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outline)) {
-                    Text(text = "< 10 mins")
-                }
-                Chip(onClick = { /*TODO*/ }, colors = ChipDefaults.chipColors(backgroundColor = Color.Transparent), border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outline)) {
-                    Text(text = "10 - 20 mins")
-                }
-                Chip(onClick = { /*TODO*/ }, colors = ChipDefaults.chipColors(backgroundColor = Color.Transparent), border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outline)) {
-                    Text(text = "> 20 mins")
+            LazyRow(
+                modifier = modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp)
+            ) {
+
+                items(time.size) {
+                    Chip(onClick = { selectedTimeIndex = time[it].first },
+                        colors = ChipDefaults.chipColors(backgroundColor = if (selectedTimeIndex == time[it].first) color else Color.Transparent),
+                        border = BorderStroke(width = 1.dp, color = if (selectedTimeIndex == time[it].first) Color.Transparent else MaterialTheme.colorScheme.outline)
+                    ) {
+                        Text(text = time[it].second,
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.SemiBold,
+                            color = if (selectedTimeIndex == time[it].first) Color.Black else Color.Unspecified)
+                    }
                 }
             }
         }
@@ -171,9 +172,18 @@ fun MeditationStartScreen(modifier: Modifier = Modifier,
                 }
 
                 is Resource.Success -> {
+
+                    val data = meditationUIState.data.data?.filter {
+                        if (selectedCategoryIndex == 0) {
+                            true
+                        } else {
+                            it?.category?.lowercase() == category[selectedCategoryIndex].second.lowercase()
+                        }
+                    }
+
                     LazyColumn(modifier = modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp)) {
-                        items(meditationUIState.data.data?.size ?: return@LazyColumn) {
-                            MeditationCard(meditation = meditationUIState.data.data[it] ?: return@items, onCardClick = onCardClick)
+                        items(data?.size ?: return@LazyColumn) {
+                            MeditationCard(meditation = data[it] ?: return@items, onCardClick = onCardClick)
                         }
                     }
                 }

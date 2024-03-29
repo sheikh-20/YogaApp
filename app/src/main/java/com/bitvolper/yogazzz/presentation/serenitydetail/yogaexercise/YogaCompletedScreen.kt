@@ -2,6 +2,8 @@ package com.bitvolper.yogazzz.presentation.serenitydetail.yogaexercise
 
 import android.app.Activity
 import android.content.res.Configuration
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,6 +23,7 @@ import androidx.compose.material.icons.rounded.LocalFireDepartment
 import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material.icons.rounded.SelfImprovement
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -30,6 +33,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -38,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.bitvolper.yogazzz.R
+import com.bitvolper.yogazzz.presentation.home.account.showFeedbackDialog
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import kotlinx.coroutines.delay
 import nl.dionsegijn.konfetti.compose.KonfettiView
@@ -58,7 +63,13 @@ fun YogaCompletedScreen(modifier: Modifier = Modifier,
         updateReports()
         delay(3_000L)
         showSubscriptionSheet()
+
+
+        (context as Activity).showFeedbackDialog()
+
     }
+
+    BackHandler { (context as Activity).finish() }
 
     val party = listOf(Party(
         speed = 0f,
@@ -173,10 +184,14 @@ fun YogaCompletedScreen(modifier: Modifier = Modifier,
                     horizontalArrangement = Arrangement.spacedBy(16.dp)) {
 
 
-                    OutlinedButton(onClick = { (context as Activity).finish() }, modifier = modifier
-                        .weight(1f)
-                        .requiredHeight(50.dp)) {
-                        Text(text = "Go to Homepage")
+                    OutlinedButton(
+                        onClick = { (context as Activity).finish() },
+                        modifier = modifier
+                            .weight(1f)
+                            .requiredHeight(50.dp),
+                        border = BorderStroke(0.dp, Color.Transparent),
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
+                        Text(text = "Go to Homepage", color = MaterialTheme.colorScheme.onPrimaryContainer)
                     }
 
 

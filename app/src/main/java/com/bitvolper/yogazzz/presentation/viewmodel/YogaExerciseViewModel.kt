@@ -20,7 +20,9 @@ import javax.inject.Inject
 data class ExerciseUIState(val exercise: SerenityData.Data.Pose = SerenityData.Data.Pose(),
                            val timer: Int = 10,
                            val showExerciseDetails: Boolean = false,
-                           val exerciseTimer: Int = 30)
+                           val exerciseTimer: Int = 30,
+                           val restTimer: Int = 14,
+                           val soundEnabled: Boolean = true)
 
 @HiltViewModel
 class YogaExerciseViewModel @Inject constructor(val player: Player): ViewModel() {
@@ -32,6 +34,9 @@ class YogaExerciseViewModel @Inject constructor(val player: Player): ViewModel()
     }
 
     private lateinit var timer: CountDownTimer
+    private lateinit var restTimer: CountDownTimer
+
+
     private var timeInMilliSec: Long = TIME_LEFT_MILLI_SEC
     private var exerciseTimeInMilliSec: Long = EXERCISE_TIME_LEFT_MILLI_SEC
 
@@ -308,6 +313,44 @@ class YogaExerciseViewModel @Inject constructor(val player: Player): ViewModel()
     }
 
 
+    private fun onRestTimer() {
+        Timber.tag(TAG).d("OnRestTimer called!")
+
+        restTimer = object : CountDownTimer(14_000L, 1_000L) {
+
+            override fun onTick(millisUntilFinished: Long) {
+                timeInMilliSec = millisUntilFinished
+
+                _currentExercise.update {
+                    it.copy(
+                        restTimer = currentExercise.value.restTimer.dec()
+                    )
+                }
+            }
+
+            override fun onFinish() {
+
+                _currentExercise.update {
+                    it.copy(
+                        restTimer = 0
+                    )
+                }
+            }
+        }
+    }
+
+    fun onRestTimerStart() {
+        onRestTimer()
+        restTimer.start()
+    }
+
+    fun onRestTimerStop() {
+        restTimer.cancel()
+        _currentExercise.update {
+            it.copy(restTimer = 14)
+        }
+    }
+
     fun playerStart(filePath: String) {
         player.setMediaItem(MediaItem.fromUri(filePath))
         player.play()
@@ -315,6 +358,20 @@ class YogaExerciseViewModel @Inject constructor(val player: Player): ViewModel()
 
     private fun playerStop() {
         player.pause()
+    }
+
+    fun changeSoundSettings(toast: (String) -> Unit = { _ -> }) {
+        _currentExercise.update {
+            it.copy(soundEnabled = it.soundEnabled.not())
+        }
+
+        if (currentExercise.value.soundEnabled) {
+            player.volume = 0.7f
+            toast("Sound is turned on")
+        } else {
+            player.volume = 0f
+            toast("Sound is turned off")
+        }
     }
 
     override fun onCleared() {

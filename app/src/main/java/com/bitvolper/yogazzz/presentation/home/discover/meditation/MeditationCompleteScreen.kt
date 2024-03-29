@@ -1,5 +1,6 @@
 package com.bitvolper.yogazzz.presentation.home.discover.meditation
 
+import android.app.Activity
 import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
@@ -30,6 +31,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -40,6 +42,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -47,6 +50,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.domain.model.Meditation
+import com.bitvolper.yogazzz.presentation.home.account.showFeedbackDialog
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -56,6 +60,13 @@ fun MeditationCompleteScreen(modifier: Modifier = Modifier,
                              meditation: Meditation.Data = Meditation.Data(),
                              onCloseButtonClick: () -> Unit = { },
                              onCompleteClick: (String) -> Unit = { _ ->  }) {
+
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = Unit) {
+        (context as Activity).showFeedbackDialog()
+    }
+
 
     BackHandler { onCloseButtonClick() }
 
@@ -125,7 +136,8 @@ fun MeditationCompleteScreen(modifier: Modifier = Modifier,
                                 modifier = modifier
                                     .fillMaxWidth()
                                     .wrapContentWidth(align = Alignment.CenterHorizontally)
-                                    .size(70.dp).padding(8.dp),
+                                    .size(70.dp)
+                                    .padding(8.dp),
                                 contentScale = ContentScale.Crop,
                                 )
                         }

@@ -26,8 +26,8 @@ android {
         applicationId = "com.bitvolper.yogazzz"
         minSdk = 21
         targetSdk = 34
-        versionCode = 33
-        versionName = "1.0.32"
+        versionCode = 35
+        versionName = "1.0.34"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -141,6 +141,10 @@ dependencies {
     // Play App Update
     implementation(libs.play.app.update)
     implementation(libs.play.app.update.ktx)
+    
+    // Play review
+    implementation(libs.play.review)
+    implementation(libs.play.review.ktx)
 
     // Gson
     implementation(libs.gson)
@@ -160,9 +164,8 @@ dependencies {
     implementation(libs.media3.exoplayer)
     implementation(libs.media3.session)
 
-
-//    implementation(libs.calendar.view)
-    implementation("com.google.android.material:material:1.11.0")
-
     implementation(libs.congrats.greeting)
+
+    // Ad version
+    implementation(libs.unity.ads)
 }

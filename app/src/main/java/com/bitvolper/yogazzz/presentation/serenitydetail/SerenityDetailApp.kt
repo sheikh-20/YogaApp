@@ -1,6 +1,7 @@
 package com.bitvolper.yogazzz.presentation.serenitydetail
 
 import android.app.Activity
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,8 +23,8 @@ import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Mic
 import androidx.compose.material.icons.rounded.MusicNote
 import androidx.compose.material.icons.rounded.Share
-import androidx.compose.material.icons.rounded.SkipPrevious
 import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material.icons.rounded.VolumeDown
 import androidx.compose.material.icons.rounded.VolumeOff
 import androidx.compose.material.icons.rounded.VolumeUp
 import androidx.compose.material3.BottomSheetDefaults
@@ -71,6 +72,7 @@ import com.bitvolper.yogazzz.presentation.serenitydetail.yogaexercise.PauseYogaS
 import com.bitvolper.yogazzz.presentation.serenitydetail.yogaexercise.StartYogaScreen
 import com.bitvolper.yogazzz.presentation.serenitydetail.yogaexercise.YogaCompletedScreen
 import com.bitvolper.yogazzz.presentation.viewmodel.AccountViewModel
+import com.bitvolper.yogazzz.presentation.viewmodel.ExerciseUIState
 import com.bitvolper.yogazzz.presentation.viewmodel.HomeViewModel
 import com.bitvolper.yogazzz.presentation.viewmodel.YogaExerciseViewModel
 import com.bitvolper.yogazzz.utility.Resource
@@ -84,6 +86,8 @@ fun SerenityDetailApp(modifier: Modifier = Modifier,
                       homeViewModel: HomeViewModel = hiltViewModel(),
                       accountViewModel: AccountViewModel = hiltViewModel(),
                       yogaExerciseViewModel: YogaExerciseViewModel = hiltViewModel()) {
+
+    val context = LocalContext.current
 
     val yogaExerciseUIState by homeViewModel.serenityFlowUIState.collectAsState()
     val currentExerciseUIState by yogaExerciseViewModel.currentExercise.collectAsState()
@@ -119,7 +123,11 @@ fun SerenityDetailApp(modifier: Modifier = Modifier,
                 onNegativeClick = {
                     showBottomSheet = BottomSheet.Default
                 },
-                onPositiveClick = { showBottomSheet = BottomSheet.Default },
+                onPositiveClick = {
+//                    (context as Activity).finish()
+//                    SubscriptionActivity.startActivity(context as Activity)
+                    showBottomSheet = BottomSheet.Default
+                                  },
                 contentSheet = { onPositiveClick, onNegativeClick ->
                     BottomSheetSubscriptionContent(
                         onPositiveClick = onPositiveClick,
@@ -139,8 +147,13 @@ fun SerenityDetailApp(modifier: Modifier = Modifier,
                 navController = navController,
                 yogaExerciseUIState = yogaExerciseUIState,
                 onBookmarkClick = { accountViewModel.updateBookmark(it) },
-                showSoundEffect = { showBottomSheet = BottomSheet.SoundEffect },
-                currentExerciseIndex = yogaExerciseViewModel.currentExerciseIndex.inc().div(yogaExerciseViewModel.totalExerciseSize.toFloat()))
+                showSoundEffect = {
+                    yogaExerciseViewModel.changeSoundSettings {
+                        Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                    }
+                },
+                currentExerciseIndex = yogaExerciseViewModel.currentExerciseIndex.inc().div(yogaExerciseViewModel.totalExerciseSize.toFloat()),
+                currentExerciseUIState = currentExerciseUIState)
         }
     ) { paddingValues ->
 
@@ -203,6 +216,10 @@ fun SerenityDetailApp(modifier: Modifier = Modifier,
                 NextYogaScreen(
                     paddingValues = paddingValues,
                     currentYogaExercise = currentExerciseUIState,
+                    currentExerciseIndex = yogaExerciseViewModel.currentExerciseIndex,
+                    totalExerciseSize = yogaExerciseViewModel.totalExerciseSize,
+                    onStartRestTimer = { yogaExerciseViewModel.onRestTimerStart() },
+                    onStopRestTimer = { yogaExerciseViewModel.onRestTimerStop() },
                     onSkipClick = {
                         navController.navigateUp()
                         yogaExerciseViewModel.startTimer()
@@ -328,7 +345,7 @@ private fun BottomSheetContent(modifier: Modifier = Modifier, onNegativeClick: (
                 border = BorderStroke(0.dp, Color.Transparent),
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
 
-                Text(text = stringResource(id = R.string.cancel))
+                Text(text = stringResource(id = R.string.cancel), color = MaterialTheme.colorScheme.onPrimaryContainer)
             }
 
             Button(onClick = onPositiveClick, modifier = modifier
@@ -377,8 +394,10 @@ private fun BottomSheetSubscriptionContent(modifier: Modifier = Modifier, onNega
 
             OutlinedButton(onClick = onNegativeClick, modifier = modifier
                 .weight(1f)
-                .requiredHeight(50.dp)) {
-                Text(text = "Not now")
+                .requiredHeight(50.dp),
+                border = BorderStroke(0.dp, Color.Transparent),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
+                Text(text = "Not now", color = MaterialTheme.colorScheme.onPrimaryContainer)
             }
 
             Button(onClick = onPositiveClick, modifier = modifier
@@ -395,6 +414,7 @@ private fun BottomSheetSubscriptionContent(modifier: Modifier = Modifier, onNega
 @Composable
 private fun SerenityDetailTopAppBar(navController: NavHostController? = null,
                                     yogaExerciseUIState: Resource<SerenityData> = Resource.Loading,
+                                    currentExerciseUIState: ExerciseUIState = ExerciseUIState(),
                                     onBookmarkClick: (String) -> Unit = { },
                                     showSoundEffect: () -> Unit = {  },
                                     currentExerciseIndex: Float = 0f) {
@@ -500,7 +520,11 @@ private fun SerenityDetailTopAppBar(navController: NavHostController? = null,
                 },
                 actions = {
                     IconButton(onClick = showSoundEffect) {
-                        Icon(imageVector = Icons.Rounded.VolumeUp, contentDescription = null)
+                        if (currentExerciseUIState.soundEnabled) {
+                            Icon(imageVector = Icons.Rounded.VolumeUp, contentDescription = null)
+                        } else {
+                            Icon(imageVector = Icons.Rounded.VolumeOff, contentDescription = null)
+                        }
                     }
                 }
             )

@@ -1,6 +1,7 @@
 package com.bitvolper.yogazzz.presentation.appearance
 
 import android.app.Activity
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,12 +29,14 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -55,8 +59,11 @@ fun AppearanceApp(modifier: Modifier = Modifier, accountViewModel: AccountViewMo
         BottomSheet.ShowTheme -> {
             BottomSheet(
                 onDismiss = { showBottomSheet = BottomSheet.Default },
-                onNegativeClick = {  },
-                onPositiveClick = accountViewModel::updateAppThemeIndex,
+                onNegativeClick = { showBottomSheet = BottomSheet.Default },
+                onPositiveClick = {
+                    showBottomSheet = BottomSheet.Default
+                    accountViewModel.updateAppThemeIndex(it)
+                },
                 contentSheet = {
                         onNegativeClick, onPositiveClick ->
 
@@ -141,6 +148,8 @@ private fun BottomSheetContent(modifier: Modifier = Modifier,
 
     val theme = listOf(Pair(0, "System Default"), Pair(1, "Light"), Pair(2, "Dark"))
 
+    var currentSelectedAppTheme by remember { mutableStateOf<Int?>(null) }
+
     Column(modifier = modifier
         .padding(16.dp)
         .systemBarsPadding(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -156,7 +165,7 @@ private fun BottomSheetContent(modifier: Modifier = Modifier,
 
             theme.forEach {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    RadioButton(selected = selectedAppTheme == it.first, onClick = { onPositiveClick(it.first) })
+                    RadioButton(selected = if (currentSelectedAppTheme != null) currentSelectedAppTheme == it.first else selectedAppTheme == it.first, onClick = { currentSelectedAppTheme = it.first })
 
                     Text(text = it.second,
                         style = MaterialTheme.typography.bodyLarge)
@@ -170,13 +179,17 @@ private fun BottomSheetContent(modifier: Modifier = Modifier,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically) {
 
-            OutlinedButton(onClick = onNegativeClick, modifier = modifier
-                .weight(1f)
-                .requiredHeight(50.dp)) {
-                Text(text = "Cancel")
+            OutlinedButton(
+                onClick = onNegativeClick,
+                modifier = modifier
+                    .weight(1f)
+                    .requiredHeight(50.dp),
+                border = BorderStroke(0.dp, Color.Transparent),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
+                Text(text = "Cancel", color = MaterialTheme.colorScheme.onPrimaryContainer)
             }
 
-            Button(onClick = onNegativeClick, modifier = modifier
+            Button(onClick = { onPositiveClick(currentSelectedAppTheme ?: 0) }, modifier = modifier
                 .weight(1f)
                 .requiredHeight(50.dp)) {
                 Text(text = "Ok")
