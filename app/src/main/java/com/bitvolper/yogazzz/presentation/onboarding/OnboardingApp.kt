@@ -8,6 +8,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBar
@@ -17,9 +18,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -33,12 +36,17 @@ import com.bitvolper.yogazzz.presentation.onboarding.login.LoginScreen
 import com.bitvolper.yogazzz.presentation.onboarding.login.LoginWithPasswordScreen
 import com.bitvolper.yogazzz.presentation.onboarding.signup.SignupWithPasswordScreen
 import com.bitvolper.yogazzz.presentation.viewmodel.OnboardingViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OnboardingApp(modifier: Modifier = Modifier,
                   navController: NavHostController = rememberNavController(),
                   onboardingViewModel: OnboardingViewModel = hiltViewModel()) {
+
+
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
 
     val snackbarHostState = remember { SnackbarHostState() }
     val onSocialSignIn = onboardingViewModel.socialSignIn
@@ -95,9 +103,6 @@ fun OnboardingApp(modifier: Modifier = Modifier,
             composable(route = OnboardingScreen.LoginWithPassword.name) {
                 LoginWithPasswordScreen(
                     paddingValues = paddingValues,
-                    onResetPasswordClick = {
-//                        navController.navigate(OnboardingScreen.ResetPassword.name)
-                    },
                     onSignInClick = { email: String?, password: String? -> onboardingViewModel.signInEmail(email, password) },
                     onGoogleSignInClick = { activity, intent ->  onboardingViewModel.signInGoogle(activity, intent) },
                     onSocialSignIn = onSocialSignIn,
@@ -107,7 +112,15 @@ fun OnboardingApp(modifier: Modifier = Modifier,
                     loginUIState = loginUIState,
                     showDialog = { showOnboardDialog = it },
                     onUpdateUserProfile = onboardingViewModel::updateUserProfile,
-                    onForgotPasswordClick = { navController.navigate(OnboardingScreen.ForgotPassword.name) }
+                    onForgotPasswordClick = {
+                        if (onboardingViewModel.email.isEmpty()) {
+                            coroutineScope.launch {
+                                snackbarHostState.showSnackbar(message = "Enter your email address", duration = SnackbarDuration.Short)
+                            }
+                        } else {
+                            navController.navigate(OnboardingScreen.ForgotPassword.name)
+                        }
+                    }
                 )
             }
 
@@ -129,7 +142,8 @@ fun OnboardingApp(modifier: Modifier = Modifier,
                 ContactDetailsScreen(
                     email = onboardingViewModel.email,
                     onPasswordResetOtp = onboardingViewModel::sendPasswordResetOtp,
-                    snackbarHostState = snackbarHostState
+                    snackbarHostState = snackbarHostState,
+                    onComplete = { navController.navigateUp() }
                 )
             }
         }

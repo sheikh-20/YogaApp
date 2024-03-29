@@ -1,5 +1,6 @@
 package com.bitvolper.yogazzz.presentation.home.reports
 
+import android.app.Activity
 import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -52,11 +53,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitvolper.yogazzz.domain.model.History
 import com.bitvolper.yogazzz.domain.model.Reports
+import com.bitvolper.yogazzz.presentation.home.account.showFeedbackDialog
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.utility.Resource
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
@@ -105,6 +108,11 @@ fun ReportsScreen(modifier: Modifier = Modifier,
 
 
     val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = Unit) {
+        (context as Activity).showFeedbackDialog()
+    }
 
     var isRefreshing by remember { mutableStateOf(false) }
     val pullRefreshState = rememberPullRefreshState(
