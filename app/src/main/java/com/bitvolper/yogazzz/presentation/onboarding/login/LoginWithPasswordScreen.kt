@@ -69,7 +69,6 @@ private const val TAG = "LoginWithPasswordScreen"
 @Composable
 fun LoginWithPasswordScreen(modifier: Modifier = Modifier,
                             paddingValues: PaddingValues = PaddingValues(),
-                            onResetPasswordClick: () -> Unit = { },
                             onSignInClick: (String, String) -> Unit = { _, _ ->  },
                             onGoogleSignInClick: (Activity?, Intent?) -> Unit = { _, _ ->},
                             onSocialSignIn: SharedFlow<Resource<AuthResult>>? = null,

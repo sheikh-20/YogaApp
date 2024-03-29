@@ -26,6 +26,7 @@ google-service-version = "4.4.0"
 number-picker-version = "1.0.3"
 vico-chart-version = "2.0.0-alpha.12"
 play-app-update-version = "2.1.0"
+play-review-version = "2.0.1"
 firebase-analytics = "21.5.1"
 firebase-crashlytics = "18.6.2"
 gson-version = "2.10.1"
@@ -39,6 +40,7 @@ calendar-view-version = "1.0.1"
 gradle = "8.1.0"
 firebase-crashlytics-gradle = "2.9.9"
 greeting_version = "2.0.4"
+unity-ads-version = "4.10.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose" }
@@ -96,6 +98,11 @@ firebase-storage = { group = "com.google.firebase", name = "firebase-storage", v
 play-service = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "play-service-version" }
 play-app-update = { module = "com.google.android.play:app-update", version.ref = "play-app-update-version" }
 play-app-update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "play-app-update-version" }
+play-review = { module = "com.google.android.play:review", version.ref = "play-review-version"}
+play-review-ktx = { module = "com.google.android.play:review-ktx", version.ref = "play-review-version" }
+
+unity-ads = { module = "com.unity3d.ads:unity-ads", version.ref = "unity-ads-version" }
+
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebase-analytics" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebase-crashlytics" }
 firebase-message = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebase-message" }
