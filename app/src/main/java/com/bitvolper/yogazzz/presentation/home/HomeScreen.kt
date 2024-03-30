@@ -208,9 +208,18 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
 
 
         Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Card(onClick = { CategoryDetailActivity.startActivity(context as Activity) }, modifier = modifier
-                .weight(1f)
-                .requiredHeight(120.dp), colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.category3))) {
+            Card(onClick = {
+                CategoryDetailActivity.startActivity(
+                    activity = context as Activity,
+                    category = "improvedPosture",
+                    title = "Improved Posture",
+                    image = R.drawable.ic_category3,
+                    color = R.color.category3)
+                           },
+                modifier = modifier
+                    .weight(1f)
+                    .requiredHeight(120.dp),
+                colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.category3))) {
                 Box(modifier = modifier.fillMaxSize()) {
 
                     Image(
@@ -226,9 +235,18 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
                 }
             }
 
-            Card(onClick = { CategoryDetailActivity.startActivity(context as Activity) }, modifier = modifier
-                .weight(1f)
-                .requiredHeight(120.dp), colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.category4))) {
+            Card(onClick = {
+                CategoryDetailActivity.startActivity(
+                    activity = context as Activity,
+                    category = "recovery",
+                    title = "Recovery",
+                    image = R.drawable.ic_category4,
+                    color = R.color.category4)
+                           },
+                modifier = modifier
+                    .weight(1f)
+                    .requiredHeight(120.dp),
+                colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.category4))) {
                 Box(modifier = modifier.fillMaxSize()) {
 
                     Image(
@@ -245,9 +263,18 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
         }
 
         Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Card(onClick = { CategoryDetailActivity.startActivity(context as Activity) }, modifier = modifier
-                .weight(1f)
-                .requiredHeight(120.dp), colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.category5))) {
+            Card(onClick = {
+                CategoryDetailActivity.startActivity(
+                    activity = context as Activity,
+                    category = "mindfulnessPresence",
+                    title = "Minfulness & Presence",
+                    image = R.drawable.ic_category5,
+                    color = R.color.category5)
+                           },
+                modifier = modifier
+                    .weight(1f)
+                    .requiredHeight(120.dp),
+                colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.category5))) {
                 Box(modifier = modifier.fillMaxSize()) {
 
                     Image(
@@ -263,9 +290,18 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
                 }
             }
 
-            Card(onClick = { CategoryDetailActivity.startActivity(context as Activity) }, modifier = modifier
-                .weight(1f)
-                .requiredHeight(120.dp), colors = CardDefaults.cardColors(containerColor = colorResource(R.color.category6))) {
+            Card(onClick = {
+                CategoryDetailActivity.startActivity(
+                    activity = context as Activity,
+                    category = "spritualGrowth",
+                    title = "Spritual Growth",
+                    image = R.drawable.ic_category6,
+                    color = R.color.category6)
+                           },
+                modifier = modifier
+                    .weight(1f)
+                    .requiredHeight(120.dp),
+                colors = CardDefaults.cardColors(containerColor = colorResource(R.color.category6))) {
                 Box(modifier = modifier.fillMaxSize()) {
 
                     Image(
@@ -282,9 +318,17 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
         }
 
         Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Card(onClick = { CategoryDetailActivity.startActivity(context as Activity) }, modifier = modifier
-                .weight(1f)
-                .requiredHeight(120.dp),
+            Card(onClick = {
+                CategoryDetailActivity.startActivity(
+                    activity = context as Activity,
+                    category = "emotionalBalance",
+                    title = "Emotional Growth",
+                    image = R.drawable.ic_category7,
+                    color = R.color.category7)
+                           },
+                modifier = modifier
+                    .weight(1f)
+                    .requiredHeight(120.dp),
                 colors = CardDefaults.cardColors(containerColor = colorResource(R.color.category7))) {
                 Box(modifier = modifier.fillMaxSize()) {
 
@@ -300,9 +344,18 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
                 }
             }
 
-            Card(onClick = { CategoryDetailActivity.startActivity(context as Activity) }, modifier = modifier
-                .weight(1f)
-                .requiredHeight(120.dp), colors = CardDefaults.cardColors(containerColor = colorResource(R.color.category8))) {
+            Card(onClick = {
+                CategoryDetailActivity.startActivity(
+                    activity = context as Activity,
+                    category = "sleepQuality",
+                    title = "Enhanced Sleep Quality",
+                    image = R.drawable.ic_category8,
+                    color = R.color.category8)
+                           },
+                modifier = modifier
+                    .weight(1f)
+                    .requiredHeight(120.dp),
+                colors = CardDefaults.cardColors(containerColor = colorResource(R.color.category8))) {
                 Box(modifier = modifier.fillMaxSize()) {
 
                     Image(

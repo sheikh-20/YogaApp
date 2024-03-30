@@ -57,7 +57,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.ImageLoader
 import coil.compose.AsyncImage
+import coil.decode.VideoFrameDecoder
 import coil.request.ImageRequest
 import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.domain.model.Meditation
@@ -85,7 +87,6 @@ fun CategoryDetailScreen(modifier: Modifier = Modifier, yogaCategoryUIState: Res
 
     val color = MaterialTheme.colorScheme.primary
 
-
     Column(
             modifier = modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -109,7 +110,7 @@ fun CategoryDetailScreen(modifier: Modifier = Modifier, yogaCategoryUIState: Res
                         .requiredHeight(250.dp)
                         .fillMaxSize()
                         .wrapContentSize(align = Alignment.BottomEnd)
-                        .offset(x = 100.dp, y = 0.dp)
+                        .offset(x = 60.dp, y = 0.dp)
                 )
 
                 Column(modifier = modifier
@@ -218,6 +219,13 @@ private fun CategoryDetailCard(modifier: Modifier = Modifier,
 
     val context = LocalContext.current
 
+
+    val imageLoader = ImageLoader.Builder(LocalContext.current)
+        .components {
+            add(VideoFrameDecoder.Factory())
+        }
+        .build()
+
     Row(modifier = modifier
         .fillMaxWidth()
         .clickable(
@@ -233,18 +241,29 @@ private fun CategoryDetailCard(modifier: Modifier = Modifier,
 
             Card(onClick = { }, modifier = modifier.padding(vertical = 4.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.outlineVariant)) {
 
+//                AsyncImage(
+//                    model = ImageRequest.Builder(context = LocalContext.current)
+//                        .data(yoga.image)
+//                        .crossfade(true)
+//                        .build(),
+//                    error = painterResource(id = R.drawable.ic_broken_image),
+//                    placeholder = painterResource(id = R.drawable.ic_image_placeholder),
+//                    contentDescription = null,
+//                    modifier = modifier
+//                        .size(height = 100.dp, width = 100.dp),
+//                    contentScale = ContentScale.Crop)
+
                 AsyncImage(
-                    model = ImageRequest.Builder(context = LocalContext.current)
-                        .data(yoga.image)
-                        .crossfade(true)
-                        .build(),
+                    model = yoga.pose?.first()?.file,
+                    imageLoader = imageLoader,
                     error = painterResource(id = R.drawable.ic_broken_image),
                     placeholder = painterResource(id = R.drawable.ic_image_placeholder),
                     contentDescription = null,
                     modifier = modifier
                         .size(height = 100.dp, width = 100.dp),
                     contentScale = ContentScale.Crop)
-        }
+
+            }
 
         Column(modifier = modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(
