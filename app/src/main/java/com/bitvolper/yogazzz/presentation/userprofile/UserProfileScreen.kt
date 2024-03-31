@@ -1,5 +1,6 @@
 package com.bitvolper.yogazzz.presentation.userprofile
 
+import android.app.Activity
 import android.content.res.Configuration
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -57,6 +58,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.bitvolper.yogazzz.R
+import com.bitvolper.yogazzz.presentation.home.account.millisecondToDate
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.utility.Resource
 import kotlinx.coroutines.launch
@@ -73,7 +75,7 @@ fun UserProfileScreen(modifier: Modifier = Modifier,
                       gender: Int = 0,
 
                       onGenderButtonClick: () -> Unit = { },
-                      birthdayDate: Long = 0L,
+                      birthdayDate: Long = 31536000000L,
 
                       onUpdateButtonClick: () -> Unit = { },
                       onCalendarButtonClick: () -> Unit = {  },
@@ -82,6 +84,7 @@ fun UserProfileScreen(modifier: Modifier = Modifier,
                       profileUIState: Resource<Uri> = Resource.Loading,
                       ) {
 
+    val context = LocalContext.current
     val focusManager = LocalFocusManager.current
 
 
@@ -164,13 +167,11 @@ fun UserProfileScreen(modifier: Modifier = Modifier,
                     modifier = modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(30),
                     keyboardOptions = KeyboardOptions.Default.copy(
-                        imeAction = ImeAction.Next,
+                        imeAction = ImeAction.Done,
                         keyboardType = KeyboardType.Text
                     ),
-                    keyboardActions = KeyboardActions(onNext = {
-                        focusManager.moveFocus(
-                            FocusDirection.Down
-                        )
+                    keyboardActions = KeyboardActions(onDone = {
+                        focusManager.clearFocus()
                     }),
                     interactionSource = fullNameInteractionSource
                 )
@@ -256,7 +257,7 @@ fun UserProfileScreen(modifier: Modifier = Modifier,
                 )
 
                 OutlinedTextField(
-                    value = birthdayDate.toString(),
+                    value = birthdayDate.millisecondToDate(),
                     onValueChange = {  },
                     label = {
                         if (birthdayDateInteractionSource.collectIsFocusedAsState().value.not() && birthdayDate.toString().isEmpty()) {
@@ -266,13 +267,11 @@ fun UserProfileScreen(modifier: Modifier = Modifier,
                     modifier = modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(30),
                     keyboardOptions = KeyboardOptions.Default.copy(
-                        imeAction = ImeAction.Next,
+                        imeAction = ImeAction.Done,
                         keyboardType = KeyboardType.Text
                     ),
-                    keyboardActions = KeyboardActions(onNext = {
-                        focusManager.moveFocus(
-                            FocusDirection.Down
-                        )
+                    keyboardActions = KeyboardActions(onDone = {
+                        focusManager.clearFocus()
                     }),
                     interactionSource = birthdayDateInteractionSource,
                     trailingIcon = {
@@ -299,7 +298,10 @@ fun UserProfileScreen(modifier: Modifier = Modifier,
 
 
                 Button(
-                    onClick = onUpdateButtonClick,
+                    onClick = {
+                        onUpdateButtonClick()
+                        (context as Activity).finish()
+                    },
                     modifier = modifier
                         .weight(1f)
                         .requiredHeight(50.dp)) {
