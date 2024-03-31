@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
-import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
@@ -64,20 +63,14 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.bitvolper.yogazzz.R
-import com.bitvolper.yogazzz.domain.model.AdjustYogaLevel
-import com.bitvolper.yogazzz.domain.model.FlexibilityStrength
-import com.bitvolper.yogazzz.domain.model.PopularYoga
 import com.bitvolper.yogazzz.domain.model.PopularYogaWithFlexibility
-import com.bitvolper.yogazzz.domain.model.StressRelief
+import com.bitvolper.yogazzz.domain.model.YogaData
 import com.bitvolper.yogazzz.presentation.bodyfocus.BodyFocusDetailActivity
-import com.bitvolper.yogazzz.presentation.categorydetail.CategoryDetailActivity
 import com.bitvolper.yogazzz.presentation.home.discover.adjust_yoga.AdjustYogaActivity
-import com.bitvolper.yogazzz.presentation.home.discover.body_focus.BodyFocusActivity
 import com.bitvolper.yogazzz.presentation.home.discover.flexiblity_strength.FlexibilityStrengthActivity
 import com.bitvolper.yogazzz.presentation.home.discover.meditation.MeditationActivity
 import com.bitvolper.yogazzz.presentation.home.discover.popular_yoga.PopularYogaActivity
 import com.bitvolper.yogazzz.presentation.home.discover.stress_relief.StressReliefActivity
-import com.bitvolper.yogazzz.presentation.home.recommendation.RecommendationActivity
 import com.bitvolper.yogazzz.presentation.serenitydetail.SerenityDetailActivity
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.utility.Body
@@ -138,7 +131,7 @@ fun DiscoverScreen(modifier: Modifier = Modifier,
 
 @Preview(showBackground = true)
 @Composable
-private fun PopularYogaCompose(modifier: Modifier = Modifier, popularYoga: PopularYoga = PopularYoga(emptyList())) {
+private fun PopularYogaCompose(modifier: Modifier = Modifier, popularYoga: YogaData = YogaData(emptyList())) {
 
     val context = LocalContext.current
 
@@ -180,7 +173,7 @@ private fun PopularYogaCompose(modifier: Modifier = Modifier, popularYoga: Popul
 @Preview(showBackground = true)
 @Composable
 fun PopularYogaCard(modifier: Modifier = Modifier,
-                    popularYoga: PopularYoga.Data = PopularYoga.Data(title = "Yoga Exercise", duration = "10 mins", level = "Beginner")) {
+                    popularYoga: YogaData.Data = YogaData.Data(title = "Yoga Exercise", duration = "10 mins", level = "Beginner")) {
 
     val context = LocalContext.current
 
@@ -188,7 +181,7 @@ fun PopularYogaCard(modifier: Modifier = Modifier,
     Row(modifier = modifier.fillMaxWidth()
         .clickable(
             onClick = {
-                SerenityDetailActivity.startActivity(context as Activity, null)
+                SerenityDetailActivity.startActivity(context as Activity, popularYoga.id)
             },
             interactionSource = remember { MutableInteractionSource() },
             indication = null
@@ -270,12 +263,12 @@ private fun MeditationCard(modifier: Modifier = Modifier) {
 @OptIn(ExperimentalMaterialApi::class)
 @Preview(showBackground = true)
 @Composable
-private fun AdjustYogaLevelScreen(modifier: Modifier = Modifier, adjustYogaLevel: AdjustYogaLevel = AdjustYogaLevel(emptyList())) {
+private fun AdjustYogaLevelScreen(modifier: Modifier = Modifier, adjustYogaLevel: YogaData = YogaData(emptyList())) {
 
     val context = LocalContext.current
 
     val level = listOf(Pair(0, "All"), Pair(1, "Beginner"), Pair(2, "Intermediate"), Pair(3, "Advanced"))
-    var selectedIndex by remember { mutableIntStateOf(0) }
+    var selectedLevelIndex by remember { mutableIntStateOf(0) }
 
     val color = MaterialTheme.colorScheme.primary
 
@@ -310,13 +303,24 @@ private fun AdjustYogaLevelScreen(modifier: Modifier = Modifier, adjustYogaLevel
 
         LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             items(level.size) {
-                Chip(onClick = { selectedIndex = level[it].first }, colors = ChipDefaults.chipColors(backgroundColor = if (selectedIndex == level[it].first) color else Color.Transparent), border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outline)) {
+                Chip(onClick = { selectedLevelIndex = level[it].first },
+                    colors = ChipDefaults.chipColors(backgroundColor = if (selectedLevelIndex == level[it].first) color else Color.Transparent),
+                    border = BorderStroke(width = 1.dp, color = if (selectedLevelIndex == level[it].first) Color.Transparent else MaterialTheme.colorScheme.outline)) {
                     Text(text = level[it].second, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
                 }
             }
         }
 
-        adjustYogaLevel.data?.forEach {
+
+        val data = adjustYogaLevel.data?.filter {
+            if (selectedLevelIndex == 0) {
+                true
+            } else {
+                it?.level?.lowercase() == level[selectedLevelIndex].second.lowercase()
+            }
+        }
+
+        data?.forEach {
             AdjustYogaLevelCard(adjustYogaLevel = it ?: return)
         }
     }
@@ -326,7 +330,7 @@ private fun AdjustYogaLevelScreen(modifier: Modifier = Modifier, adjustYogaLevel
 @Preview(showBackground = true)
 @Composable
 fun AdjustYogaLevelCard(modifier: Modifier = Modifier,
-                        adjustYogaLevel: AdjustYogaLevel.Data = AdjustYogaLevel.Data(title = "Yoga Exercise", duration = "10 mins", level = "Beginner")) {
+                        adjustYogaLevel: YogaData.Data = YogaData.Data(title = "Yoga Exercise", duration = "10 mins", level = "Beginner")) {
 
     val context = LocalContext.current
 
@@ -334,7 +338,7 @@ fun AdjustYogaLevelCard(modifier: Modifier = Modifier,
     Row(modifier = modifier.fillMaxWidth()
         .clickable(
             onClick = {
-                SerenityDetailActivity.startActivity(context as Activity, null)
+                SerenityDetailActivity.startActivity(context as Activity, adjustYogaLevel.id)
             },
             interactionSource = remember { MutableInteractionSource() },
             indication = null
@@ -424,7 +428,7 @@ private fun BodyFocusScreen(modifier: Modifier = Modifier) {
 @OptIn(ExperimentalMaterialApi::class)
 @Preview(showBackground = true)
 @Composable
-private fun FlexibilityStrengthScreen(modifier: Modifier = Modifier, flexibilityStrength: FlexibilityStrength = FlexibilityStrength(emptyList())) {
+private fun FlexibilityStrengthScreen(modifier: Modifier = Modifier, flexibilityStrength: YogaData = YogaData(emptyList())) {
 
 
     val context = LocalContext.current
@@ -468,7 +472,7 @@ private fun FlexibilityStrengthScreen(modifier: Modifier = Modifier, flexibility
 @Preview(showBackground = true)
 @Composable
 fun FlexibilityStrengthCard(modifier: Modifier = Modifier,
-                            flexibilityStrength: FlexibilityStrength.Data = FlexibilityStrength.Data(title = "Yoga Exercise", duration = "10 mins", level = "Beginner")) {
+                            flexibilityStrength: YogaData.Data = YogaData.Data(title = "Yoga Exercise", duration = "10 mins", level = "Beginner")) {
 
     val context = LocalContext.current
 
@@ -476,7 +480,7 @@ fun FlexibilityStrengthCard(modifier: Modifier = Modifier,
     Row(modifier = modifier.fillMaxWidth()
         .clickable(
             onClick = {
-                SerenityDetailActivity.startActivity(context as Activity, null)
+                SerenityDetailActivity.startActivity(context as Activity, flexibilityStrength.id)
             },
             interactionSource = remember { MutableInteractionSource() },
             indication = null
@@ -522,7 +526,7 @@ fun FlexibilityStrengthCard(modifier: Modifier = Modifier,
 @OptIn(ExperimentalMaterialApi::class)
 @Preview(showBackground = true)
 @Composable
-private fun StressReliefScreen(modifier: Modifier = Modifier, stressRelief: StressRelief = StressRelief(emptyList())) {
+private fun StressReliefScreen(modifier: Modifier = Modifier, stressRelief: YogaData = YogaData(emptyList())) {
 
     val context = LocalContext.current
 
@@ -565,7 +569,7 @@ private fun StressReliefScreen(modifier: Modifier = Modifier, stressRelief: Stre
 @Preview(showBackground = true)
 @Composable
 fun StressReliefCard(modifier: Modifier = Modifier,
-                     stressRelief: StressRelief.Data = StressRelief.Data(title = "Yoga Exercise", duration = "10 mins", level = "Beginner")) {
+                     stressRelief: YogaData.Data = YogaData.Data(title = "Yoga Exercise", duration = "10 mins", level = "Beginner")) {
 
     val context = LocalContext.current
 
@@ -573,7 +577,7 @@ fun StressReliefCard(modifier: Modifier = Modifier,
     Row(modifier = modifier.fillMaxWidth()
         .clickable(
             onClick = {
-                SerenityDetailActivity.startActivity(context as Activity, null)
+                SerenityDetailActivity.startActivity(context as Activity, stressRelief.id)
             },
             interactionSource = remember { MutableInteractionSource() },
             indication = null
