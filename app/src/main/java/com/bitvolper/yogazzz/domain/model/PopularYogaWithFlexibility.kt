@@ -1,8 +1,8 @@
 package com.bitvolper.yogazzz.domain.model
 
 data class PopularYogaWithFlexibility(
-    val popularYoga: PopularYoga,
-    val adjustYogaLevel: AdjustYogaLevel,
-    val flexibilityStrength: FlexibilityStrength,
-    val stressRelief: StressRelief
+    val popularYoga: YogaData,
+    val adjustYogaLevel: YogaData,
+    val flexibilityStrength: YogaData,
+    val stressRelief: YogaData
 )

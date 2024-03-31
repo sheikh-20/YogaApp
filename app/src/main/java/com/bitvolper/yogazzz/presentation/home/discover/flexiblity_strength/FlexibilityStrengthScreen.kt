@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitvolper.yogazzz.domain.model.FlexibilityStrength
 import com.bitvolper.yogazzz.domain.model.PopularYoga
+import com.bitvolper.yogazzz.domain.model.YogaData
 import com.bitvolper.yogazzz.presentation.home.discover.FlexibilityStrengthCard
 import com.bitvolper.yogazzz.presentation.home.discover.PopularYogaCard
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
@@ -26,7 +27,7 @@ import com.bitvolper.yogazzz.utility.Resource
 @Composable
 fun FlexibilityStrengthScreen(modifier: Modifier = Modifier,
                               paddingValues: PaddingValues = PaddingValues(),
-                              flexibilityStrengthUIState: Resource<FlexibilityStrength> = Resource.Loading) {
+                              flexibilityStrengthUIState: Resource<YogaData> = Resource.Loading) {
 
     val context = LocalContext.current
 

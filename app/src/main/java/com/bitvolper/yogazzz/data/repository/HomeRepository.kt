@@ -40,13 +40,13 @@ interface HomeRepository {
 
     fun getYogaCategoryWithRecommendation(): Flow<Resource<YogaCategoryWithRecommendation>>
 
-    fun getPopularYoga(): Flow<Resource<PopularYoga>>
+    fun getPopularYoga(): Flow<Resource<YogaData>>
 
-    fun getYogaAdjustLevel(): Flow<Resource<AdjustYogaLevel>>
+    fun getYogaAdjustLevel(): Flow<Resource<YogaData>>
 
-    fun getFlexibilityStrength(): Flow<Resource<FlexibilityStrength>>
+    fun getFlexibilityStrength(): Flow<Resource<YogaData>>
 
-    fun getStressRelief(): Flow<Resource<StressRelief>>
+    fun getStressRelief(): Flow<Resource<YogaData>>
 
     fun getPopularYogaWithFlexibility(): Flow<Resource<PopularYogaWithFlexibility>>
 
@@ -190,7 +190,7 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
             emit(Resource.Failure(it))
     }
 
-    override fun getPopularYoga(): Flow<Resource<PopularYoga>> = flow {
+    override fun getPopularYoga(): Flow<Resource<YogaData>> = flow {
 
         Timber.tag(TAG).d("Called")
         emit(Resource.Loading)
@@ -207,10 +207,10 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
             val json = Gson().toJson(result.documents.map { it.data })
             Timber.tag(TAG).e("Result -> $json")
 
-            val listType = object : TypeToken<List<PopularYoga.Data>>() {}.type
-            val data = Gson().fromJson<List<PopularYoga.Data>>(json, listType)
+            val listType = object : TypeToken<List<YogaData.Data>>() {}.type
+            val data = Gson().fromJson<List<YogaData.Data>>(json, listType)
 
-            emit(Resource.Success(PopularYoga(data = data)))
+            emit(Resource.Success(YogaData(data = data)))
         } catch (exception: Exception) {
             throw Throwable(exception)
         }
@@ -221,7 +221,7 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
             emit(Resource.Failure(it))
         }
 
-    override fun getYogaAdjustLevel(): Flow<Resource<AdjustYogaLevel>> = flow {
+    override fun getYogaAdjustLevel(): Flow<Resource<YogaData>> = flow {
 
         Timber.tag(TAG).d("Called")
         emit(Resource.Loading)
@@ -238,10 +238,10 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
             val json = Gson().toJson(result.documents.map { it.data })
             Timber.tag(TAG).d("Result -> $json")
 
-            val listType = object : TypeToken<List<AdjustYogaLevel.Data>>() {}.type
-            val data = Gson().fromJson<List<AdjustYogaLevel.Data>>(json, listType)
+            val listType = object : TypeToken<List<YogaData.Data>>() {}.type
+            val data = Gson().fromJson<List<YogaData.Data>>(json, listType)
 
-            emit(Resource.Success(AdjustYogaLevel(data = data)))
+            emit(Resource.Success(YogaData(data = data)))
         } catch (exception: Exception) {
             throw Throwable(exception)
         }
@@ -252,7 +252,7 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
             emit(Resource.Failure(it))
         }
 
-    override fun getFlexibilityStrength(): Flow<Resource<FlexibilityStrength>> = flow {
+    override fun getFlexibilityStrength(): Flow<Resource<YogaData>> = flow {
 
         Timber.tag(TAG).d("Called")
         emit(Resource.Loading)
@@ -269,10 +269,10 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
             val json = Gson().toJson(result.documents.map { it.data })
             Timber.tag(TAG).d("Result -> $json")
 
-            val listType = object : TypeToken<List<FlexibilityStrength.Data>>() {}.type
-            val data = Gson().fromJson<List<FlexibilityStrength.Data>>(json, listType)
+            val listType = object : TypeToken<List<YogaData.Data>>() {}.type
+            val data = Gson().fromJson<List<YogaData.Data>>(json, listType)
 
-            emit(Resource.Success(FlexibilityStrength(data = data)))
+            emit(Resource.Success(YogaData(data = data)))
         } catch (exception: Exception) {
             throw Throwable(exception)
         }
@@ -283,7 +283,7 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
         emit(Resource.Failure(it))
     }
 
-    override fun getStressRelief(): Flow<Resource<StressRelief>> = flow {
+    override fun getStressRelief(): Flow<Resource<YogaData>> = flow {
 
         Timber.tag(TAG).d("Called")
         emit(Resource.Loading)
@@ -300,10 +300,10 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
             val json = Gson().toJson(result.documents.map { it.data })
             Timber.tag(TAG).d("Result -> $json")
 
-            val listType = object : TypeToken<List<StressRelief.Data>>() {}.type
-            val data = Gson().fromJson<List<StressRelief.Data>>(json, listType)
+            val listType = object : TypeToken<List<YogaData.Data>>() {}.type
+            val data = Gson().fromJson<List<YogaData.Data>>(json, listType)
 
-            emit(Resource.Success(StressRelief(data = data)))
+            emit(Resource.Success(YogaData(data = data)))
         } catch (exception: Exception) {
             throw Throwable(exception)
         }
@@ -344,31 +344,31 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
 
             val jsonPopularYoga = Gson().toJson(popularYogaResult.documents.map { it.data })
             Timber.tag(TAG).d("Result -> $jsonPopularYoga")
-            val listTypePopularYoga = object : TypeToken<List<PopularYoga.Data>>() {}.type
-            val popularYoga = Gson().fromJson<List<PopularYoga.Data>>(jsonPopularYoga, listTypePopularYoga)
+            val listTypePopularYoga = object : TypeToken<List<YogaData.Data>>() {}.type
+            val popularYoga = Gson().fromJson<List<YogaData.Data>>(jsonPopularYoga, listTypePopularYoga)
 
 
             val jsonAdjustYogaLevel = Gson().toJson(adjustYogaLevelResult.documents.map { it.data })
             Timber.tag(TAG).d("Result -> $jsonAdjustYogaLevel")
-            val listTypeAdjustYogaLevel = object : TypeToken<List<AdjustYogaLevel.Data>>() {}.type
-            val adjustYogaLevel = Gson().fromJson<List<AdjustYogaLevel.Data>>(jsonAdjustYogaLevel, listTypeAdjustYogaLevel)
+            val listTypeAdjustYogaLevel = object : TypeToken<List<YogaData.Data>>() {}.type
+            val adjustYogaLevel = Gson().fromJson<List<YogaData.Data>>(jsonAdjustYogaLevel, listTypeAdjustYogaLevel)
 
             val jsonFlexibilityStrength = Gson().toJson(flexibilityStrengthResult.documents.map { it.data })
             Timber.tag(TAG).d("Result -> $jsonFlexibilityStrength")
-            val listTypeFlexibilityStrength = object : TypeToken<List<FlexibilityStrength.Data>>() {}.type
-            val flexibilityStrength = Gson().fromJson<List<FlexibilityStrength.Data>>(jsonFlexibilityStrength, listTypeFlexibilityStrength)
+            val listTypeFlexibilityStrength = object : TypeToken<List<YogaData.Data>>() {}.type
+            val flexibilityStrength = Gson().fromJson<List<YogaData.Data>>(jsonFlexibilityStrength, listTypeFlexibilityStrength)
 
             val jsonStressRelief = Gson().toJson(stressReliefResult.documents.map { it.data })
             Timber.tag(TAG).d("Result -> $jsonStressRelief")
-            val listTypeStressRelief = object : TypeToken<List<StressRelief.Data>>() {}.type
-            val stressRelief = Gson().fromJson<List<StressRelief.Data>>(jsonStressRelief, listTypeStressRelief)
+            val listTypeStressRelief = object : TypeToken<List<YogaData.Data>>() {}.type
+            val stressRelief = Gson().fromJson<List<YogaData.Data>>(jsonStressRelief, listTypeStressRelief)
 
 
             emit(Resource.Success(PopularYogaWithFlexibility(
-                popularYoga = PopularYoga(popularYoga),
-                adjustYogaLevel = AdjustYogaLevel(adjustYogaLevel),
-                flexibilityStrength = FlexibilityStrength(flexibilityStrength),
-                stressRelief = StressRelief(stressRelief)
+                popularYoga = YogaData(popularYoga),
+                adjustYogaLevel = YogaData(adjustYogaLevel),
+                flexibilityStrength = YogaData(flexibilityStrength),
+                stressRelief = YogaData(stressRelief)
             )))
         } catch (exception: Exception) {
             throw Throwable(exception)
