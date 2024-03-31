@@ -18,6 +18,7 @@ import com.bitvolper.yogazzz.domain.model.Meditation
 import com.bitvolper.yogazzz.domain.model.PopularYoga
 import com.bitvolper.yogazzz.domain.model.PopularYogaWithFlexibility
 import com.bitvolper.yogazzz.domain.model.StressRelief
+import com.bitvolper.yogazzz.domain.model.YogaData
 import com.bitvolper.yogazzz.domain.usecase.HomeUseCase
 import com.bitvolper.yogazzz.utility.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -40,21 +41,21 @@ class DiscoverViewModel @Inject constructor(private val homeUseCase: HomeUseCase
     }
 
 
-    private var _popularYoga = MutableStateFlow<Resource<PopularYoga>>(Resource.Loading)
-    val popularYoga: StateFlow<Resource<PopularYoga>> get() = _popularYoga
+    private var _popularYoga = MutableStateFlow<Resource<YogaData>>(Resource.Loading)
+    val popularYoga: StateFlow<Resource<YogaData>> get() = _popularYoga
 
     private var _discoverUIState = MutableStateFlow<Resource<PopularYogaWithFlexibility>>(Resource.Loading)
     val discoverUIState: StateFlow<Resource<PopularYogaWithFlexibility>> get() = _discoverUIState
 
 
-    private var _adjustYogaLevel = MutableStateFlow<Resource<AdjustYogaLevel>>(Resource.Loading)
-    val adjustYogaLevel: StateFlow<Resource<AdjustYogaLevel>> get() = _adjustYogaLevel
+    private var _adjustYogaLevel = MutableStateFlow<Resource<YogaData>>(Resource.Loading)
+    val adjustYogaLevel: StateFlow<Resource<YogaData>> get() = _adjustYogaLevel
 
-    private var _flexibilityStrength = MutableStateFlow<Resource<FlexibilityStrength>>(Resource.Loading)
-    val flexibilityStrength: StateFlow<Resource<FlexibilityStrength>> get() = _flexibilityStrength
+    private var _flexibilityStrength = MutableStateFlow<Resource<YogaData>>(Resource.Loading)
+    val flexibilityStrength: StateFlow<Resource<YogaData>> get() = _flexibilityStrength
 
-    private var _stressRelief = MutableStateFlow<Resource<StressRelief>>(Resource.Loading)
-    val stressRelief: StateFlow<Resource<StressRelief>> get() = _stressRelief
+    private var _stressRelief = MutableStateFlow<Resource<YogaData>>(Resource.Loading)
+    val stressRelief: StateFlow<Resource<YogaData>> get() = _stressRelief
 
 
     private var _meditationUIState = MutableStateFlow<Resource<Meditation>>(Resource.Loading)

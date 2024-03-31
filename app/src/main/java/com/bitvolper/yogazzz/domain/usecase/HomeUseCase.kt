@@ -32,13 +32,13 @@ interface HomeUseCase {
 
     fun getYogaCategoryWithRecommendation(): Flow<Resource<YogaCategoryWithRecommendation>>
 
-    fun getPopularYoga(): Flow<Resource<PopularYoga>>
+    fun getPopularYoga(): Flow<Resource<YogaData>>
 
-    fun getAdjustYogaLevel(): Flow<Resource<AdjustYogaLevel>>
+    fun getAdjustYogaLevel(): Flow<Resource<YogaData>>
 
-    fun getFlexibilityStrength(): Flow<Resource<FlexibilityStrength>>
+    fun getFlexibilityStrength(): Flow<Resource<YogaData>>
 
-    fun getStressRelief(): Flow<Resource<StressRelief>>
+    fun getStressRelief(): Flow<Resource<YogaData>>
 
     fun getPopularYogaWithFlexibility(): Flow<Resource<PopularYogaWithFlexibility>>
 
@@ -90,19 +90,19 @@ class GetHomeUseCaseInteractors(private val repository: HomeRepository): HomeUse
         return repository.getYogaCategoryWithRecommendation()
     }
 
-    override fun getPopularYoga(): Flow<Resource<PopularYoga>> {
+    override fun getPopularYoga(): Flow<Resource<YogaData>> {
         return repository.getPopularYoga()
     }
 
-    override fun getAdjustYogaLevel(): Flow<Resource<AdjustYogaLevel>> {
+    override fun getAdjustYogaLevel(): Flow<Resource<YogaData>> {
         return repository.getYogaAdjustLevel()
     }
 
-    override fun getFlexibilityStrength(): Flow<Resource<FlexibilityStrength>> {
+    override fun getFlexibilityStrength(): Flow<Resource<YogaData>> {
         return repository.getFlexibilityStrength()
     }
 
-    override fun getStressRelief(): Flow<Resource<StressRelief>> {
+    override fun getStressRelief(): Flow<Resource<YogaData>> {
         return repository.getStressRelief()
     }
 
