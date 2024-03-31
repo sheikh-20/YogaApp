@@ -127,7 +127,7 @@ fun SignupWithPasswordScreen(modifier: Modifier = Modifier,
                         snackbarHostState.showSnackbar(message = "Already created, Try Login!")
                         Timber.tag("Login").e(it.throwable)
                     } else {
-                        snackbarHostState.showSnackbar(message = "Failure!")
+                        snackbarHostState.showSnackbar(message = "Already created, Try Login!")
                         Timber.tag("Login").e(it.throwable)
                     }
                 }

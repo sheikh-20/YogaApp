@@ -121,7 +121,7 @@ fun LoginWithPasswordScreen(modifier: Modifier = Modifier,
                     if (it.throwable is FirebaseAuthInvalidUserException) {
                         snackbarHostState.showSnackbar(message = "Email does not exists, Try signup!")
                     } else {
-                        snackbarHostState.showSnackbar(message = "Failure!")
+                        snackbarHostState.showSnackbar(message = "Email does not exists, Try signup!")
                         Timber.tag("Login").e(it.throwable)
                     }
                 }
