@@ -26,8 +26,8 @@ android {
         applicationId = "com.bitvolper.yogazzz"
         minSdk = 21
         targetSdk = 34
-        versionCode = 38
-        versionName = "1.0.37"
+        versionCode = 39
+        versionName = "1.0.38"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -35,12 +35,21 @@ android {
         }
     }
 
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
+    
     buildTypes {
         getByName("debug") {
             applicationIdSuffix = ".debug"
             resValue(type = "string",name = "app_name", value = "YogazzZ_Debug")
             isDebuggable = true
             isMinifyEnabled = false
+
+
+            val PUBLIC_API_KEY: String by project
+            buildConfigField(type = "String", name =  "PUBLIC_API_KEY", value = PUBLIC_API_KEY)
         }
         getByName("release") {
             resValue(type = "string",name = "app_name", value = "YogazzZ")
@@ -53,6 +62,9 @@ android {
                 "proguard-rules.pro"
             )
 
+            val PUBLIC_API_KEY: String by project
+            buildConfigField(type = "String", name =  "PUBLIC_API_KEY", value = PUBLIC_API_KEY)
+
             signingConfig = signingConfigs.getByName("config")
         }
     }
@@ -62,9 +74,6 @@ android {
     }
     kotlinOptions {
         jvmTarget = "17"
-    }
-    buildFeatures {
-        compose = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.3"
@@ -168,4 +177,7 @@ dependencies {
 
     // Ad version
     implementation(libs.unity.ads)
+
+    // Play billing
+    implementation(libs.play.billing)
 }
