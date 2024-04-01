@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -183,7 +184,7 @@ fun SerenityDetailScreen(modifier: Modifier = Modifier,
                         }
                     }
 
-                    LazyColumn(contentPadding = PaddingValues(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    LazyColumn(contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 100.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         items(yogaExerciseUIState.data.data?.first()?.pose?.size ?: return@LazyColumn) {
                             ExerciseCard(yoga = yogaExerciseUIState.data.data.first()?.pose?.get(it) ?: return@items)
                         }
@@ -193,6 +194,7 @@ fun SerenityDetailScreen(modifier: Modifier = Modifier,
                 Column(modifier = modifier
                     .fillMaxSize()
                     .wrapContentSize(align = Alignment.BottomCenter)
+                    .background(color = MaterialTheme.colorScheme.background)
                     .padding(bottom = 16.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
 
                     Divider(modifier = modifier.fillMaxWidth())
