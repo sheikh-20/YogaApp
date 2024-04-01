@@ -41,6 +41,7 @@ gradle = "8.1.0"
 firebase-crashlytics-gradle = "2.9.9"
 greeting_version = "2.0.4"
 unity-ads-version = "4.10.0"
+billing_version = "6.2.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose" }
@@ -102,6 +103,8 @@ play-review = { module = "com.google.android.play:review", version.ref = "play-r
 play-review-ktx = { module = "com.google.android.play:review-ktx", version.ref = "play-review-version" }
 
 unity-ads = { module = "com.unity3d.ads:unity-ads", version.ref = "unity-ads-version" }
+
+play-billing = { module = "com.android.billingclient:billing-ktx", version.ref = "billing_version" }
 
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebase-analytics" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebase-crashlytics" }
