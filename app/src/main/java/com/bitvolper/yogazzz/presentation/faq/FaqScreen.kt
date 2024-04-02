@@ -86,24 +86,24 @@ fun FaqScreen(modifier: Modifier = Modifier,
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
 
-                    OutlinedTextField(
-                        value = "",
-                        onValueChange = { },
-                        label = { Text(text = "Search") },
-                        shape = RoundedCornerShape(20),
-                        modifier = modifier.fillMaxWidth(),
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Rounded.Search,
-                                contentDescription = null
-                            )
-                        },
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            unfocusedBorderColor = Color.Transparent,
-                            focusedBorderColor = Color.Transparent,
-                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                        ),
-                    )
+//                    OutlinedTextField(
+//                        value = "",
+//                        onValueChange = { },
+//                        label = { Text(text = "Search") },
+//                        shape = RoundedCornerShape(20),
+//                        modifier = modifier.fillMaxWidth(),
+//                        leadingIcon = {
+//                            Icon(
+//                                imageVector = Icons.Rounded.Search,
+//                                contentDescription = null
+//                            )
+//                        },
+//                        colors = TextFieldDefaults.outlinedTextFieldColors(
+//                            unfocusedBorderColor = Color.Transparent,
+//                            focusedBorderColor = Color.Transparent,
+//                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+//                        ),
+//                    )
 
                     Row(modifier = modifier
                         .fillMaxWidth()

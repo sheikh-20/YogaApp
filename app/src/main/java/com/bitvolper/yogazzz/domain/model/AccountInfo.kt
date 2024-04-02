@@ -1,6 +1,9 @@
 package com.bitvolper.yogazzz.domain.model
 
 import java.io.Serializable
+import java.time.Instant
+import java.time.LocalDate
+import java.util.Date
 
 
 data class AccountInfo(
@@ -19,13 +22,22 @@ data class AccountInfo(
     val yogaWeekDay: Int? = null,
 
     val height: Int? = null,
+    val heightInFt: Double? = null,
+
     val currentWeight: Double? = null,
+    val currentWeightInLb: Double? = null,
+
     val targetWeight: Double? = null,
+    val targetWeightInLb: Double? = null,
 
     val history: List<HistoryData>? = null,
     val bookmark: List<String>? = null,
 
-    val reports: List<Reports>? = null
+    val reports: List<Reports>? = null,
+
+    val createdDate: String? = null,
+    val deleted: Boolean = false,
+    val forceDelete: Boolean = false
 
 ): Serializable {
     data class HistoryData(
