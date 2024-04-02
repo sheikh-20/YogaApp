@@ -30,6 +30,7 @@ import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.rounded.CalendarMonth
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.ExpandMore
+import androidx.compose.material.icons.rounded.Spa
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
@@ -127,7 +128,7 @@ fun UserProfileScreen(modifier: Modifier = Modifier,
                     }
 
                     is Resource.Failure -> {
-                        Icon(imageVector = Icons.Outlined.AccountCircle,
+                        Icon(imageVector = Icons.Rounded.Spa,
                             contentDescription = null,
                             modifier = modifier.size(80.dp).clip(RoundedCornerShape(50)))
                     }

@@ -139,6 +139,10 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase): V
         }
     }
 
+    fun resetBookmark() {
+        _bookmarkUIState.value = Resource.Success(SerenityData(emptyList()))
+    }
+
     fun getHistory(id: List<AccountInfo.HistoryData>) = viewModelScope.launch {
         try {
             homeUseCase.getHistory(id).collectLatest {

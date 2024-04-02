@@ -30,6 +30,7 @@ fun BookmarkApp(modifier: Modifier = Modifier,
                 homeViewModel: HomeViewModel = hiltViewModel(),
                 accountViewModel: AccountViewModel = hiltViewModel()) {
 
+    val accountInfoUIState by accountViewModel.accountInfoUIState.collectAsState()
     val bookmarkUIState by homeViewModel.bookmarkUIState.collectAsState()
 
     Scaffold(
@@ -37,6 +38,15 @@ fun BookmarkApp(modifier: Modifier = Modifier,
     ) { paddingValues ->
         BookmarkScreen(
             paddingValues = paddingValues,
+            onBookmark = {
+                accountViewModel.getUserProfile()
+
+                if (accountInfoUIState.bookmark == null) {
+                    homeViewModel.resetBookmark()
+                } else {
+                    homeViewModel.getBookmark(accountInfoUIState.bookmark ?: emptyList())
+                }
+            },
             bookmarkUIState = bookmarkUIState
             )
     }
@@ -61,10 +71,7 @@ private fun BookmarkTopAppBar() {
             }
         },
         actions = {
-            IconButton(onClick = { /*TODO*/ },
-                modifier = Modifier.padding(horizontal = 4.dp)) {
-                Icon(imageVector = Icons.Rounded.Search, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
-            }
+
         }
     )
 }

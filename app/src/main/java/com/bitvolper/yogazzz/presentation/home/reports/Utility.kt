@@ -2,16 +2,24 @@ package com.bitvolper.yogazzz.presentation.home.reports
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.requiredWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.Chip
 import androidx.compose.material.ChipDefaults
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
+import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -125,6 +133,38 @@ fun ExposedBottomMenu(modifier: Modifier = Modifier,
                 onClick = {
                     onExpand(false)
                     onSelectPeriod("All Time")
+                })
+        }
+    }
+}
+
+
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
+@Composable
+fun ExposedRefreshBottomMenu(modifier: Modifier = Modifier,
+                      isExpanded: Boolean = false,
+                      onExpand: (Boolean) -> Unit = { },
+                      onRefresh: () -> Unit = { }) {
+
+    ExposedDropdownMenuBox(
+        expanded = isExpanded,
+        onExpandedChange = onExpand) {
+
+        IconButton(onClick = { onExpand(true) },
+            modifier = modifier
+                .then(modifier.requiredHeight(30.dp))
+                .menuAnchor()) {
+
+            Icon(imageVector = Icons.Rounded.MoreVert, contentDescription = null)
+        }
+
+        ExposedDropdownMenu(modifier = modifier.then(modifier.requiredWidth(120.dp)), expanded = isExpanded, onDismissRequest = { onExpand(false) }) {
+            DropdownMenuItem(
+                text = { Text(text = "Refresh", style = MaterialTheme.typography.bodyLarge) },
+                onClick = {
+                    onExpand(false)
+                    onRefresh()
                 })
         }
     }

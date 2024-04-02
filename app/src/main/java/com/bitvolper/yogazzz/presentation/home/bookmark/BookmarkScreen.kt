@@ -1,6 +1,7 @@
 package com.bitvolper.yogazzz.presentation.home.bookmark
 
 import android.content.res.Configuration
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowForwardIos
@@ -28,6 +30,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -48,7 +51,12 @@ private const val TAG = "BookmarkScreen"
 @Composable
 fun BookmarkScreen(modifier: Modifier = Modifier,
                    paddingValues: PaddingValues = PaddingValues(),
+                   onBookmark: () -> Unit = { },
                    bookmarkUIState: Resource<SerenityData> = Resource.Loading) {
+
+    LaunchedEffect(key1 = Unit) {
+        onBookmark()
+    }
 
     Column(modifier = modifier
         .fillMaxSize()
@@ -64,19 +72,43 @@ fun BookmarkScreen(modifier: Modifier = Modifier,
             is Resource.Success -> {
                 Timber.tag(TAG).d("Success")
 
-                Column(modifier = modifier
-                    .fillMaxSize()
-                    .padding(
-                        top = paddingValues.calculateTopPadding(),
-                        bottom = paddingValues.calculateBottomPadding(),
-                        start = 16.dp, end = 16.dp
-                    ), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                Column(modifier = modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)) {
 
-                    LazyColumn {
-                        items(bookmarkUIState.data.data?.size ?: return@LazyColumn) {
-                            BookmarkCard(
-                                yoga = bookmarkUIState.data.data[it] ?: return@items
+
+                    if (bookmarkUIState.data.data?.isEmpty() == true) {
+                        Column(modifier = modifier.fillMaxSize().wrapContentSize(align = Alignment.Center), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                            Image(painter = painterResource(id = R.drawable.ic_empty),
+                                contentDescription = null,
+                                modifier = modifier
+                                    .fillMaxWidth()
+                                    .wrapContentWidth(align = Alignment.CenterHorizontally)
+                                    .size(150.dp))
+
+                            Text(text = "Empty",
+                                style = MaterialTheme.typography.titleLarge,
+                                modifier = modifier.fillMaxWidth(),
+                                textAlign = TextAlign.Center,
+                                fontWeight = FontWeight.SemiBold)
+
+                            Text(
+                                text = "You did not bookmark any exercise",
+                                style = MaterialTheme.typography.bodyLarge,
+                                modifier = modifier.fillMaxWidth(),
+                                textAlign = TextAlign.Center,
                             )
+                        }
+                    } else {
+                        LazyColumn(modifier = modifier.padding(
+                            top = paddingValues.calculateTopPadding(),
+                            bottom = paddingValues.calculateBottomPadding(),
+                            start = 16.dp, end = 16.dp
+                        )) {
+                            items(bookmarkUIState.data.data?.size ?: return@LazyColumn) {
+                                BookmarkCard(
+                                    yoga = bookmarkUIState.data.data[it] ?: return@items
+                                )
+                            }
                         }
                     }
                 }

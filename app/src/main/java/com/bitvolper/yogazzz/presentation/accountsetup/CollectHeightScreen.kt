@@ -1,26 +1,30 @@
 package com.bitvolper.yogazzz.presentation.accountsetup
 
 import android.content.res.Configuration
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredWidth
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.Chip
+import androidx.compose.material.ChipDefaults
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,7 +32,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.utility.AccountSetupContinueComposable
-import com.bitvolper.yogazzz.utility.ListPicker
 import com.bitvolper.yogazzz.utility.toImmutableWrapper
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -36,10 +39,16 @@ import com.bitvolper.yogazzz.utility.toImmutableWrapper
 fun CollectHeightScreen(modifier: Modifier = Modifier,
                         paddingValues: PaddingValues = PaddingValues(),
                         onSkipClick: () -> Unit = {  },
-                        onContinueClick: (Int) -> Unit = { _ -> }) {
+                        onContinueClick: (Int, Int) -> Unit = { _, _ -> }) {
 
-    var value by remember { mutableStateOf("150") }
-    val values = remember { (50..300).map { it.toString() } }
+    var cmValue by remember { mutableStateOf("150") }
+    val cmValues = remember { (50..300).map { it.toString() } }
+
+    var ftValue by remember { mutableStateOf("6") }
+    val ftValues = remember { (1..9).map { it.toString() } }
+
+    val color = MaterialTheme.colorScheme.primary
+    var currentMeasure by remember { mutableIntStateOf(Measure.CM.id) }
 
     Column(modifier = modifier
         .fillMaxSize()
@@ -54,30 +63,85 @@ fun CollectHeightScreen(modifier: Modifier = Modifier,
 
         Text(text = "How tall are you?", style = MaterialTheme.typography.bodyLarge)
 
-        Button(onClick = {  }) {
-            Text(text = "cm")
+
+        Row(modifier = modifier
+            .fillMaxWidth()
+            .wrapContentWidth(align = Alignment.CenterHorizontally),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+
+
+            Chip(onClick = { currentMeasure = Measure.CM.id },
+                colors = ChipDefaults.chipColors(backgroundColor = if (currentMeasure == Measure.CM.id) color else Color.Transparent),
+                border = BorderStroke(width = 1.dp, color = if (currentMeasure == Measure.CM.id) Color.Transparent else MaterialTheme.colorScheme.outline)
+            ) {
+                Text(text = "cm",
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = modifier.padding(10.dp),
+                    color =  if (currentMeasure == Measure.CM.id) Color.White else Color.Unspecified)
+            }
+
+            Chip(onClick = { currentMeasure = Measure.FT.id },
+                colors = ChipDefaults.chipColors(backgroundColor = if (currentMeasure == Measure.FT.id) color else Color.Transparent),
+                border = BorderStroke(width = 1.dp, color = if (currentMeasure == Measure.FT.id) Color.Transparent else MaterialTheme.colorScheme.outline)
+            ) {
+                Text(text = "ft",
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = modifier.padding(10.dp),
+                    color = if (currentMeasure == Measure.FT.id) Color.White else Color.Unspecified)
+            }
         }
 
-        com.bitvolper.yogazzz.presentation.accountsetup.utility.ListPicker(
-            initialValue = value,
-            list = values.toImmutableWrapper(),
-            modifier = modifier
-                .weight(1f)
-                .requiredWidth(200.dp)
-                .padding(vertical = 8.dp),
-            onValueChange = {
-                value = it
-            },
-            textStyle = TextStyle(fontSize = 32.sp),
-            outOfBoundsPageCount = 4,
-            verticalPadding = 8.dp,
-        )
+
+        if (currentMeasure == Measure.CM.id) {
+            com.bitvolper.yogazzz.presentation.accountsetup.utility.ListPicker(
+                initialValue = cmValue,
+                list = cmValues.toImmutableWrapper(),
+                modifier = modifier
+                    .weight(1f)
+                    .requiredWidth(200.dp)
+                    .padding(vertical = 8.dp),
+                onValueChange = {
+                    cmValue = it
+                },
+                textStyle = TextStyle(fontSize = 32.sp),
+                outOfBoundsPageCount = 4,
+                verticalPadding = 8.dp,
+            )
+        } else {
+            com.bitvolper.yogazzz.presentation.accountsetup.utility.ListPicker(
+                initialValue = ftValue,
+                list = ftValues.toImmutableWrapper(),
+                modifier = modifier
+                    .weight(1f)
+                    .requiredWidth(200.dp)
+                    .padding(vertical = 8.dp),
+                onValueChange = {
+                    ftValue = it
+                },
+                textStyle = TextStyle(fontSize = 32.sp),
+                outOfBoundsPageCount = 4,
+                verticalPadding = 8.dp,
+            )
+        }
 
         AccountSetupContinueComposable(
             onSkipClick = onSkipClick,
-            onContinueClick = { onContinueClick(value.toInt()) }
+            onContinueClick = {
+                if (currentMeasure == Measure.CM.id) {
+                    onContinueClick(cmValue.toInt(), currentMeasure)
+                } else {
+                    onContinueClick(ftValue.toInt(), currentMeasure)
+                }
+            }
         )
     }
+}
+
+enum class Measure(val id: Int) {
+    CM(0), FT(1)
 }
 
 @Preview(showBackground = true, showSystemUi = true)

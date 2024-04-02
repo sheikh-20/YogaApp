@@ -24,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitvolper.yogazzz.presentation.faq.FaqActivity
+import com.bitvolper.yogazzz.presentation.home.account.aboutus.AboutUsActivity
 import com.bitvolper.yogazzz.presentation.home.account.privacypolicy.PrivacyPolicyActivity
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 
@@ -51,14 +52,6 @@ fun SupportScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = 
         }
 
         Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Text(text = "Contact Support", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, modifier = modifier.weight(1f))
-
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(imageVector = Icons.Rounded.ArrowForwardIos, contentDescription = null)
-            }
-        }
-
-        Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Text(text = "Privacy Policy", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, modifier = modifier.weight(1f))
 
             IconButton(onClick = { PrivacyPolicyActivity.startActivity(context as Activity) }) {
@@ -67,32 +60,12 @@ fun SupportScreen(modifier: Modifier = Modifier, paddingValues: PaddingValues = 
         }
 
         Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Text(text = "Terms of service", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, modifier = modifier.weight(1f))
-
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(imageVector = Icons.Rounded.ArrowForwardIos, contentDescription = null)
-            }
-        }
-
-        Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Text(text = "About us", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, modifier = modifier.weight(1f))
 
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { AboutUsActivity.startActivity(context as Activity) }) {
                 Icon(imageVector = Icons.Rounded.ArrowForwardIos, contentDescription = null)
             }
         }
-
-
-        Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Text(text = "Follow us on Social Media", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, modifier = modifier.weight(1f))
-
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(imageVector = Icons.Rounded.ArrowForwardIos, contentDescription = null)
-            }
-        }
-
-
-
     }
 }
 

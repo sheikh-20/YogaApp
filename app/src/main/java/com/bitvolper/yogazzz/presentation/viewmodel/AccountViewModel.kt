@@ -1,6 +1,11 @@
 package com.bitvolper.yogazzz.presentation.viewmodel
 
 import android.net.Uri
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bitvolper.yogazzz.domain.model.AccountInfo
@@ -12,6 +17,11 @@ import com.bitvolper.yogazzz.domain.model.Subscription
 import com.bitvolper.yogazzz.domain.usecase.AppThemeUseCase
 import com.bitvolper.yogazzz.domain.usecase.HomeUseCase
 import com.bitvolper.yogazzz.domain.usecase.PushNotificationUseCase
+import com.bitvolper.yogazzz.presentation.home.account.millisecondToDate
+import com.bitvolper.yogazzz.presentation.mybody.cmToFeet
+import com.bitvolper.yogazzz.presentation.mybody.feetToCm
+import com.bitvolper.yogazzz.presentation.mybody.kgToLb
+import com.bitvolper.yogazzz.presentation.mybody.lbToKg
 import com.bitvolper.yogazzz.utility.Resource
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -145,22 +155,111 @@ class AccountViewModel @Inject constructor(
         }
     }
 
+    /**
+     * height in cm
+     * */
+    var height by mutableIntStateOf(0)
+        private set
+
+    fun onHeight(value: Int) {
+        height = value
+    }
+
     fun updateHeight(value: Int) {
         _accountInfoUIState.update {
-            it.copy(height = value)
+            it.copy(height = value, heightInFt = cmToFeet(value))
         }
+    }
+
+
+    /**
+     * height in ft
+     * */
+    var heightInFt by mutableDoubleStateOf(0.0)
+        private set
+
+    fun onHeightFt(value: Double) {
+        heightInFt = value
+    }
+
+    fun updateHeightFt(value: Double) {
+        _accountInfoUIState.update {
+            it.copy(heightInFt = value, height = feetToCm(value))
+        }
+    }
+
+
+    /**
+     * current weight in kg
+     * */
+    var currentWeight by mutableDoubleStateOf(0.0)
+        private set
+
+    fun onCurrentWeight(value: Double) {
+        currentWeight = value
     }
 
     fun updateCurrentWeight(value: Double) {
         _accountInfoUIState.update {
-            it.copy(currentWeight = value)
+            it.copy(currentWeight = value, currentWeightInLb = kgToLb(value))
         }
+    }
+
+    /**
+     * current weight in lb
+     * */
+    var currentWeightInLb by mutableDoubleStateOf(0.0)
+        private set
+
+    fun onCurrentWeightLb(value: Double) {
+        currentWeightInLb = value
+    }
+
+    fun updateCurrentWeightLb(value: Double) {
+        _accountInfoUIState.update {
+            it.copy(currentWeightInLb = value, currentWeight = lbToKg(value))
+        }
+    }
+
+
+    /**
+     * target weight in kg
+     * */
+    var targetWeight by mutableDoubleStateOf(0.0)
+        private set
+
+    fun onTargetWeight(value: Double) {
+        targetWeight = value
     }
 
     fun updateTargetWeight(value: Double) {
         _accountInfoUIState.update {
-            it.copy(targetWeight = value)
+            it.copy(targetWeight = value, targetWeightInLb = kgToLb(value))
         }
+    }
+
+    /**
+     * target weight in lb
+     * */
+    var targetWeightInLb by mutableDoubleStateOf(0.0)
+        private set
+
+    fun onTargetWeightLb(value: Double) {
+        targetWeightInLb = value
+    }
+
+    fun updateTargetWeightLb(value: Double) {
+        _accountInfoUIState.update {
+            it.copy(targetWeightInLb = value, targetWeight = lbToKg(value))
+        }
+    }
+
+
+    fun onDeleteAccount() {
+        _accountInfoUIState.update {
+            it.copy(deleted = true)
+        }
+        updateUserProfile()
     }
 
     fun updateHistory(id: String) {
@@ -252,7 +351,7 @@ class AccountViewModel @Inject constructor(
             }
 
             _accountInfoUIState.update {
-                it.copy(email = auth.currentUser?.email ?: "")
+                it.copy(fullName = if (it.fullName.isNullOrEmpty()) "Avatar" else it.fullName, email = auth.currentUser?.email ?: "", createdDate = auth.currentUser?.metadata?.creationTimestamp?.millisecondToDate() ?: "")
             }
 
         } catch (exception: IOException) {

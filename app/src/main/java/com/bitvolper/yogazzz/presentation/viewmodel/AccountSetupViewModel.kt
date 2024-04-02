@@ -5,6 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bitvolper.yogazzz.domain.model.AccountInfo
 import com.bitvolper.yogazzz.domain.usecase.HomeUseCase
+import com.bitvolper.yogazzz.presentation.accountsetup.Measure
+import com.bitvolper.yogazzz.presentation.accountsetup.MeasureWeight
+import com.bitvolper.yogazzz.presentation.home.account.millisecondToDate
+import com.bitvolper.yogazzz.presentation.mybody.cmToFeet
+import com.bitvolper.yogazzz.presentation.mybody.feetToCm
+import com.bitvolper.yogazzz.presentation.mybody.kgToLb
+import com.bitvolper.yogazzz.presentation.mybody.lbToKg
 import com.bitvolper.yogazzz.utility.ACCOUNT_SETUP_MAX_SCREEN
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -123,23 +130,41 @@ class AccountSetupViewModel @Inject constructor(private val homeUseCase: HomeUse
         Timber.tag(TAG).d(accountInfoUIState.value.toString())
     }
 
-    fun updateHeight(height: Int) {
-        _accountInfoUIState.update {
-            it.copy(height = height)
+    fun updateHeight(height: Int, measureHeight: Int) {
+        if (measureHeight == Measure.CM.id) {
+            _accountInfoUIState.update {
+                it.copy(height = height, heightInFt = cmToFeet(height))
+            }
+        } else {
+            _accountInfoUIState.update {
+                it.copy(heightInFt = height.toDouble(), height = feetToCm(height.toDouble()))
+            }
         }
         Timber.tag(TAG).d(accountInfoUIState.value.toString())
     }
 
-    fun updateCurrentWeight(currentWeight: Double) {
-        _accountInfoUIState.update {
-            it.copy(currentWeight = currentWeight)
+    fun updateCurrentWeight(currentWeight: Double, measureWeight: Int) {
+        if (measureWeight == MeasureWeight.Kg.id) {
+            _accountInfoUIState.update {
+                it.copy(currentWeight = currentWeight, currentWeightInLb = kgToLb(currentWeight))
+            }
+        } else {
+            _accountInfoUIState.update {
+                it.copy(currentWeightInLb = currentWeight, currentWeight = lbToKg(currentWeight))
+            }
         }
         Timber.tag(TAG).d(accountInfoUIState.value.toString())
     }
 
-    fun updateTargetWeight(targetWeight: Double) {
-        _accountInfoUIState.update {
-            it.copy(targetWeight = targetWeight)
+    fun updateTargetWeight(targetWeight: Double, measureWeight: Int) {
+        if (measureWeight == MeasureWeight.Kg.id) {
+            _accountInfoUIState.update {
+                it.copy(targetWeight = targetWeight, targetWeightInLb = kgToLb(targetWeight))
+            }
+        } else {
+            _accountInfoUIState.update {
+                it.copy(targetWeightInLb = targetWeight, targetWeight = lbToKg(targetWeight))
+            }
         }
         Timber.tag(TAG).d(accountInfoUIState.value.toString())
     }
@@ -153,7 +178,10 @@ class AccountSetupViewModel @Inject constructor(private val homeUseCase: HomeUse
 
     private fun updateUserCredential() {
         _accountInfoUIState.update {
-            it.copy(fullName = auth.currentUser?.displayName ?: "", email = auth.currentUser?.email ?: "")
+            it.copy(
+                fullName = auth.currentUser?.displayName ?: "",
+                email = auth.currentUser?.email ?: "",
+                createdDate = auth.currentUser?.metadata?.creationTimestamp?.millisecondToDate() ?: "")
         }
     }
 

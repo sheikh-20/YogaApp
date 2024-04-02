@@ -82,6 +82,7 @@ fun MyBodyApp(modifier: Modifier = Modifier, accountViewModel: AccountViewModel 
                 TextButton(
                     onClick = {
                         accountViewModel.updateBirthdayDate(state.selectedDateMillis ?: return@TextButton)
+                        accountViewModel.updateUserProfile()
                         openDialog = false
                     }
                 ) {
@@ -122,7 +123,30 @@ fun MyBodyApp(modifier: Modifier = Modifier, accountViewModel: AccountViewModel 
 
                     BottomSheetHeightContent(
                         onNegativeClick = onNegativeClick,
-                        onPositiveClick = onPositiveClick
+                        onPositiveClick = onPositiveClick,
+                        height = accountViewModel.height,
+                        onHeight = accountViewModel::onHeight
+                    )
+                }
+            )
+        }
+        BottomSheet.HeightFt -> {
+            BottomSheet(
+                onDismiss = { showBottomSheet = BottomSheet.Default   },
+                onNegativeClick = { showBottomSheet = BottomSheet.Default },
+                onPositiveClick = {
+                    accountViewModel.updateHeightFt(it.toString().toDouble())
+                    accountViewModel.updateUserProfile()
+                    showBottomSheet = BottomSheet.Default
+                },
+                contentSheet = {
+                        onNegativeClick, onPositiveClick ->
+
+                    BottomSheetHeightFtContent(
+                        onNegativeClick = onNegativeClick,
+                        onPositiveClick = onPositiveClick,
+                        heightInFt = accountViewModel.heightInFt,
+                        onHeightFt = accountViewModel::onHeightFt
                     )
                 }
             )
@@ -141,7 +165,30 @@ fun MyBodyApp(modifier: Modifier = Modifier, accountViewModel: AccountViewModel 
 
                     BottomSheetCurrentWeightContent(
                         onNegativeClick = onNegativeClick,
-                        onPositiveClick = onPositiveClick
+                        onPositiveClick = onPositiveClick,
+                        currentWeight = accountViewModel.currentWeight,
+                        onCurrentWeight = accountViewModel::onCurrentWeight
+                    )
+                }
+            )
+        }
+        BottomSheet.CurrentWeightInLb -> {
+            BottomSheet(
+                onDismiss = { showBottomSheet = BottomSheet.Default   },
+                onNegativeClick = { showBottomSheet = BottomSheet.Default },
+                onPositiveClick = {
+                    accountViewModel.updateCurrentWeightLb(it.toString().toDouble())
+                    accountViewModel.updateUserProfile()
+                    showBottomSheet = BottomSheet.Default
+                },
+                contentSheet = {
+                        onNegativeClick, onPositiveClick ->
+
+                    BottomSheetCurrentWeightLbContent(
+                        onNegativeClick = onNegativeClick,
+                        onPositiveClick = onPositiveClick,
+                        currentWeightInLb = accountViewModel.currentWeightInLb,
+                        onCurrentWeightLb = accountViewModel::onCurrentWeightLb
                     )
                 }
             )
@@ -160,7 +207,30 @@ fun MyBodyApp(modifier: Modifier = Modifier, accountViewModel: AccountViewModel 
 
                     BottomSheetTargetWeightContent(
                         onNegativeClick = onNegativeClick,
-                        onPositiveClick = onPositiveClick
+                        onPositiveClick = onPositiveClick,
+                        targetWeight = accountViewModel.targetWeight,
+                        onTargetWeight = accountViewModel::onTargetWeight
+                    )
+                }
+            )
+        }
+        BottomSheet.TargetWeightInLb -> {
+            BottomSheet(
+                onDismiss = { showBottomSheet = BottomSheet.Default   },
+                onNegativeClick = { showBottomSheet = BottomSheet.Default },
+                onPositiveClick = {
+                    accountViewModel.updateTargetWeightLb(it.toString().toDouble())
+                    accountViewModel.updateUserProfile()
+                    showBottomSheet = BottomSheet.Default
+                },
+                contentSheet = {
+                        onNegativeClick, onPositiveClick ->
+
+                    BottomSheetTargetWeightLbContent(
+                        onNegativeClick = onNegativeClick,
+                        onPositiveClick = onPositiveClick,
+                        targetWeightInLb = accountViewModel.targetWeightInLb,
+                        onTargetWeightLb = accountViewModel::onTargetWeightLb
                     )
                 }
             )
@@ -194,11 +264,38 @@ fun MyBodyApp(modifier: Modifier = Modifier, accountViewModel: AccountViewModel 
         MyBodyScreen(
             paddingValues = paddingValues,
             height = accountInfoUIState.height ?: 0,
-            onHeightButtonClick = { showBottomSheet = BottomSheet.Height },
+            onHeightButtonClick = {
+                accountViewModel.onHeight(accountInfoUIState.height ?: 0)
+                showBottomSheet = BottomSheet.Height },
+
+            heightFt = accountInfoUIState.heightInFt ?: 0.0,
+            onHeightFtButtonClick = {
+                accountViewModel.onHeightFt(accountInfoUIState.heightInFt ?: 0.0)
+                showBottomSheet = BottomSheet.HeightFt
+            },
+
             currentWeight = accountInfoUIState.currentWeight ?: 0.0,
-            onCurrentWeightButtonClick = { showBottomSheet = BottomSheet.CurrentWeight },
+            onCurrentWeightButtonClick = {
+                accountViewModel.onCurrentWeight(accountInfoUIState.currentWeight ?: 0.0)
+                showBottomSheet = BottomSheet.CurrentWeight },
+
+            currentWeightInLb = accountInfoUIState.currentWeightInLb ?: 0.0,
+            onCurrentWeightLbButtonClick = {
+                accountViewModel.onCurrentWeightLb(accountInfoUIState.currentWeightInLb ?: 0.0)
+                showBottomSheet = BottomSheet.CurrentWeightInLb
+            },
+
             targetWeight = accountInfoUIState.targetWeight ?: 0.0,
-            onTargetWeightButtonClick = { showBottomSheet = BottomSheet.TargetWeight },
+            onTargetWeightButtonClick = {
+                accountViewModel.onTargetWeight(accountInfoUIState.targetWeight ?: 0.0)
+                showBottomSheet = BottomSheet.TargetWeight },
+
+            targetWeightInLb = accountInfoUIState.targetWeightInLb ?: 0.0,
+            onTargetWeightLbButtonClick = {
+                accountViewModel.onTargetWeightLb(accountInfoUIState.targetWeightInLb ?: 0.0)
+                showBottomSheet = BottomSheet.TargetWeightInLb },
+
+
             age = accountInfoUIState.birthdayDate ?: 0L,
             onAgeButtonClick = { openDialog = true },
             gender = accountInfoUIState.gender ?: 0,
@@ -230,7 +327,7 @@ private fun MyBodyTopAppBar() {
 }
 
 enum class BottomSheet {
-    Default, Height, CurrentWeight, TargetWeight, Gender
+    Default, Height, HeightFt, CurrentWeight, CurrentWeightInLb, TargetWeight, TargetWeightInLb, Gender
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -269,14 +366,12 @@ private fun BottomSheet(modifier: Modifier = Modifier,
 @Composable
 private fun BottomSheetHeightContent(modifier: Modifier = Modifier,
                                      onNegativeClick: () -> Unit = { },
-                                     onPositiveClick: (Int) -> Unit = { _ -> }) {
+                                     onPositiveClick: (Int) -> Unit = { _ -> },
+                                     height: Int = 0,
+                                     onHeight: (Int) -> Unit = { _ -> }) {
 
     val focusManager = LocalFocusManager.current
     val color = MaterialTheme.colorScheme.primary
-
-    var height by remember {
-        mutableIntStateOf(0)
-    }
 
     Column(modifier = modifier
         .padding(16.dp)
@@ -292,7 +387,7 @@ private fun BottomSheetHeightContent(modifier: Modifier = Modifier,
 
         OutlinedTextField(
             value = "$height",
-            onValueChange = { height = it.toIntOrNull() ?: 0 },
+            onValueChange = { onHeight(it.toIntOrNull() ?: 0) },
             modifier = modifier
                 .fillMaxWidth()
                 .padding(vertical = 16.dp),
@@ -330,14 +425,14 @@ private fun BottomSheetHeightContent(modifier: Modifier = Modifier,
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun BottomSheetCurrentWeightContent(modifier: Modifier = Modifier, onNegativeClick: () -> Unit = { }, onPositiveClick: (Double) -> Unit = { _ -> }) {
+private fun BottomSheetHeightFtContent(modifier: Modifier = Modifier,
+                                     onNegativeClick: () -> Unit = { },
+                                     onPositiveClick: (Double) -> Unit = { _ -> },
+                                     heightInFt: Double = 0.0,
+                                     onHeightFt: (Double) -> Unit = { _ -> }) {
 
     val focusManager = LocalFocusManager.current
     val color = MaterialTheme.colorScheme.primary
-
-    var currentWeight by remember {
-        mutableDoubleStateOf(0.0)
-    }
 
     Column(modifier = modifier
         .padding(16.dp)
@@ -352,8 +447,69 @@ private fun BottomSheetCurrentWeightContent(modifier: Modifier = Modifier, onNeg
         Divider()
 
         OutlinedTextField(
+            value = "$heightInFt",
+            onValueChange = { onHeightFt(it.toDoubleOrNull() ?: 0.0) },
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(vertical = 16.dp),
+            shape = RoundedCornerShape(20),
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done, keyboardType = KeyboardType.Number),
+            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+            colors = androidx.compose.material.TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = color,
+                unfocusedBorderColor = color,
+                backgroundColor = MaterialTheme.colorScheme.primaryContainer,
+                textColor = MaterialTheme.colorScheme.primary
+            )
+        )
+
+        Row(modifier = modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically) {
+
+            OutlinedButton(onClick = onNegativeClick, modifier = modifier
+                .weight(1f)
+                .requiredHeight(50.dp)) {
+                Text(text = stringResource(id = R.string.cancel))
+            }
+
+            Button(onClick = { onPositiveClick(heightInFt) }, modifier = modifier
+                .weight(1f)
+                .requiredHeight(50.dp)) {
+                Text(text = "Ok")
+            }
+        }
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun BottomSheetCurrentWeightContent(modifier: Modifier = Modifier,
+                                            onNegativeClick: () -> Unit = { },
+                                            onPositiveClick: (Double) -> Unit = { _ -> },
+                                            currentWeight: Double = 0.0,
+                                            onCurrentWeight: (Double) -> Unit = { _ -> }) {
+
+    val focusManager = LocalFocusManager.current
+    val color = MaterialTheme.colorScheme.primary
+
+    Column(modifier = modifier
+        .padding(16.dp)
+        .systemBarsPadding(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Text(text = "Enter Weight",
+            style = MaterialTheme.typography.headlineSmall,
+            textAlign = TextAlign.Center,
+            modifier = modifier.fillMaxWidth(),
+            color = MaterialTheme.colorScheme.primary,
+            fontWeight = FontWeight.Bold)
+
+        Divider()
+
+        OutlinedTextField(
             value = "$currentWeight",
-            onValueChange = { currentWeight = it.toDoubleOrNull() ?: 0.0 },
+            onValueChange = { onCurrentWeight(it.toDoubleOrNull() ?: 0.0) },
             modifier = modifier
                 .fillMaxWidth()
                 .padding(vertical = 16.dp),
@@ -390,19 +546,79 @@ private fun BottomSheetCurrentWeightContent(modifier: Modifier = Modifier, onNeg
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun BottomSheetTargetWeightContent(modifier: Modifier = Modifier, onNegativeClick: () -> Unit = { }, onPositiveClick: (Double) -> Unit = { _ -> }) {
+private fun BottomSheetCurrentWeightLbContent(modifier: Modifier = Modifier,
+                                            onNegativeClick: () -> Unit = { },
+                                            onPositiveClick: (Double) -> Unit = { _ -> },
+                                            currentWeightInLb: Double = 0.0,
+                                            onCurrentWeightLb: (Double) -> Unit = { _ -> }) {
 
     val focusManager = LocalFocusManager.current
     val color = MaterialTheme.colorScheme.primary
 
-    var targetWeight by remember {
-        mutableDoubleStateOf(0.0)
+    Column(modifier = modifier
+        .padding(16.dp)
+        .systemBarsPadding(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Text(text = "Enter Weight",
+            style = MaterialTheme.typography.headlineSmall,
+            textAlign = TextAlign.Center,
+            modifier = modifier.fillMaxWidth(),
+            color = MaterialTheme.colorScheme.primary,
+            fontWeight = FontWeight.Bold)
+
+        Divider()
+
+        OutlinedTextField(
+            value = "$currentWeightInLb",
+            onValueChange = { onCurrentWeightLb(it.toDoubleOrNull() ?: 0.0) },
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(vertical = 16.dp),
+            shape = RoundedCornerShape(20),
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done, keyboardType = KeyboardType.Number),
+            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+            colors = androidx.compose.material.TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = color,
+                unfocusedBorderColor = color,
+                textColor = MaterialTheme.colorScheme.primary
+            )
+        )
+
+        Row(modifier = modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically) {
+
+            OutlinedButton(onClick = onNegativeClick, modifier = modifier
+                .weight(1f)
+                .requiredHeight(50.dp)) {
+                Text(text = stringResource(id = R.string.cancel))
+            }
+
+            Button(onClick = { onPositiveClick(currentWeightInLb) }, modifier = modifier
+                .weight(1f)
+                .requiredHeight(50.dp)) {
+                Text(text = "Ok")
+            }
+        }
     }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun BottomSheetTargetWeightContent(modifier: Modifier = Modifier,
+                                           onNegativeClick: () -> Unit = { },
+                                           onPositiveClick: (Double) -> Unit = { _ -> },
+                                           targetWeight: Double = 0.0,
+                                           onTargetWeight: (Double) -> Unit = { _ -> }) {
+
+    val focusManager = LocalFocusManager.current
+    val color = MaterialTheme.colorScheme.primary
 
     Column(modifier = modifier
         .padding(16.dp)
         .systemBarsPadding(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Text(text = "Enter Height",
+        Text(text = "Enter Weight",
             style = MaterialTheme.typography.headlineSmall,
             textAlign = TextAlign.Center,
             modifier = modifier.fillMaxWidth(),
@@ -413,7 +629,7 @@ private fun BottomSheetTargetWeightContent(modifier: Modifier = Modifier, onNega
 
         OutlinedTextField(
             value = "$targetWeight",
-            onValueChange = { targetWeight = it.toDoubleOrNull() ?: 0.0 },
+            onValueChange = { onTargetWeight(it.toDoubleOrNull() ?: 0.0) },
             modifier = modifier
                 .fillMaxWidth()
                 .padding(vertical = 16.dp),
@@ -445,6 +661,71 @@ private fun BottomSheetTargetWeightContent(modifier: Modifier = Modifier, onNega
         }
     }
 }
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun BottomSheetTargetWeightLbContent(modifier: Modifier = Modifier,
+                                             onNegativeClick: () -> Unit = { },
+                                             onPositiveClick: (Double) -> Unit = { _ -> },
+                                             targetWeightInLb: Double = 0.0,
+                                             onTargetWeightLb: (Double) -> Unit = { _ -> }
+                                             ) {
+
+    val focusManager = LocalFocusManager.current
+    val color = MaterialTheme.colorScheme.primary
+
+
+    Column(modifier = modifier
+        .padding(16.dp)
+        .systemBarsPadding(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Text(text = "Enter Weight",
+            style = MaterialTheme.typography.headlineSmall,
+            textAlign = TextAlign.Center,
+            modifier = modifier.fillMaxWidth(),
+            color = MaterialTheme.colorScheme.primary,
+            fontWeight = FontWeight.Bold)
+
+        Divider()
+
+        OutlinedTextField(
+            value = "$targetWeightInLb",
+            onValueChange = { onTargetWeightLb(it.toDoubleOrNull() ?: 0.0) },
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(vertical = 16.dp),
+            shape = RoundedCornerShape(20),
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done, keyboardType = KeyboardType.Number),
+            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+            colors = androidx.compose.material.TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = color,
+                unfocusedBorderColor = color,
+                textColor = MaterialTheme.colorScheme.primary
+            )
+        )
+
+        Row(modifier = modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically) {
+
+            OutlinedButton(onClick = onNegativeClick, modifier = modifier
+                .weight(1f)
+                .requiredHeight(50.dp)) {
+                Text(text = stringResource(id = R.string.cancel))
+            }
+
+            Button(onClick = { onPositiveClick(targetWeightInLb) }, modifier = modifier
+                .weight(1f)
+                .requiredHeight(50.dp)) {
+                Text(text = "Ok")
+            }
+        }
+    }
+}
+
+
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable

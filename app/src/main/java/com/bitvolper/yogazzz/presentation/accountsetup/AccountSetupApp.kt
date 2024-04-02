@@ -225,9 +225,9 @@ fun AccountSetupApp(modifier: Modifier = Modifier,
                         accountSetupViewModel.updateCurrentScreen()
                         navController.navigate(AccountSetupScreen.CurrentWeight.name)
                     },
-                    onContinueClick = {
+                    onContinueClick = { value, measure ->
                         accountSetupViewModel.updateCurrentScreen()
-                        accountSetupViewModel.updateHeight(it)
+                        accountSetupViewModel.updateHeight(value, measure)
                         navController.navigate(AccountSetupScreen.CurrentWeight.name)
                     }
                 )
@@ -240,9 +240,9 @@ fun AccountSetupApp(modifier: Modifier = Modifier,
                         accountSetupViewModel.updateCurrentScreen()
                         navController.navigate(AccountSetupScreen.TargetWeight.name)
                     },
-                    onContinueClick = {
+                    onContinueClick = { value, measure ->
                         accountSetupViewModel.updateCurrentScreen()
-                        accountSetupViewModel.updateCurrentWeight(it)
+                        accountSetupViewModel.updateCurrentWeight(value, measure)
                         navController.navigate(AccountSetupScreen.TargetWeight.name)
                     }
                 )
@@ -255,9 +255,9 @@ fun AccountSetupApp(modifier: Modifier = Modifier,
                         accountSetupViewModel.updateCurrentScreen()
                         navController.navigate(AccountSetupScreen.YogaPlan.name)
                     },
-                    onContinueClick = {
+                    onContinueClick = { value, measure ->
                         accountSetupViewModel.updateCurrentScreen()
-                        accountSetupViewModel.updateTargetWeight(it)
+                        accountSetupViewModel.updateTargetWeight(value, measure)
                         navController.navigate(AccountSetupScreen.YogaPlan.name)
                     }
                 )

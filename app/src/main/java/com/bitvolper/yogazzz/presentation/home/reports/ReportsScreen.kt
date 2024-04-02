@@ -167,7 +167,7 @@ fun ReportsScreen(modifier: Modifier = Modifier,
                         TitleCardCompose(reports = reportsUIState.data)
                         StatisticsCardCompose()
                         WeightCardCompose()
-                        BmiCardCompose()
+//                        BmiCardCompose()
                     }
                 }
             }

@@ -18,12 +18,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.LocalFireDepartment
 import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material.icons.rounded.SelfImprovement
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -42,8 +44,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.bitvolper.yogazzz.R
+import com.bitvolper.yogazzz.domain.model.SerenityData
 import com.bitvolper.yogazzz.presentation.home.account.showFeedbackDialog
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
+import com.bitvolper.yogazzz.utility.Resource
 import kotlinx.coroutines.delay
 import nl.dionsegijn.konfetti.compose.KonfettiView
 import nl.dionsegijn.konfetti.core.Party
@@ -54,16 +58,26 @@ import java.util.concurrent.TimeUnit
 @Composable
 fun YogaCompletedScreen(modifier: Modifier = Modifier,
                         paddingValues: PaddingValues = PaddingValues(),
+                        yogaExerciseUIState: Resource<SerenityData> = Resource.Loading,
                         showSubscriptionSheet: () -> Unit = {  },
-                        updateReports: () -> Unit = { }) {
+                        updateReports: () -> Unit = { },
+                        updateHistory: (String) -> Unit = { _ -> }) {
 
     val context = LocalContext.current
 
     LaunchedEffect(key1 = Unit) {
         updateReports()
+
+        when (yogaExerciseUIState) {
+            is Resource.Loading -> { }
+            is Resource.Failure -> { }
+            is Resource.Success -> {
+                updateHistory(yogaExerciseUIState.data.data?.first()?.id ?: return@LaunchedEffect)
+            }
+        }
+
         delay(3_000L)
         showSubscriptionSheet()
-
 
         (context as Activity).showFeedbackDialog()
 
