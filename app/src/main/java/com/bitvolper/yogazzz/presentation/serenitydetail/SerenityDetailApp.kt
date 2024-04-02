@@ -230,8 +230,10 @@ fun SerenityDetailApp(modifier: Modifier = Modifier,
             composable(route = YogaExercise.Complete.name) {
                 YogaCompletedScreen(
                     paddingValues = paddingValues,
+                    yogaExerciseUIState = yogaExerciseUIState,
                     showSubscriptionSheet = { showBottomSheet = BottomSheet.Subscription },
-                    updateReports = accountViewModel::updateUserProfile)
+                    updateReports = accountViewModel::updateUserProfile,
+                    updateHistory = accountViewModel::updateHistory)
             }
         }
     }

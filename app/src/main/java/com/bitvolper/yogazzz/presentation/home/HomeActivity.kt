@@ -104,9 +104,6 @@ class HomeActivity : BaseActivity() {
 //
 //        })
 
-        homeViewModel.getHomeContent()
-        discoverViewModel.getExploreContent()
-
         lifecycle.coroutineScope.launch {
             accountViewModel.appThemeIndex.collect {
                 setTransparentStatusBar(it.themeIndex)

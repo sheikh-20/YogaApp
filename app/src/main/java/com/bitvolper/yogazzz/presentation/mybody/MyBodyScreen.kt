@@ -43,12 +43,25 @@ import kotlinx.coroutines.launch
 @Composable
 fun MyBodyScreen(modifier: Modifier = Modifier,
                  paddingValues: PaddingValues = PaddingValues(),
+
                  height: Int = 0,
                  onHeightButtonClick: () -> Unit = { },
+
+                 heightFt: Double = 0.0,
+                 onHeightFtButtonClick: () -> Unit = { },
+
                  currentWeight: Double = 0.0,
                  onCurrentWeightButtonClick: () -> Unit = { },
+
+                 currentWeightInLb: Double = 0.0,
+                 onCurrentWeightLbButtonClick: () -> Unit = { },
+
                  targetWeight: Double = 0.0,
                  onTargetWeightButtonClick: () -> Unit = {  },
+
+                 targetWeightInLb: Double = 0.0,
+                 onTargetWeightLbButtonClick: () -> Unit = {  },
+
                  age: Long = 0L,
                  onAgeButtonClick: () -> Unit = { },
                  gender: Int = 0,
@@ -131,7 +144,7 @@ fun MyBodyScreen(modifier: Modifier = Modifier,
                             BodyPartCard(title = "Height", value = "$height cm", onClick = onHeightButtonClick)
                             BodyPartCard(title = "Weight", value = "$currentWeight kg", onClick = onCurrentWeightButtonClick)
                             BodyPartCard(title = "Target Weight", value = "$targetWeight kg", onClick = onTargetWeightButtonClick)
-                            BodyPartCard(title = "Age", value = "$age", onClick = onAgeButtonClick)
+                            BodyPartCard(title = "Age", value = "${calculateAgeFromMilliseconds(age)}", onClick = onAgeButtonClick)
                             BodyPartCard(title = "Gender", value = if (gender == 0) "Man" else "Woman", onClick = onGenderButtonClick)
 
                         }
@@ -142,10 +155,12 @@ fun MyBodyScreen(modifier: Modifier = Modifier,
                             verticalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
 
-                            BodyPartCard(title = "Height", value = "$height cm")
-                            BodyPartCard(title = "Weight", value = "$currentWeight kg")
-                            BodyPartCard(title = "Target Weight", value = "$targetWeight kg")
-                            BodyPartCard(title = "Age", value = "$age", onClick = onAgeButtonClick)
+                            val heightInFeet = heightFt.toString().split(".")
+
+                            BodyPartCard(title = "Height", value = "${heightInFeet[0]} ft ${heightInFeet[1]} in", onClick = onHeightFtButtonClick)
+                            BodyPartCard(title = "Weight", value = "$currentWeightInLb lb", onClick = onCurrentWeightLbButtonClick)
+                            BodyPartCard(title = "Target Weight", value = "$targetWeightInLb lb", onClick = onTargetWeightLbButtonClick)
+                            BodyPartCard(title = "Age", value = "${calculateAgeFromMilliseconds(age)}", onClick = onAgeButtonClick)
                             BodyPartCard(title = "Gender", value = if (gender == 0) "Man" else "Woman", onClick = onGenderButtonClick)
                         }
                     }

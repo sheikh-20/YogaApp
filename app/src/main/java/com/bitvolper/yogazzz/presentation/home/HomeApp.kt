@@ -74,6 +74,8 @@ import com.bitvolper.yogazzz.presentation.home.bookmark.BookmarkActivity
 import com.bitvolper.yogazzz.presentation.home.discover.DiscoverScreen
 import com.bitvolper.yogazzz.presentation.home.history.HistoryScreen
 import com.bitvolper.yogazzz.presentation.home.notification.NotificationSettingsActivity
+import com.bitvolper.yogazzz.presentation.home.reports.ExposedBottomMenu
+import com.bitvolper.yogazzz.presentation.home.reports.ExposedRefreshBottomMenu
 import com.bitvolper.yogazzz.presentation.home.reports.ReportsScreen
 import com.bitvolper.yogazzz.presentation.notifications.NotificationsActivity
 import com.bitvolper.yogazzz.presentation.viewmodel.AccountViewModel
@@ -84,7 +86,9 @@ import com.bitvolper.yogazzz.utility.Resource
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
+private const val TAG = "HomeApp"
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun HomeApp(modifier: Modifier = Modifier,
@@ -94,7 +98,20 @@ fun HomeApp(modifier: Modifier = Modifier,
             discoverViewModel: DiscoverViewModel = hiltViewModel(),
             accountViewModel: AccountViewModel = hiltViewModel()) {
 
+    LaunchedEffect(key1 = Unit) {
+        homeViewModel.getHomeContent()
+        discoverViewModel.getExploreContent()
+    }
+
     val context = LocalContext.current
+    val clearSession by accountViewModel.accountInfoUIState.collectAsState()
+
+    if (clearSession.forceDelete) {
+        onboardingViewModel.signOut()
+        (context as Activity).finish()
+        HomeActivity.startActivity(context as Activity)
+    }
+
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -173,7 +190,31 @@ fun HomeApp(modifier: Modifier = Modifier,
 
     Scaffold(
         topBar = {
-            HomeTopAppBar(navController = navController)
+            HomeTopAppBar(
+                navController = navController,
+                onAccountRefresh = {
+                    accountViewModel.getUserProfile()
+                    accountViewModel.getProfilePhoto()
+                },
+                onReportsRefresh = {
+                    accountViewModel.getUserProfile()
+
+                    if (accountInfoUIState.reports == null) {
+                        homeViewModel.resetReports()
+                    } else {
+                        homeViewModel.getReports(accountInfoUIState.reports ?: return@HomeTopAppBar)
+                    }
+                },
+                onHistoryRefresh = {
+                    accountViewModel.getUserProfile()
+
+                    if (accountInfoUIState.history == null) {
+                        homeViewModel.resetHistory()
+                    } else {
+                        homeViewModel.getHistory(accountInfoUIState.history ?: return@HomeTopAppBar)
+                    }
+                },
+                onDiscoverRefresh = discoverViewModel::getExploreContent)
         },
         bottomBar = {
             HomeBottomBarNavigation(navController = navController)
@@ -222,6 +263,7 @@ fun HomeApp(modifier: Modifier = Modifier,
             composable(route = BottomNavigationScreens.Account.route) {
                 AccountScreen(paddingValues = paddingValues,
                     uiState = profileUiState,
+                    accountInfoUIState = accountInfoUIState,
                     onSignOutClick = {
                         showBottomSheet = BottomSheet.Logout
                     },
@@ -306,9 +348,16 @@ private fun BottomSheetContent(modifier: Modifier = Modifier, onNegativeClick: (
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun HomeTopAppBar(navController: NavHostController,) {
+private fun HomeTopAppBar(navController: NavHostController,
+                          onAccountRefresh: () -> Unit = { },
+                          onReportsRefresh: () -> Unit = { },
+                          onHistoryRefresh: () -> Unit = { },
+                          onDiscoverRefresh: () -> Unit = { }
+                          ) {
 
     val context = LocalContext.current
+
+    var isExpanded by remember { mutableStateOf(false) }
 
     when (navController.currentBackStackEntryAsState().value?.destination?.route) {
         BottomNavigationScreens.Home.route -> {
@@ -347,10 +396,11 @@ private fun HomeTopAppBar(navController: NavHostController,) {
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /*TODO*/ },
-                        modifier = Modifier.padding(horizontal = 4.dp)) {
-                        Icon(imageVector = Icons.Rounded.MoreVert, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
-                    }
+                    ExposedRefreshBottomMenu(
+                        isExpanded = isExpanded,
+                        onExpand = { isExpanded = it },
+                        onRefresh = onDiscoverRefresh
+                    )
                 }
             )
         }
@@ -367,10 +417,11 @@ private fun HomeTopAppBar(navController: NavHostController,) {
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /*TODO*/ },
-                        modifier = Modifier.padding(horizontal = 4.dp)) {
-                        Icon(imageVector = Icons.Rounded.MoreVert, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
-                    }
+                    ExposedRefreshBottomMenu(
+                        isExpanded = isExpanded,
+                        onExpand = { isExpanded = it },
+                        onRefresh = onReportsRefresh
+                    )
                 }
             )
         }
@@ -388,10 +439,11 @@ private fun HomeTopAppBar(navController: NavHostController,) {
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /*TODO*/ },
-                        modifier = Modifier.padding(horizontal = 4.dp)) {
-                        Icon(imageVector = Icons.Rounded.MoreVert, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
-                    }
+                    ExposedRefreshBottomMenu(
+                        isExpanded = isExpanded,
+                        onExpand = { isExpanded = it },
+                        onRefresh = onHistoryRefresh
+                    )
                 }
             )
         }
@@ -407,6 +459,13 @@ private fun HomeTopAppBar(navController: NavHostController,) {
                     IconButton(onClick = { /*TODO*/ }) {
                         Icon(imageVector = Icons.Rounded.Spa, contentDescription = null)
                     }
+                },
+                actions = {
+                    ExposedRefreshBottomMenu(
+                        isExpanded = isExpanded,
+                        onExpand = { isExpanded = it },
+                        onRefresh = onAccountRefresh
+                    )
                 }
             )
         }

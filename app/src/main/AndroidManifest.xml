@@ -30,6 +30,12 @@
         </service>
 
         <activity
+            android:name=".presentation.home.account.aboutus.AboutUsActivity"
+            android:exported="true"
+            android:theme="@style/Theme.YogaApp"
+            android:screenOrientation="portrait"/>
+
+        <activity
             android:name=".presentation.home.account.privacypolicy.PrivacyPolicyActivity"
             android:exported="true"
             android:theme="@style/Theme.YogaApp"

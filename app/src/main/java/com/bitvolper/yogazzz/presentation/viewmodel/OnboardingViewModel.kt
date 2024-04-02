@@ -13,6 +13,7 @@ import com.bitvolper.yogazzz.domain.usecase.PasswordResetUseCase
 import com.bitvolper.yogazzz.domain.usecase.SignInEmailUseCase
 import com.bitvolper.yogazzz.domain.usecase.SignInGoogleUseCase
 import com.bitvolper.yogazzz.domain.usecase.SignUpEmailUseCase
+import com.bitvolper.yogazzz.presentation.home.account.millisecondToDate
 import com.bitvolper.yogazzz.utility.Resource
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.ktx.auth
@@ -28,6 +29,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.IOException
+import java.util.Date
 import javax.inject.Inject
 
 data class OnboardUIState(val isEmailError: Boolean = false, val isPasswordError: Boolean = false)
@@ -121,7 +123,7 @@ class OnboardingViewModel @Inject constructor(private val signInGoogleUseCase: S
 
     fun updateUserProfile() = viewModelScope.launch {
         try {
-            homeUseCase.updateUserInfo(auth.currentUser?.uid ?: return@launch, AccountInfo(fullName = auth.currentUser?.displayName ?: "", email = auth.currentUser?.email ?: ""))
+            homeUseCase.updateUserInfo(auth.currentUser?.uid ?: return@launch, AccountInfo(fullName = auth.currentUser?.displayName ?: "", email = auth.currentUser?.email ?: "", createdDate = auth.currentUser?.metadata?.creationTimestamp?.millisecondToDate() ?: ""))
         } catch (exception: IOException) {
             Timber.tag(TAG).e(exception)
         }

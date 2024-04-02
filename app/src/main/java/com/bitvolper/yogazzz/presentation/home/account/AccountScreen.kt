@@ -57,6 +57,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.bitvolper.yogazzz.R
+import com.bitvolper.yogazzz.domain.model.AccountInfo
 import com.bitvolper.yogazzz.domain.model.UserData
 import com.bitvolper.yogazzz.presentation.accountsecurity.AccountSecurityActivity
 import com.bitvolper.yogazzz.presentation.analytics.AnalyticsActivity
@@ -75,6 +76,7 @@ import com.bitvolper.yogazzz.utility.Resource
 fun AccountScreen(modifier: Modifier = Modifier,
                   paddingValues: PaddingValues = PaddingValues(),
                   uiState: UserData? = null,
+                  accountInfoUIState: AccountInfo = AccountInfo(),
                   profileUIState: Resource<Uri> = Resource.Loading,
                   onSignOutClick: () -> Unit = {}) {
 
@@ -94,7 +96,7 @@ fun AccountScreen(modifier: Modifier = Modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp)) {
 
         ProfileViewCompose(
-            userName = uiState?.userName ?: "",
+            userName = accountInfoUIState.fullName ?: "",
             gmail = uiState?.email ?: "",
             onClick = {
                 UserProfileActivity.startActivity(context as Activity)
@@ -127,9 +129,9 @@ fun AccountScreen(modifier: Modifier = Modifier,
                 AppearanceActivity.startActivity(context as Activity)
             }
 
-            AccountContentCompose(title = "Data & Analytics", icon = Icons.Rounded.Analytics) {
-                AnalyticsActivity.startActivity(context as Activity)
-            }
+//            AccountContentCompose(title = "Data & Analytics", icon = Icons.Rounded.Analytics) {
+//                AnalyticsActivity.startActivity(context as Activity)
+//            }
 
             AccountContentCompose(title = "Help & Support", icon = Icons.Rounded.SupportAgent) {
                 SupportActivity.startActivity(context as Activity)
