@@ -155,7 +155,7 @@ fun HistoryScreen(
 
                                         val date: Date = Date(date)
                                         selectedDate = android.text.format.DateFormat.format("d-M-yyyy", date) as String
-                                        selectedDay =  android.text.format.DateFormat.format("EEE MMM yy", date) as String
+                                        selectedDay =  android.text.format.DateFormat.format("EEE, MMM dd", date) as String
                                     }
                                 },
                                 update = {
@@ -169,7 +169,7 @@ fun HistoryScreen(
 
                                             val calendar: Calendar = Calendar.getInstance()
                                             calendar.set(year, month, dayOfMonth)
-                                            selectedDay =  android.text.format.DateFormat.format("EEE MMM yy", calendar.time) as String
+                                            selectedDay =  android.text.format.DateFormat.format("EEE, MMM dd", calendar.time) as String
                                         }
                                     }
                                 })
@@ -192,6 +192,11 @@ fun HistoryScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun HistoryCompose(modifier: Modifier = Modifier, history: History = History(), selectedDate: String = "5-5-2024", selectedDay: String = "Mon") {
+
+    val filter = history.data?.filter {
+        selectedDate == it?.date
+    }
+
     Card(border = BorderStroke(width = .5.dp, color = MaterialTheme.colorScheme.outlineVariant),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent)) {
         Column(modifier = modifier
@@ -211,18 +216,18 @@ private fun HistoryCompose(modifier: Modifier = Modifier, history: History = His
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
 
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Icon(imageVector = Icons.Rounded.SelfImprovement, contentDescription = null)
-                        Text(text = "0", style = MaterialTheme.typography.bodyLarge)
+                        Icon(imageVector = Icons.Rounded.SelfImprovement, contentDescription = null, tint = Color(0xFFf54336), modifier = modifier.size(20.dp))
+                        Text(text = "${filter?.size ?: 0}", style = MaterialTheme.typography.bodyMedium)
                     }
 
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Icon(imageVector = Icons.Rounded.AccessTime, contentDescription = null)
-                        Text(text = "0 mins", style = MaterialTheme.typography.bodyLarge)
+                        Icon(imageVector = Icons.Rounded.AccessTime, contentDescription = null, tint = Color(0xFF4db05a), modifier = modifier.size(20.dp))
+                        Text(text = "${filter?.sumBy { it?.duration?.toIntOrNull() ?: 0 }} mins", style = MaterialTheme.typography.bodyMedium)
                     }
 
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Icon(imageVector = Icons.Rounded.LocalFireDepartment, contentDescription = null)
-                        Text(text = "0 kcal", style = MaterialTheme.typography.bodyLarge)
+                        Icon(imageVector = Icons.Rounded.LocalFireDepartment, contentDescription = null, tint = Color(0xFFfe9e26), modifier = modifier.size(20.dp))
+                        Text(text = "${filter?.sumBy { it?.kcal?.toIntOrNull() ?: 0 }} kcal", style = MaterialTheme.typography.bodyMedium)
                     }
                 }
             }
@@ -230,9 +235,6 @@ private fun HistoryCompose(modifier: Modifier = Modifier, history: History = His
             Divider()
 
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                val filter = history.data?.filter {
-                    selectedDate == it?.date
-                }
 
                 if (filter?.isEmpty() == true) {
 
@@ -305,14 +307,16 @@ private fun HistoryCard(
                     contentScale = ContentScale.Crop)
             }
 
-            IconButton(onClick = { /*TODO*/ },
-                modifier = modifier
-                    .fillMaxSize()
-                    .wrapContentSize(align = Alignment.Center)
-                    .background(color = Color(0xFFE5E5E5), shape = RoundedCornerShape(50))) {
-                Icon(imageVector = Icons.Rounded.PlayArrow, contentDescription = null, modifier = modifier.size(30.dp), tint = MaterialTheme.colorScheme.primary)
-            }
 
+            if (history.type != "yoga") {
+                IconButton(onClick = { /*TODO*/ },
+                    modifier = modifier
+                        .fillMaxSize()
+                        .wrapContentSize(align = Alignment.Center)
+                        .background(color = Color(0xFFE5E5E5), shape = RoundedCornerShape(50))) {
+                    Icon(imageVector = Icons.Rounded.PlayArrow, contentDescription = null, modifier = modifier.size(30.dp), tint = MaterialTheme.colorScheme.primary)
+                }
+            }
         }
 
         Column(modifier = modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -324,10 +328,18 @@ private fun HistoryCard(
                 maxLines = 1
             )
 
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(text = history.duration ?: "", style = MaterialTheme.typography.bodyMedium)
-                Text(text = ".", style = MaterialTheme.typography.bodySmall)
-                Text(text = history.category ?: "", style = MaterialTheme.typography.bodyMedium)
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Icon(imageVector = Icons.Rounded.AccessTime, contentDescription = null, tint = Color(0xFF4db05a), modifier = modifier.size(20.dp))
+                    Text(text = "${history.duration ?: 0} mins", style = MaterialTheme.typography.bodyMedium)
+                }
+
+                if (history.type == "yoga") {
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Icon(imageVector = Icons.Rounded.LocalFireDepartment, contentDescription = null, tint = Color(0xFFfe9e26), modifier = modifier.size(20.dp))
+                        Text(text = "${history.kcal ?: 0} kcal", style = MaterialTheme.typography.bodyMedium)
+                    }
+                }
             }
         }
 

@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
@@ -234,16 +235,16 @@ fun HomeApp(modifier: Modifier = Modifier,
 
             composable(route = BottomNavigationScreens.Reports.route) {
                 ReportsScreen(paddingValues = paddingValues,
-                    onReports = {
+                    onHistory = {
+
                         accountViewModel.getUserProfile()
 
-                        if (accountInfoUIState.reports == null) {
-                            homeViewModel.resetReports()
+                        if (accountInfoUIState.history == null) {
+                            homeViewModel.resetHistory()
                         } else {
-                            homeViewModel.getReports(accountInfoUIState.reports ?: return@ReportsScreen)
-                        }
-                    },
-                    reportsUIState = reportsUIState)
+                            homeViewModel.getHistory(accountInfoUIState.history ?: return@ReportsScreen)
+                        } },
+                    historyUIState = historyUIState)
             }
 
             composable(route = BottomNavigationScreens.History.route) {
@@ -369,7 +370,7 @@ private fun HomeTopAppBar(navController: NavHostController,
                 },
                 navigationIcon = {
                     IconButton(onClick = { /*TODO*/ }) {
-                        Icon(imageVector = Icons.Rounded.Spa, contentDescription = null)
+                        Icon(painter = painterResource(id = R.drawable.ic_yoga), contentDescription = null, modifier = Modifier.size(36.dp))
                     }
                 },
                 actions = {
@@ -392,7 +393,7 @@ private fun HomeTopAppBar(navController: NavHostController,
                 },
                 navigationIcon = {
                     IconButton(onClick = { /*TODO*/ }) {
-                        Icon(imageVector = Icons.Rounded.Spa, contentDescription = null)
+                        Icon(painter = painterResource(id = R.drawable.ic_yoga), contentDescription = null, modifier = Modifier.size(36.dp))
                     }
                 },
                 actions = {
@@ -413,14 +414,14 @@ private fun HomeTopAppBar(navController: NavHostController,
                 },
                 navigationIcon = {
                     IconButton(onClick = { /*TODO*/ }) {
-                        Icon(imageVector = Icons.Rounded.Spa, contentDescription = null)
+                        Icon(painter = painterResource(id = R.drawable.ic_yoga), contentDescription = null, modifier = Modifier.size(36.dp))
                     }
                 },
                 actions = {
                     ExposedRefreshBottomMenu(
                         isExpanded = isExpanded,
                         onExpand = { isExpanded = it },
-                        onRefresh = onReportsRefresh
+                        onRefresh = onHistoryRefresh
                     )
                 }
             )
@@ -435,7 +436,7 @@ private fun HomeTopAppBar(navController: NavHostController,
                 },
                 navigationIcon = {
                     IconButton(onClick = { /*TODO*/ }) {
-                        Icon(imageVector = Icons.Rounded.Spa, contentDescription = null)
+                        Icon(painter = painterResource(id = R.drawable.ic_yoga), contentDescription = null, modifier = Modifier.size(36.dp))
                     }
                 },
                 actions = {
@@ -457,7 +458,7 @@ private fun HomeTopAppBar(navController: NavHostController,
                 },
                 navigationIcon = {
                     IconButton(onClick = { /*TODO*/ }) {
-                        Icon(imageVector = Icons.Rounded.Spa, contentDescription = null)
+                        Icon(painter = painterResource(id = R.drawable.ic_yoga), contentDescription = null, modifier = Modifier.size(36.dp))
                     }
                 },
                 actions = {

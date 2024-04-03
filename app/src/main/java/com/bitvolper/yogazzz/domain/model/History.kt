@@ -9,6 +9,8 @@ data class History(
         val image: String? = null,
         val duration: String? = null,
         val category: String? = null,
-        val date: String? = null
+        val date: String? = null,
+        val type: String? = null,
+        val kcal: String? = null
     )
 }

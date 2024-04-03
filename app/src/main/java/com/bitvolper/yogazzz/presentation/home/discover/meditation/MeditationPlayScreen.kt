@@ -105,7 +105,7 @@ fun MeditationPlayScreen(modifier: Modifier = Modifier,
 
         Column(modifier = modifier.padding(top = paddingValues.calculateTopPadding(), start = 16.dp, end = 16.dp, bottom = 16.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)) {
-            Text(text = "Mindful Moments\nMeditation",
+            Text(text = meditation.title ?: "",
                 style = MaterialTheme.typography.headlineLarge,
                 color = Color.White,
                 textAlign = TextAlign.Center,
@@ -118,9 +118,9 @@ fun MeditationPlayScreen(modifier: Modifier = Modifier,
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)) {
 
-                Text(text = "8 mins", style = MaterialTheme.typography.bodyMedium, color = Color.White)
+                Text(text = "${meditation.duration ?: 0} mins", style = MaterialTheme.typography.bodyMedium, color = Color.White)
                 Text(text = ".", style = MaterialTheme.typography.bodyMedium, color = Color.White)
-                Text(text = "Calm", style = MaterialTheme.typography.bodyMedium, color = Color.White)
+                Text(text = meditation.category ?: "", style = MaterialTheme.typography.bodyMedium, color = Color.White)
             }
 
             Spacer(modifier = modifier.weight(1f))

@@ -81,7 +81,7 @@ fun MeditationDetailScreen(modifier: Modifier = Modifier,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically) {
             Card(shape = RoundedCornerShape(20)) {
-                Text(text = meditation.duration ?: "", modifier = modifier.padding(8.dp), style = MaterialTheme.typography.bodySmall)
+                Text(text = "${meditation.duration ?: 0} mins", modifier = modifier.padding(8.dp), style = MaterialTheme.typography.bodySmall)
             }
 
             Card(shape = RoundedCornerShape(20)) {

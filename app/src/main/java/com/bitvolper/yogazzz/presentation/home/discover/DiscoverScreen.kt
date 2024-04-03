@@ -173,7 +173,7 @@ private fun PopularYogaCompose(modifier: Modifier = Modifier, popularYoga: YogaD
 @Preview(showBackground = true)
 @Composable
 fun PopularYogaCard(modifier: Modifier = Modifier,
-                    popularYoga: YogaData.Data = YogaData.Data(title = "Yoga Exercise", duration = "10 mins", level = "Beginner")) {
+                    popularYoga: YogaData.Data = YogaData.Data(title = "Yoga Exercise", duration = "10", level = "Beginner")) {
 
     val context = LocalContext.current
 
@@ -213,7 +213,7 @@ fun PopularYogaCard(modifier: Modifier = Modifier,
             )
 
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(text = popularYoga.duration ?: "", style = MaterialTheme.typography.bodySmall)
+                Text(text = "${popularYoga.duration ?: 0} mins", style = MaterialTheme.typography.bodySmall)
                 Text(text = ".", style = MaterialTheme.typography.bodySmall)
                 Text(text = popularYoga.level ?: "", style = MaterialTheme.typography.bodySmall)
             }
@@ -370,7 +370,7 @@ fun AdjustYogaLevelCard(modifier: Modifier = Modifier,
             )
 
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(text = adjustYogaLevel.duration ?: "", style = MaterialTheme.typography.bodySmall)
+                Text(text = "${adjustYogaLevel.duration ?: 0} mins", style = MaterialTheme.typography.bodySmall)
                 Text(text = ".", style = MaterialTheme.typography.bodySmall)
                 Text(text = adjustYogaLevel.level ?: "", style = MaterialTheme.typography.bodySmall)
             }
@@ -512,7 +512,7 @@ fun FlexibilityStrengthCard(modifier: Modifier = Modifier,
             )
 
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(text = flexibilityStrength.duration ?: "", style = MaterialTheme.typography.bodySmall)
+                Text(text = "${flexibilityStrength.duration ?: 0} mins", style = MaterialTheme.typography.bodySmall)
                 Text(text = ".", style = MaterialTheme.typography.bodySmall)
                 Text(text = flexibilityStrength.level ?: "", style = MaterialTheme.typography.bodySmall)
             }
@@ -609,7 +609,7 @@ fun StressReliefCard(modifier: Modifier = Modifier,
             )
 
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(text = stressRelief.duration ?: "", style = MaterialTheme.typography.bodySmall)
+                Text(text = "${stressRelief.duration ?: 0} mins", style = MaterialTheme.typography.bodySmall)
                 Text(text = ".", style = MaterialTheme.typography.bodySmall)
                 Text(text = stressRelief.level ?: "", style = MaterialTheme.typography.bodySmall)
             }
