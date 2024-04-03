@@ -155,7 +155,7 @@ private fun BookmarkCard(modifier: Modifier = Modifier,
             )
 
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(text = yoga.duration ?: "", style = MaterialTheme.typography.bodyMedium)
+                Text(text = "${yoga.duration ?: 0} mins", style = MaterialTheme.typography.bodyMedium)
                 Text(text = ".", style = MaterialTheme.typography.bodySmall)
                 Text(text = yoga.level ?: "", style = MaterialTheme.typography.bodyMedium)
             }

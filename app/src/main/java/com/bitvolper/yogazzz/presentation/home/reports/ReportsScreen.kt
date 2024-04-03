@@ -44,6 +44,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -91,10 +92,12 @@ import com.patrykandpatrick.vico.core.model.CartesianChartModelProducer
 import com.patrykandpatrick.vico.core.model.columnSeries
 import com.patrykandpatrick.vico.core.model.lineSeries
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.time.LocalDate
 import java.util.Timer
 import kotlin.random.Random
 
@@ -103,8 +106,8 @@ private const val TAG = "ReportsScreen"
 @Composable
 fun ReportsScreen(modifier: Modifier = Modifier,
                   paddingValues: PaddingValues = PaddingValues(),
-                  onReports: () -> Unit = { },
-                  reportsUIState: Resource<Reports> = Resource.Loading,) {
+                  onHistory: () -> Unit = { },
+                  historyUIState: Resource<History> = Resource.Loading,) {
 
 
     val coroutineScope = rememberCoroutineScope()
@@ -121,7 +124,7 @@ fun ReportsScreen(modifier: Modifier = Modifier,
             coroutineScope.launch {
                 isRefreshing = !isRefreshing
 
-                onReports()
+                onHistory()
 
                 delay(1_000L)
                 isRefreshing = !isRefreshing
@@ -130,7 +133,7 @@ fun ReportsScreen(modifier: Modifier = Modifier,
 
 
     LaunchedEffect(key1 = Unit) {
-        onReports()
+        onHistory()
     }
 
     Box(modifier = modifier
@@ -143,13 +146,13 @@ fun ReportsScreen(modifier: Modifier = Modifier,
             .wrapContentSize(align = Alignment.Center)
         ) {
 
-            when (reportsUIState) {
+            when (historyUIState) {
                 is Resource.Loading -> {
                     CircularProgressIndicator()
                 }
 
                 is Resource.Failure -> {
-                    Text(text = reportsUIState.throwable.toString())
+                    Text(text = historyUIState.throwable.toString())
                 }
 
                 is Resource.Success -> {
@@ -164,8 +167,8 @@ fun ReportsScreen(modifier: Modifier = Modifier,
                         .verticalScroll(rememberScrollState()),
                         verticalArrangement = Arrangement.spacedBy(16.dp)) {
 
-                        TitleCardCompose(reports = reportsUIState.data)
-                        StatisticsCardCompose()
+                        TitleCardCompose(history = historyUIState.data)
+                        StatisticsCardCompose(history = historyUIState.data)
                         WeightCardCompose()
 //                        BmiCardCompose()
                     }
@@ -177,26 +180,26 @@ fun ReportsScreen(modifier: Modifier = Modifier,
 
 @Preview(showBackground = true)
 @Composable
-private fun TitleCardCompose(modifier: Modifier = Modifier, reports: Reports = Reports()) {
+private fun TitleCardCompose(modifier: Modifier = Modifier, history: History = History()) {
     Card(border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)) {
         Row(modifier = modifier
             .fillMaxWidth()
             .padding(16.dp), horizontalArrangement = Arrangement.SpaceEvenly) {
             Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Icon(imageVector = Icons.Rounded.SelfImprovement, contentDescription = null, tint = Color(0xFFf54336))
-                Text(text = "${reports.data?.size ?: 0}", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
+                Text(text = "${history.data?.size ?: 0}", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
                 Text(text = "yoga", style = MaterialTheme.typography.bodySmall)
             }
 
             Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Icon(imageVector = Icons.Rounded.AccessTime, contentDescription = null, tint = Color(0xFF4db05a))
-                Text(text = "${reports.data?.sumBy { it?.duration?.toInt() ?: 0 }}", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
+                Text(text = "${history.data?.sumBy { it?.duration?.toInt() ?: 0 }}", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
                 Text(text = "minutes", style = MaterialTheme.typography.bodySmall)
             }
 
             Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Icon(imageVector = Icons.Rounded.LocalFireDepartment, contentDescription = null, tint = Color(0xFFfe9e26))
-                Text(text = "${reports.data?.sumBy { it?.kcal?.toInt() ?: 0 }}", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
+                Text(text = "${history.data?.sumBy { it?.kcal?.toInt() ?: 0 }}", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
                 Text(text = "kcal", style = MaterialTheme.typography.bodySmall)
             }
         }
@@ -206,33 +209,155 @@ private fun TitleCardCompose(modifier: Modifier = Modifier, reports: Reports = R
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
-private fun StatisticsCardCompose(modifier: Modifier = Modifier) {
+private fun StatisticsCardCompose(modifier: Modifier = Modifier, history: History = History()) {
 
     val modelProducer = remember { CartesianChartModelProducer.build() }
 
     var isExpanded by remember { mutableStateOf(false) }
     var selectedPeriod by remember { mutableStateOf("This Week") }
 
-    val datesOfWeek = listOf("16", "17", "18", "19", "20", "21", "22")
-    val bottomAxisValueFormatter =
-        AxisValueFormatter<AxisPosition.Horizontal.Bottom> { x, _, _ -> datesOfWeek[x.toInt() % datesOfWeek.size] }
+    val today = listOf(LocalDate.now().toString())
+    val (datesOfWeek, localDate) = getDateForWeek()
+    val (datesOfMonth, localDateMonth) = getDateForMonth()
+    val (datesOf6Months, localDate6Months) = getDateFor6Months()
 
-    LaunchedEffect(Unit) {
-        withContext(Dispatchers.Default) {
-            modelProducer.tryRunTransaction {
-                columnSeries {
-                    repeat(3) {
-                        series(
-                            List(Defaults.ENTRY_COUNT) {
-                                Defaults.COLUMN_LAYER_MIN_Y +
-                                        Random.nextFloat() * Defaults.COLUMN_LAYER_RELATIVE_MAX_Y
-                            },
-                        )
+    val bottomAxisValueFormatter = when(selectedPeriod) {
+        "Today" -> AxisValueFormatter<AxisPosition.Horizontal.Bottom> { x, _, _ -> today[x.toInt() % today.size] }
+        "This Week" -> AxisValueFormatter<AxisPosition.Horizontal.Bottom> { x, _, _ -> datesOfWeek[x.toInt() % datesOfWeek.size] }
+        "This Month" -> AxisValueFormatter<AxisPosition.Horizontal.Bottom> { x, _, _ -> datesOfMonth[x.toInt() % datesOfMonth.size] }
+        else -> AxisValueFormatter<AxisPosition.Horizontal.Bottom> { x, _, _ -> datesOf6Months[x.toInt() % datesOf6Months.size] }
+    }
+
+//    LaunchedEffect(Unit) {
+//        withContext(Dispatchers.Default) {
+//            modelProducer.tryRunTransaction {
+//                columnSeries {
+//                    repeat(3) {
+//
+//                        when (selectedPeriod) {
+//                            "This Week" -> {
+//                                series(
+//                                    List(datesOfWeek.size) { date ->
+//
+//                                        when (it) {
+//                                            0 -> if (datesOfWeek[date] == LocalDate.now().dayOfMonth.toString()) history.data?.size?.plus(250) ?: 0 else 0
+//                                            1 -> if (datesOfWeek[date] == LocalDate.now().dayOfMonth.toString()) history.data?.sumBy { it?.duration?.toIntOrNull() ?: 0 }?.plus(250) ?: 0 else 0
+//                                            else -> if (datesOfWeek[date] == LocalDate.now().dayOfMonth.toString()) history.data?.sumBy { it?.kcal?.toIntOrNull() ?: 0 } ?: 0 else 0
+//                                        }
+//                                    },
+//                                )
+//                            } else -> {
+//                                series(
+//                                    List(today.size) { date ->
+//
+//                                        when (it) {
+//                                            0 -> history.data?.size?.plus(250) ?: 0
+//                                            1 -> history.data?.sumBy { it?.duration?.toIntOrNull() ?: 0 }?.plus(250) ?: 0
+//                                            else -> history.data?.sumBy { it?.kcal?.toIntOrNull() ?: 0 } ?: 0
+//                                        }
+//                                    },
+//                                )
+//                        }
+//                        }
+//                    }
+//                }
+//            }
+//            delay(Defaults.TRANSACTION_INTERVAL_MS)
+//        }
+//    }
+
+    when (selectedPeriod) {
+        "Today" -> {
+            LaunchedEffect(Unit) {
+                withContext(Dispatchers.Default) {
+                    modelProducer.tryRunTransaction {
+                        columnSeries {
+                            repeat(3) {
+                                series(
+                                    List(today.size) { date ->
+
+                                        when (it) {
+                                            0 -> history.data?.size?.plus(250) ?: 0
+                                            1 -> history.data?.sumBy { it?.duration?.toIntOrNull() ?: 0 }?.plus(250) ?: 0
+                                            else -> history.data?.sumBy { it?.kcal?.toIntOrNull() ?: 0 } ?: 0
+                                        }
+                                    },
+                                )
+                            }
+                        }
                     }
+                    delay(Defaults.TRANSACTION_INTERVAL_MS)
                 }
-                lineSeries { series(List(Defaults.ENTRY_COUNT) { Random.nextFloat() * Defaults.MAX_Y }) }
             }
-            delay(Defaults.TRANSACTION_INTERVAL_MS)
+        }
+        "This Week" -> {
+            LaunchedEffect(Unit) {
+                withContext(Dispatchers.Default) {
+                    modelProducer.tryRunTransaction {
+                        columnSeries {
+                            repeat(3) {
+                                series(
+                                    List(datesOfWeek.size) { date ->
+
+                                        when (it) {
+                                            0 -> if (datesOfWeek[date] == LocalDate.now().dayOfMonth.toString()) history.data?.size?.plus(250) ?: 0 else 0
+                                            1 -> if (datesOfWeek[date] == LocalDate.now().dayOfMonth.toString()) history.data?.sumBy { it?.duration?.toIntOrNull() ?: 0 }?.plus(250) ?: 0 else 0
+                                            else -> if (datesOfWeek[date] == LocalDate.now().dayOfMonth.toString()) history.data?.sumBy { it?.kcal?.toIntOrNull() ?: 0 } ?: 0 else 0
+                                        }
+                                    },
+                                )
+                            }
+                        }
+                    }
+                    delay(Defaults.TRANSACTION_INTERVAL_MS)
+                }
+            }
+        }
+        "This Month" -> {
+            LaunchedEffect(Unit) {
+                withContext(Dispatchers.Default) {
+                    modelProducer.tryRunTransaction {
+                        columnSeries {
+                            repeat(3) {
+                                series(
+                                    List(datesOfMonth.size) { date ->
+
+                                        when (it) {
+                                            0 -> if (datesOfMonth[date] == LocalDate.now().dayOfMonth.toString()) history.data?.size?.plus(250) ?: 0 else 0
+                                            1 -> if (datesOfMonth[date] == LocalDate.now().dayOfMonth.toString()) history.data?.sumBy { it?.duration?.toIntOrNull() ?: 0 }?.plus(250) ?: 0 else 0
+                                            else -> if (datesOfMonth[date] == LocalDate.now().dayOfMonth.toString()) history.data?.sumBy { it?.kcal?.toIntOrNull() ?: 0 } ?: 0 else 0
+                                        }
+                                    },
+                                )
+                            }
+                        }
+                    }
+                    delay(Defaults.TRANSACTION_INTERVAL_MS)
+                }
+            }
+        }
+        else -> {
+            LaunchedEffect(Unit) {
+                withContext(Dispatchers.Default) {
+                    modelProducer.tryRunTransaction {
+                        columnSeries {
+                            repeat(3) {
+                                series(
+                                    List(datesOf6Months.size) { date ->
+
+                                        when (it) {
+                                            0 -> if (datesOf6Months[date] == LocalDate.now().dayOfMonth.toString()) history.data?.size?.plus(250) ?: 0 else 0
+                                            1 -> if (datesOf6Months[date] == LocalDate.now().dayOfMonth.toString()) history.data?.sumBy { it?.duration?.toIntOrNull() ?: 0 }?.plus(250) ?: 0 else 0
+                                            else -> if (datesOf6Months[date] == LocalDate.now().dayOfMonth.toString()) history.data?.sumBy { it?.kcal?.toIntOrNull() ?: 0 } ?: 0 else 0
+                                        }
+                                    },
+                                )
+                            }
+                        }
+                    }
+                    delay(Defaults.TRANSACTION_INTERVAL_MS)
+                }
+            }
         }
     }
 
@@ -248,7 +373,7 @@ private fun StatisticsCardCompose(modifier: Modifier = Modifier) {
                 )
 
                 Spacer(modifier = modifier.weight(1f))
-                
+
                 ExposedBottomMenu(
                     isExpanded = isExpanded,
                     onExpand = { isExpanded = it },
@@ -305,13 +430,19 @@ private fun StatisticsCardCompose(modifier: Modifier = Modifier) {
     }
 }
 
+
 @OptIn(ExperimentalMaterialApi::class)
 @Preview(showBackground = true)
 @Composable
 private fun WeightCardCompose(modifier: Modifier = Modifier) {
 
     var isExpanded by remember { mutableStateOf(false) }
-    var selectedPeriod by remember { mutableStateOf("This Week") }
+    var selectedPeriod by remember { mutableStateOf("Last 6 Months") }
+
+    val (datesOfWeek, localDate) = getDayForWeek()
+    val (dayOfMonth, localDateMonth) = getDayForMonth()
+    val (dayOf6Months, localDate6Months) = getLast6Months()
+
 
     val color = MaterialTheme.colorScheme.primary
     val marker = rememberMarker().apply { labelFormatter = MarkerLabelFormatter { markedEntries, chartValues ->
@@ -321,9 +452,11 @@ private fun WeightCardCompose(modifier: Modifier = Modifier) {
     val modelProducer = remember { CartesianChartModelProducer.build() }
     LaunchedEffect(Unit) { modelProducer.tryRunTransaction { lineSeries { series(78, 66, 75, 78, 70, 78) } } }
 
-    val daysOfWeek = listOf("Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
-    val bottomAxisValueFormatter =
-        AxisValueFormatter<AxisPosition.Horizontal.Bottom> { x, _, _ -> daysOfWeek[x.toInt() % daysOfWeek.size] }
+
+    val bottomAxisValueFormatter = when (selectedPeriod) {
+        "This Week" -> AxisValueFormatter<AxisPosition.Horizontal.Bottom> { x, _, _ -> datesOfWeek[x.toInt() % datesOfWeek.size] }
+        else -> AxisValueFormatter<AxisPosition.Horizontal.Bottom> { x, _, _ -> dayOf6Months[x.toInt() % dayOf6Months.size] }
+    }
 
     Card(border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)) {
         Column(modifier = modifier
@@ -338,16 +471,12 @@ private fun WeightCardCompose(modifier: Modifier = Modifier) {
 
                 Spacer(modifier = modifier.weight(1f))
 
-                ExposedBottomMenu(
+                ExposedBottomMenuWeight(
                     isExpanded = isExpanded,
                     onExpand = { isExpanded = it },
                     selectedPeriod = selectedPeriod,
                     onSelectPeriod = { selectedPeriod = it }
                 )
-
-                IconButton(onClick = { /*TODO*/ }) {
-                    Icon(imageVector = Icons.Rounded.Edit, contentDescription = null)
-                }
             }
 
             Divider(color = MaterialTheme.colorScheme.outline)
@@ -377,7 +506,7 @@ private fun WeightCardCompose(modifier: Modifier = Modifier) {
                 ),
                 modelProducer,
                 horizontalLayout = com.patrykandpatrick.vico.core.chart.layout.HorizontalLayout.fullWidth(),
-                zoomState = rememberVicoZoomState(zoomEnabled = false),
+                zoomState = rememberVicoZoomState(zoomEnabled = true),
                 marker = marker
             )
         }

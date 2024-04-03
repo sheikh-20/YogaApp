@@ -405,7 +405,7 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
 @Preview(showBackground = true)
 @Composable
 fun RecommendationCard(modifier: Modifier = Modifier,
-                       recommendation: YogaRecommendation.Data = YogaRecommendation.Data(title = "Yoga Exercise", duration = "10 mins", level = "Beginner")) {
+                       recommendation: YogaRecommendation.Data = YogaRecommendation.Data(title = "Yoga Exercise", duration = "10", level = "Beginner")) {
 
     val context = LocalContext.current
 
@@ -461,7 +461,7 @@ fun RecommendationCard(modifier: Modifier = Modifier,
             )
 
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(text = recommendation.duration ?: "", style = MaterialTheme.typography.bodyMedium)
+                Text(text = "${recommendation.duration ?: 0} mins", style = MaterialTheme.typography.bodyMedium)
                 Text(text = ".", style = MaterialTheme.typography.bodySmall)
                 Text(text = recommendation.level ?: "", style = MaterialTheme.typography.bodyMedium)
             }

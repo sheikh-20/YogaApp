@@ -312,6 +312,19 @@ class AccountViewModel @Inject constructor(
         updateUserProfile()
     }
 
+    fun removeBookmark(id: String) = viewModelScope.launch {
+        val bookmark = mutableSetOf<String>().apply {
+            addAll(_accountInfoUIState.value.bookmark ?: emptyList())
+            remove(id)
+        }
+
+        _accountInfoUIState.update {
+            it.copy(bookmark = bookmark.toList())
+        }
+
+        updateUserProfile()
+    }
+
     fun uploadProfilePhoto(uri: Uri) = viewModelScope.launch {
         try {
             homeUseCase.uploadProfilePhoto(auth.currentUser?.uid ?: return@launch, uri).collectLatest {

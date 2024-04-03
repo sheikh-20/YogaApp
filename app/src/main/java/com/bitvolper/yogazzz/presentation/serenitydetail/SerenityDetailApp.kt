@@ -24,7 +24,6 @@ import androidx.compose.material.icons.rounded.Mic
 import androidx.compose.material.icons.rounded.MusicNote
 import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material.icons.rounded.Star
-import androidx.compose.material.icons.rounded.VolumeDown
 import androidx.compose.material.icons.rounded.VolumeOff
 import androidx.compose.material.icons.rounded.VolumeUp
 import androidx.compose.material3.BottomSheetDefaults
@@ -91,6 +90,7 @@ fun SerenityDetailApp(modifier: Modifier = Modifier,
 
     val yogaExerciseUIState by homeViewModel.serenityFlowUIState.collectAsState()
     val currentExerciseUIState by yogaExerciseViewModel.currentExercise.collectAsState()
+    val accountUIState by accountViewModel.accountInfoUIState.collectAsState()
 
     var showBottomSheet by remember { mutableStateOf(BottomSheet.Default) }
 
@@ -146,14 +146,16 @@ fun SerenityDetailApp(modifier: Modifier = Modifier,
             SerenityDetailTopAppBar(
                 navController = navController,
                 yogaExerciseUIState = yogaExerciseUIState,
-                onBookmarkClick = { accountViewModel.updateBookmark(it) },
+                onBookmarkAdd = { accountViewModel.updateBookmark(it) },
+                onBookmarkRemove = { accountViewModel.removeBookmark(it) },
                 showSoundEffect = {
                     yogaExerciseViewModel.changeSoundSettings {
                         Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
                     }
                 },
                 currentExerciseIndex = yogaExerciseViewModel.currentExerciseIndex.inc().div(yogaExerciseViewModel.totalExerciseSize.toFloat()),
-                currentExerciseUIState = currentExerciseUIState)
+                currentExerciseUIState = currentExerciseUIState,
+                isBookmark = accountUIState.bookmark)
         }
     ) { paddingValues ->
 
@@ -417,9 +419,11 @@ private fun BottomSheetSubscriptionContent(modifier: Modifier = Modifier, onNega
 private fun SerenityDetailTopAppBar(navController: NavHostController? = null,
                                     yogaExerciseUIState: Resource<SerenityData> = Resource.Loading,
                                     currentExerciseUIState: ExerciseUIState = ExerciseUIState(),
-                                    onBookmarkClick: (String) -> Unit = { },
+                                    onBookmarkAdd: (String) -> Unit = { },
+                                    onBookmarkRemove: (String) -> Unit = { },
                                     showSoundEffect: () -> Unit = {  },
-                                    currentExerciseIndex: Float = 0f) {
+                                    currentExerciseIndex: Float = 0f,
+                                    isBookmark: List<String>? = listOf()) {
 
     val context = LocalContext.current
 
@@ -452,8 +456,21 @@ private fun SerenityDetailTopAppBar(navController: NavHostController? = null,
                         }
                         is Resource.Success -> {
 
-                            IconButton(onClick = { onBookmarkClick(yogaExerciseUIState.data.data?.first()?.id ?: return@IconButton) }) {
-                                Icon(imageVector = Icons.Rounded.Bookmark, contentDescription = null)
+                            if (isBookmark?.contains(yogaExerciseUIState.data.data?.first()?.id ?: return@CenterAlignedTopAppBar) == true) {
+
+                                IconButton(onClick = {
+                                    Toast.makeText(context, "Bookmark removed", Toast.LENGTH_SHORT).show()
+                                    onBookmarkRemove(yogaExerciseUIState.data.data?.first()?.id ?: return@IconButton) }) {
+
+                                    Icon(imageVector = Icons.Rounded.Bookmark, contentDescription = null)
+                                }
+                            } else {
+                                IconButton(onClick = {
+                                    Toast.makeText(context, "Bookmark added", Toast.LENGTH_SHORT).show()
+                                    onBookmarkAdd(yogaExerciseUIState.data.data?.first()?.id ?: return@IconButton) }) {
+
+                                    Icon(imageVector = Icons.Rounded.BookmarkBorder, contentDescription = null)
+                                }
                             }
                         }
                     }

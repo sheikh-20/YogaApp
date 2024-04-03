@@ -248,7 +248,7 @@ fun MeditationCard(modifier: Modifier = Modifier,
             )
 
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(text = meditation.duration ?: "", style = MaterialTheme.typography.bodyMedium)
+                Text(text = "${meditation.duration ?: 0} mins", style = MaterialTheme.typography.bodyMedium)
                 Text(text = ".", style = MaterialTheme.typography.bodySmall)
                 Text(text = meditation.category ?: "", style = MaterialTheme.typography.bodyMedium)
             }
