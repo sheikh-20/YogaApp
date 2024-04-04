@@ -26,8 +26,8 @@ android {
         applicationId = "com.bitvolper.yogazzz"
         minSdk = 21
         targetSdk = 34
-        versionCode = 41
-        versionName = "1.0.40"
+        versionCode = 42
+        versionName = "1.0.41"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -180,4 +180,5 @@ dependencies {
 
     // Play billing
     implementation(libs.play.billing)
+    implementation(libs.akshat.play.billing)
 }

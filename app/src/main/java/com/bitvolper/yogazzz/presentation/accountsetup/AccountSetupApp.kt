@@ -21,6 +21,7 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -29,6 +30,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -41,17 +43,23 @@ import com.bitvolper.yogazzz.presentation.home.HomeActivity
 import com.bitvolper.yogazzz.presentation.home.discover.meditation.Meditation
 import com.bitvolper.yogazzz.presentation.viewmodel.AccountSetupUIState
 import com.bitvolper.yogazzz.presentation.viewmodel.AccountSetupViewModel
+import com.bitvolper.yogazzz.presentation.viewmodel.HomeViewModel
 import com.bitvolper.yogazzz.utility.ACCOUNT_SETUP_MAX_SCREEN
 
 @Composable
 fun AccountSetupApp(modifier: Modifier = Modifier,
                     navController: NavHostController = rememberNavController(),
-                    accountSetupViewModel: AccountSetupViewModel = viewModel()) {
+                    accountSetupViewModel: AccountSetupViewModel = hiltViewModel(),
+                    homeViewModel: HomeViewModel = hiltViewModel()) {
 
     val context = LocalContext.current
 
     val uiState by accountSetupViewModel.uiState.collectAsState()
     val accountInfoUIState by accountSetupViewModel.accountInfoUIState.collectAsState()
+
+    LaunchedEffect(key1 = Unit) { homeViewModel.getSerenityFlow() }
+
+    val yogaExerciseUIState by homeViewModel.serenityFlowUIState.collectAsState()
 
     Scaffold(
         topBar = {
@@ -281,7 +289,8 @@ fun AccountSetupApp(modifier: Modifier = Modifier,
                         accountSetupViewModel.updateUserProfile()
                         (context as Activity).finish()
                         HomeActivity.startActivity(context as Activity)
-                    }
+                    },
+                    yogaExerciseUIState = yogaExerciseUIState
                 )
             }
         }
