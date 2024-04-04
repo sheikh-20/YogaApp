@@ -1,5 +1,6 @@
 package com.bitvolper.yogazzz.presentation.subscription
 
+import android.content.Context
 import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -49,7 +50,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun SubscriptionScreen(modifier: Modifier = Modifier,
                        paddingValues: PaddingValues = PaddingValues(),
-                       subscriptionUIState: Resource<Subscription> = Resource.Loading) {
+                       subscriptionUIState: Resource<Subscription> = Resource.Loading,
+                       purchaseSubscription: () -> Unit = {  }) {
 
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -140,8 +142,9 @@ fun SubscriptionScreen(modifier: Modifier = Modifier,
                             Divider(modifier = modifier.fillMaxWidth())
 
                             Button(
-                                onClick = {  },
-                                modifier = modifier.fillMaxWidth().requiredHeight(50.dp).padding(horizontal = 16.dp)) {
+                                onClick = { purchaseSubscription() },
+                                modifier = modifier.fillMaxWidth().requiredHeight(50.dp).padding(horizontal = 16.dp),
+                                enabled = false) {
 
                                 Text(text = "Continue - ${subscriptionUIState.data.data[pager.currentPage]?.price}")
                             }
@@ -198,6 +201,7 @@ private fun SubscriptionCard(modifier: Modifier = Modifier,
         }
     }
 }
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable

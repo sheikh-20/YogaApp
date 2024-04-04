@@ -1,8 +1,6 @@
 package com.bitvolper.yogazzz.presentation.accountsetup
 
-import android.app.Activity
 import android.content.res.Configuration
-import android.text.format.DateFormat
 import android.view.ContextThemeWrapper
 import android.widget.CalendarView
 import androidx.compose.foundation.BorderStroke
@@ -23,17 +21,14 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerState
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -46,22 +41,24 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import coil.ImageLoader
 import coil.compose.AsyncImage
+import coil.decode.VideoFrameDecoder
 import coil.request.ImageRequest
 import com.bitvolper.yogazzz.R
+import com.bitvolper.yogazzz.domain.model.SerenityData
 import com.bitvolper.yogazzz.domain.model.YogaRecommendation
-import com.bitvolper.yogazzz.presentation.home.HomeActivity
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
-import com.bitvolper.yogazzz.utility.AccountSetupContinueComposable
+import com.bitvolper.yogazzz.utility.Resource
 import com.google.accompanist.pager.ExperimentalPagerApi
-import timber.log.Timber
-import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DisplayYogaPlanScreen(modifier: Modifier = Modifier,
                           paddingValues: PaddingValues = PaddingValues(),
-                          onContinueClick: () -> Unit = { }) {
+                          onContinueClick: () -> Unit = { },
+                          yogaExerciseUIState: Resource<SerenityData> = Resource.Loading,
+                          ) {
 
     val context = LocalContext.current
 
@@ -89,7 +86,15 @@ fun DisplayYogaPlanScreen(modifier: Modifier = Modifier,
             modifier = modifier.padding(horizontal = 16.dp),
             textAlign = TextAlign.Center)
 
-        YogaCard()
+        when (yogaExerciseUIState) {
+            is Resource.Loading -> {
+                CircularProgressIndicator()
+            }
+            is Resource.Failure -> { }
+            is Resource.Success -> {
+                YogaCard(yoga = yogaExerciseUIState.data.data?.first() ?: return)
+            }
+        }
 
         Card(border = BorderStroke(width = .5.dp, color = MaterialTheme.colorScheme.outlineVariant), colors = CardDefaults.cardColors(containerColor = Color.Transparent)) {
             AndroidView(
@@ -119,7 +124,9 @@ fun DisplayYogaPlanScreen(modifier: Modifier = Modifier,
 
                 OutlinedButton(
                     onClick = onContinueClick,
-                    modifier = modifier.weight(1f).requiredHeight(50.dp),
+                    modifier = modifier
+                        .weight(1f)
+                        .requiredHeight(50.dp),
                     border = BorderStroke(0.dp, Color.Transparent),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
 
@@ -143,21 +150,27 @@ fun DisplayYogaPlanScreen(modifier: Modifier = Modifier,
 @Preview(showBackground = true)
 @Composable
 private fun YogaCard(modifier: Modifier = Modifier,
-                       recommendation: YogaRecommendation.Data = YogaRecommendation.Data(title = "Yoga Exercise", duration = "10 mins", level = "Beginner")) {
+                     yoga: SerenityData.Data = SerenityData.Data(title = "Yoga Exercise", duration = "10 mins", level = "Beginner")) {
 
     val context = LocalContext.current
 
-    Row(modifier = modifier.fillMaxWidth().padding(horizontal = 16.dp),
+    val imageLoader = ImageLoader.Builder(LocalContext.current)
+        .components {
+            add(VideoFrameDecoder.Factory())
+        }
+        .build()
+
+    Row(modifier = modifier
+        .fillMaxWidth()
+        .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)) {
 
         Card(onClick = { }, modifier = modifier.padding(vertical = 4.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.outlineVariant)) {
 
             AsyncImage(
-                model = ImageRequest.Builder(context = LocalContext.current)
-                    .data(recommendation.image)
-                    .crossfade(true)
-                    .build(),
+                model = yoga.pose?.first()?.file,
+                imageLoader = imageLoader,
                 error = painterResource(id = R.drawable.ic_broken_image),
                 placeholder = painterResource(id = R.drawable.ic_image_placeholder),
                 contentDescription = null,
@@ -169,7 +182,7 @@ private fun YogaCard(modifier: Modifier = Modifier,
 
         Column(modifier = modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(
-                text = recommendation.title ?: "",
+                text = yoga.title ?: "",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.SemiBold,
                 overflow = TextOverflow.Ellipsis,
@@ -177,9 +190,9 @@ private fun YogaCard(modifier: Modifier = Modifier,
             )
 
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(text = recommendation.duration ?: "", style = MaterialTheme.typography.bodyMedium)
+                Text(text = "${yoga.duration ?: 0} mins", style = MaterialTheme.typography.bodyMedium)
                 Text(text = ".", style = MaterialTheme.typography.bodySmall)
-                Text(text = recommendation.level ?: "", style = MaterialTheme.typography.bodyMedium)
+                Text(text = yoga.level ?: "", style = MaterialTheme.typography.bodyMedium)
             }
         }
 

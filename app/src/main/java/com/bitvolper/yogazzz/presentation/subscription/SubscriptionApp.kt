@@ -21,18 +21,31 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bitvolper.yogazzz.presentation.viewmodel.AccountViewModel
+import com.bitvolper.yogazzz.presentation.viewmodel.SubscriptionViewModel
+import timber.log.Timber
 
+private const val TAG = "SubscriptionApp"
 @Composable
-fun SubscriptionApp(modifier: Modifier = Modifier, accountViewModel: AccountViewModel = hiltViewModel()) {
+fun SubscriptionApp(modifier: Modifier = Modifier,
+                    accountViewModel: AccountViewModel = hiltViewModel(),
+                    subscriptionViewModel: SubscriptionViewModel = hiltViewModel(),
+                    purchaseSubscription: () -> Unit = { }) {
 
     val subscriptionUIState by accountViewModel.subscriptionUIState.collectAsState()
+    val purchaseUIState by subscriptionViewModel.purchaseUIState.collectAsState()
+
+
+    Timber.tag(TAG).d(purchaseUIState.isBillingClientConnected.toString())
 
     Scaffold(
         topBar = {
             SubscriptionTopAppBar()
         }
     ) { paddingValues ->
-        SubscriptionScreen(paddingValues = paddingValues, subscriptionUIState = subscriptionUIState)
+        SubscriptionScreen(
+            paddingValues = paddingValues,
+            subscriptionUIState = subscriptionUIState,
+            purchaseSubscription = purchaseSubscription)
     }
 }
 

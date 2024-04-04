@@ -34,7 +34,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.ImageLoader
 import coil.compose.AsyncImage
+import coil.decode.VideoFrameDecoder
 import coil.request.ImageRequest
 import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.domain.model.AccountInfo
@@ -125,6 +127,12 @@ private fun BookmarkCard(modifier: Modifier = Modifier,
 
     val context = LocalContext.current
 
+    val imageLoader = ImageLoader.Builder(LocalContext.current)
+        .components {
+            add(VideoFrameDecoder.Factory())
+        }
+        .build()
+
     Row(modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -132,10 +140,8 @@ private fun BookmarkCard(modifier: Modifier = Modifier,
         Card(onClick = { }, modifier = modifier.padding(vertical = 4.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.outlineVariant)) {
 
             AsyncImage(
-                model = ImageRequest.Builder(context = LocalContext.current)
-                    .data(yoga.image)
-                    .crossfade(true)
-                    .build(),
+                model = yoga.pose?.first()?.file,
+                imageLoader = imageLoader,
                 error = painterResource(id = R.drawable.ic_broken_image),
                 placeholder = painterResource(id = R.drawable.ic_image_placeholder),
                 contentDescription = null,
