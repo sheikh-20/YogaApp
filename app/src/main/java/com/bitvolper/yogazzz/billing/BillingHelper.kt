@@ -10,11 +10,14 @@ import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
+import com.android.billingclient.api.QueryProductDetailsParams
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
 import com.android.billingclient.api.acknowledgePurchase
+import com.android.billingclient.api.queryProductDetails
 import com.android.billingclient.api.queryPurchasesAsync
 import com.android.billingclient.api.querySkuDetails
+import com.google.common.collect.ImmutableList
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -52,12 +55,16 @@ class BillingHelper @Inject constructor(
         Log.d(TAG, "onBillingSetupFinished: $responseCode $debugMessage")
         when (responseCode) {
             BillingClient.BillingResponseCode.OK -> {
-                // The billing client is ready. You can query purchases here.
-                // This doesn't mean that your app is set up correctly in the console -- it just
-                // means that you have a connection to the Billing service.
-                coroutineScope.launch {
-                    querySkuDetailsAsync()
-                    restorePurchases()
+
+                if (billingClient.isReady) {
+                    Timber.tag(TAG).d("Billing Client is ready")
+                    coroutineScope.launch {
+                        querySkuDetailsAsync()
+                        restorePurchases()
+                    }
+
+                } else {
+                    Timber.tag(TAG).e("Billing client error!")
                 }
             }
         }
@@ -68,6 +75,9 @@ class BillingHelper @Inject constructor(
      * @param skuList a List<String> of SKUs representing purchases.
      */
     private fun addSkuFlows(skuList: List<String>?) {
+
+        Timber.tag(TAG).d(skuList.toString())
+
         if (null == skuList) {
             Log.e(
                 TAG,
@@ -100,16 +110,58 @@ class BillingHelper @Inject constructor(
      * SKU details are useful for displaying item names and price lists to the user, and are
      * required to make a purchase.
      */
+//    private suspend fun querySkuDetailsAsync() {
+//        if (!knownInAppSKUs.isNullOrEmpty()) {
+//            val skuDetailsResult = billingClient.querySkuDetails(
+//                SkuDetailsParams.newBuilder()
+//                    .setType(BillingClient.SkuType.SUBS)
+//                    .setSkusList(knownInAppSKUs.toMutableList())
+//                    .build()
+//            )
+//            // Process the result
+//            onSkuDetailsResponse(skuDetailsResult.billingResult, skuDetailsResult.skuDetailsList)
+//        }
+//    }
+
+    /**
+     * Calls the billing client functions to query sku details for the subscription SKUs.
+     * SKU details are useful for displaying item names and price lists to the user, and are
+     * required to make a purchase.
+     */
     private suspend fun querySkuDetailsAsync() {
-        if (!knownInAppSKUs.isNullOrEmpty()) {
-            val skuDetailsResult = billingClient.querySkuDetails(
-                SkuDetailsParams.newBuilder()
-                    .setType(BillingClient.SkuType.INAPP)
-                    .setSkusList(knownInAppSKUs.toMutableList())
+        if (!knowConsumableInAppKUSs.isNullOrEmpty()) {
+
+            Timber.tag(TAG).d("Query details called!")
+
+//            val skuDetailsResult = billingClient.querySkuDetails(
+//                SkuDetailsParams.newBuilder()
+//                    .setType(BillingClient.SkuType.SUBS)
+//                    .setSkusList(knowConsumableInAppKUSs.toMutableList())
+//                    .build()
+//            )
+
+
+            // Process the result
+//            onSkuDetailsResponse(queryProductDetailsParams., skuDetailsResult.skuDetailsList)
+            val productList = listOf(
+                QueryProductDetailsParams.Product.newBuilder()
+                    .setProductId(SUBSCRIPTION_ID)
+                    .setProductType(BillingClient.ProductType.SUBS)
                     .build()
             )
-            // Process the result
-            onSkuDetailsResponse(skuDetailsResult.billingResult, skuDetailsResult.skuDetailsList)
+            val params = QueryProductDetailsParams.newBuilder()
+            params.setProductList(productList)
+
+            // leverage queryProductDetails Kotlin extension function
+            val productDetailsResult = billingClient.queryProductDetails(params.build())
+
+            when (productDetailsResult.billingResult.responseCode) {
+                BillingClient.BillingResponseCode.OK -> {
+
+                    val result = productDetailsResult.productDetailsList?.map { it.productId }
+                    Timber.tag(TAG).d(result.toString())
+                }
+            }
         }
     }
 
@@ -118,7 +170,7 @@ class BillingHelper @Inject constructor(
      * You should call it every time the activity starts
      */
     private suspend fun restorePurchases() {
-        val purchasesResult = billingClient.queryPurchasesAsync(BillingClient.SkuType.INAPP)
+        val purchasesResult = billingClient.queryPurchasesAsync(BillingClient.SkuType.SUBS)
         val billingResult = purchasesResult.billingResult
         if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
             handlePurchase(purchasesResult.purchasesList)
@@ -135,6 +187,10 @@ class BillingHelper @Inject constructor(
         when (responseCode) {
             BillingClient.BillingResponseCode.OK -> {
                 Timber.tag(TAG).i("onSkuDetailsResponse: " + responseCode + " " + debugMessage)
+
+                val result = skuDetailsList?.map { it.sku }
+                Timber.tag(TAG).d(result.toString())
+
                 if (skuDetailsList == null || skuDetailsList.isEmpty()) {
                     Timber.tag(TAG)
                         .e("onSkuDetailsResponse: " + "Found null or empty SkuDetails. " + "Check to see if the SKUs you requested are correctly published " + "in the Google Play Console.")
@@ -331,7 +387,10 @@ class BillingHelper @Inject constructor(
         }
 
         //Add flow for in app purchases
-        addSkuFlows(this.knownInAppSKUs)
+//        addSkuFlows(this.knownInAppSKUs)
+
+        //Add flow for subscription
+        addSkuFlows(this.knowConsumableInAppKUSs)
 
         //Connecting the billing client
         billingClient = BillingClient.newBuilder(context)
@@ -339,6 +398,7 @@ class BillingHelper @Inject constructor(
             .enablePendingPurchases()
             .build()
         billingClient.startConnection(this)
+
     }
 
     companion object {

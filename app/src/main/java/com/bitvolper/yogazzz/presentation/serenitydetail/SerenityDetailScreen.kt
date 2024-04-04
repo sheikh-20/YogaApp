@@ -97,7 +97,7 @@ fun SerenityDetailScreen(modifier: Modifier = Modifier,
                     verticalArrangement = Arrangement.spacedBy(16.dp)) {
 
                     AsyncImage(
-                        model = yogaExerciseUIState.data.data?.first()?.pose?.first()?.image,
+                        model = yogaExerciseUIState.data.data.first()?.image,
                         imageLoader = imageLoader,
                         error = painterResource(id = R.drawable.ic_broken_image),
                         placeholder = painterResource(id = R.drawable.ic_image_placeholder),
