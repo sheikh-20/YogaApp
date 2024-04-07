@@ -41,6 +41,7 @@ import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.presentation.home.BottomNavigationScreens
 import com.bitvolper.yogazzz.presentation.home.HomeActivity
 import com.bitvolper.yogazzz.presentation.home.discover.meditation.Meditation
+import com.bitvolper.yogazzz.presentation.serenitydetail.SerenityDetailActivity
 import com.bitvolper.yogazzz.presentation.viewmodel.AccountSetupUIState
 import com.bitvolper.yogazzz.presentation.viewmodel.AccountSetupViewModel
 import com.bitvolper.yogazzz.presentation.viewmodel.HomeViewModel
@@ -289,6 +290,12 @@ fun AccountSetupApp(modifier: Modifier = Modifier,
                         accountSetupViewModel.updateUserProfile()
                         (context as Activity).finish()
                         HomeActivity.startActivity(context as Activity)
+                    },
+                    onGetStartedClick = {
+                        accountSetupViewModel.updateUserProfile()
+                        (context as Activity).finish()
+                        HomeActivity.startActivity(context as Activity)
+                        SerenityDetailActivity.startActivity(activity = context as Activity, yogaId = null)
                     },
                     yogaExerciseUIState = yogaExerciseUIState
                 )

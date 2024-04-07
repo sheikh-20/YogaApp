@@ -57,6 +57,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 fun DisplayYogaPlanScreen(modifier: Modifier = Modifier,
                           paddingValues: PaddingValues = PaddingValues(),
                           onContinueClick: () -> Unit = { },
+                          onGetStartedClick: () -> Unit = { },
                           yogaExerciseUIState: Resource<SerenityData> = Resource.Loading,
                           ) {
 
@@ -134,7 +135,7 @@ fun DisplayYogaPlanScreen(modifier: Modifier = Modifier,
                 }
 
                 Button(
-                    onClick = onContinueClick,
+                    onClick = onGetStartedClick,
                     modifier = modifier
                         .weight(1f)
                         .requiredHeight(50.dp)) {
