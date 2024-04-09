@@ -56,6 +56,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -106,7 +107,7 @@ fun DiscoverScreen(modifier: Modifier = Modifier,
                     OutlinedTextField(
                         value = "",
                         onValueChange = { },
-                        label = { Text(text = "Search") },
+                        label = { Text(text = stringResource(R.string.search)) },
                         shape = RoundedCornerShape(20),
                         modifier = modifier.fillMaxWidth(),
                         leadingIcon = { Icon(imageVector = Icons.Rounded.Search, contentDescription = null) },
@@ -139,12 +140,12 @@ private fun PopularYogaCompose(modifier: Modifier = Modifier, popularYoga: YogaD
         Row(modifier = modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(text = "Popular Yoga", style = MaterialTheme.typography.titleMedium)
+            Text(text = stringResource(R.string.popular_yoga), style = MaterialTheme.typography.titleMedium)
 
             Spacer(modifier = modifier.weight(1f))
 
             Text(
-                text = "View All",
+                text = stringResource(id = R.string.view_all),
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.primary,
@@ -178,7 +179,8 @@ fun PopularYogaCard(modifier: Modifier = Modifier,
     val context = LocalContext.current
 
 
-    Row(modifier = modifier.fillMaxWidth()
+    Row(modifier = modifier
+        .fillMaxWidth()
         .clickable(
             onClick = {
                 SerenityDetailActivity.startActivity(context as Activity, popularYoga.id)
@@ -249,12 +251,15 @@ private fun MeditationCard(modifier: Modifier = Modifier) {
 
             Image(painter = painterResource(id = R.drawable.ic_meditation),
                 contentDescription = null,
-                modifier = modifier.fillMaxHeight().offset(x = 10.dp, y = 30.dp).graphicsLayer(
-                    scaleX = 2f,
-                    scaleY = 2f,
-                    translationX = 0f,
-                    translationY = 0f,
-                )
+                modifier = modifier
+                    .fillMaxHeight()
+                    .offset(x = 10.dp, y = 30.dp)
+                    .graphicsLayer(
+                        scaleX = 2f,
+                        scaleY = 2f,
+                        translationX = 0f,
+                        translationY = 0f,
+                    )
             )
         }
     }
@@ -267,7 +272,12 @@ private fun AdjustYogaLevelScreen(modifier: Modifier = Modifier, adjustYogaLevel
 
     val context = LocalContext.current
 
-    val level = listOf(Pair(0, "All"), Pair(1, "Beginner"), Pair(2, "Intermediate"), Pair(3, "Advanced"))
+    val level = listOf(
+        Pair(0, stringResource(R.string.all)),
+        Pair(1, stringResource(R.string.beginner)),
+        Pair(2, stringResource(R.string.intermediate)),
+        Pair(3, stringResource(R.string.advanced))
+    )
     var selectedLevelIndex by remember { mutableIntStateOf(0) }
 
     val color = MaterialTheme.colorScheme.primary
@@ -277,12 +287,12 @@ private fun AdjustYogaLevelScreen(modifier: Modifier = Modifier, adjustYogaLevel
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)) {
 
-            Text(text = "Adjust Your Yoga Level", style = MaterialTheme.typography.titleMedium)
+            Text(text = stringResource(R.string.adjust_your_yoga_level), style = MaterialTheme.typography.titleMedium)
 
             Spacer(modifier = modifier.weight(1f))
 
             Text(
-                text = "View All",
+                text = stringResource(id = R.string.view_all),
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.primary,
@@ -335,7 +345,8 @@ fun AdjustYogaLevelCard(modifier: Modifier = Modifier,
     val context = LocalContext.current
 
 
-    Row(modifier = modifier.fillMaxWidth()
+    Row(modifier = modifier
+        .fillMaxWidth()
         .clickable(
             onClick = {
                 SerenityDetailActivity.startActivity(context as Activity, adjustYogaLevel.id)
@@ -393,7 +404,7 @@ private fun BodyFocusScreen(modifier: Modifier = Modifier) {
 
     Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
 
-        Text(text = "Body Focus Area", style = MaterialTheme.typography.titleMedium)
+        Text(text = stringResource(R.string.body_focus_area), style = MaterialTheme.typography.titleMedium)
         
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
@@ -405,7 +416,7 @@ private fun BodyFocusScreen(modifier: Modifier = Modifier) {
                     onClick = {
                         BodyFocusDetailActivity.startActivity(
                             activity = context as Activity,
-                            title = Body.bodyPartsImage[it].part,
+                            title = context.getString(Body.bodyPartsImage[it].part),
                             image = Body.bodyPartsImage[it].image,
                             color = Body.bodyPartsImage[it].color)
                     }) {
@@ -413,10 +424,13 @@ private fun BodyFocusScreen(modifier: Modifier = Modifier) {
                     Box() {
                         Image(painter = painterResource(id = Body.bodyPartsImage[it].image),
                             contentDescription = null,
-                            modifier = modifier.fillMaxSize().wrapContentSize(align = Alignment.BottomEnd).size(120.dp),
+                            modifier = modifier
+                                .fillMaxSize()
+                                .wrapContentSize(align = Alignment.BottomEnd)
+                                .size(120.dp),
                             contentScale = ContentScale.Crop)
 
-                        Text(text = Body.bodyPartsImage[it].part, style = MaterialTheme.typography.bodyLarge, modifier = modifier.padding(16.dp))
+                        Text(text = stringResource(id = Body.bodyPartsImage[it].part), style = MaterialTheme.typography.bodyLarge, modifier = modifier.padding(16.dp))
 
                     }
                 }
@@ -438,12 +452,12 @@ private fun FlexibilityStrengthScreen(modifier: Modifier = Modifier, flexibility
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)) {
 
-            Text(text = "Flexibility & Strength", style = MaterialTheme.typography.titleMedium)
+            Text(text = stringResource(R.string.flexibility_strength), style = MaterialTheme.typography.titleMedium)
 
             Spacer(modifier = modifier.weight(1f))
 
             Text(
-                text = "View All",
+                text = stringResource(id = R.string.view_all),
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.primary,
@@ -477,7 +491,8 @@ fun FlexibilityStrengthCard(modifier: Modifier = Modifier,
     val context = LocalContext.current
 
 
-    Row(modifier = modifier.fillMaxWidth()
+    Row(modifier = modifier
+        .fillMaxWidth()
         .clickable(
             onClick = {
                 SerenityDetailActivity.startActivity(context as Activity, flexibilityStrength.id)
@@ -535,12 +550,12 @@ private fun StressReliefScreen(modifier: Modifier = Modifier, stressRelief: Yoga
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)) {
 
-            Text(text = "Stress Relief", style = MaterialTheme.typography.titleMedium)
+            Text(text = stringResource(R.string.stress_relief), style = MaterialTheme.typography.titleMedium)
 
             Spacer(modifier = modifier.weight(1f))
 
             Text(
-                text = "View All",
+                text = stringResource(id = R.string.view_all),
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.primary,
@@ -574,7 +589,8 @@ fun StressReliefCard(modifier: Modifier = Modifier,
     val context = LocalContext.current
 
 
-    Row(modifier = modifier.fillMaxWidth()
+    Row(modifier = modifier
+        .fillMaxWidth()
         .clickable(
             onClick = {
                 SerenityDetailActivity.startActivity(context as Activity, stressRelief.id)

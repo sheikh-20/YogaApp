@@ -14,13 +14,22 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.bitvolper.yogazzz.R
+import com.bitvolper.yogazzz.domain.model.AppLanguagePreference
+import com.bitvolper.yogazzz.presentation.viewmodel.AccountViewModel
 import com.bitvolper.yogazzz.presentation.viewmodel.DiscoverViewModel
 import com.bitvolper.yogazzz.presentation.viewmodel.HomeViewModel
+import com.bitvolper.yogazzz.utility.SetLanguage
+import timber.log.Timber
 
+private const val TAG = "PopularYogaApp"
 @Composable
-fun PopularYogaApp(modifier: Modifier = Modifier, discoverViewModel: DiscoverViewModel = hiltViewModel()) {
+fun PopularYogaApp(modifier: Modifier = Modifier,
+                   discoverViewModel: DiscoverViewModel = hiltViewModel(),
+                   accountViewModel: AccountViewModel = hiltViewModel()) {
 
     val popularYogaUIState by discoverViewModel.popularYoga.collectAsState()
 
@@ -39,7 +48,7 @@ private fun PopularYogaTopAppBar() {
     CenterAlignedTopAppBar(
         title = {
             Text(
-                text = "Popular Yoga",
+                text = stringResource(id = R.string.popular_yoga),
                 fontWeight = FontWeight.SemiBold)
         },
         navigationIcon = {

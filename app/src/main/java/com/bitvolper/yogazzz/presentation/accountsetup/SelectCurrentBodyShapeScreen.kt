@@ -42,6 +42,7 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
@@ -73,9 +74,9 @@ fun SelectCurrentBodyShapeScreen(modifier: Modifier = Modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally) {
 
-        Text(text = "Your Current Body Shape", style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.SemiBold)
+        Text(text = stringResource(R.string.your_current_body_shape), style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.SemiBold)
 
-        Text(text = "Help us understand your starting point.", style = MaterialTheme.typography.bodyLarge)
+        Text(text = stringResource(R.string.help_us_understand_your_starting_point), style = MaterialTheme.typography.bodyLarge)
 
 
         Box(modifier = Modifier.weight(1f)) {
@@ -102,13 +103,17 @@ fun SelectCurrentBodyShapeScreen(modifier: Modifier = Modifier,
                 2 -> {
                     Image(painter = painterResource(id = R.drawable.ic_lean),
                         contentDescription = null,
-                        modifier = modifier.fillMaxSize().scale(1.05f, 1f),
+                        modifier = modifier
+                            .fillMaxSize()
+                            .scale(1.05f, 1f),
                         contentScale = ContentScale.Crop)
                 }
                 3 -> {
                     Image(painter = painterResource(id = R.drawable.ic_lean),
                         contentDescription = null,
-                        modifier = modifier.fillMaxSize().scale(1.2f, 1f),
+                        modifier = modifier
+                            .fillMaxSize()
+                            .scale(1.2f, 1f),
                         contentScale = ContentScale.Crop)
                 }
                 4 -> {
@@ -124,7 +129,10 @@ fun SelectCurrentBodyShapeScreen(modifier: Modifier = Modifier,
 
 
         Column(modifier = modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp)) {
-            ForecastSlider(dates = listOf("Muscular", "Ideal", "Normal", "Fat", "Obeses"), currentPosition.toFloat()) {
+            ForecastSlider(dates = listOf(stringResource(R.string.muscular),
+                stringResource(R.string.ideal), stringResource(R.string.normal),
+                stringResource(R.string.fat), stringResource(R.string.obeses)
+            ), currentPosition.toFloat()) {
                 currentPosition = it
             }
         }

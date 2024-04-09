@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,7 +33,9 @@ fun NotificationScreen(modifier: Modifier = Modifier, paddingValues: PaddingValu
         verticalArrangement = Arrangement.spacedBy(16.dp)) {
 
         Column(
-            modifier = modifier.fillMaxSize().wrapContentSize(align = Alignment.Center),
+            modifier = modifier
+                .fillMaxSize()
+                .wrapContentSize(align = Alignment.Center),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Image(
@@ -45,7 +48,7 @@ fun NotificationScreen(modifier: Modifier = Modifier, paddingValues: PaddingValu
             )
 
             Text(
-                text = "Empty",
+                text = stringResource(id = R.string.empty),
                 style = MaterialTheme.typography.titleLarge,
                 modifier = modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
@@ -53,7 +56,7 @@ fun NotificationScreen(modifier: Modifier = Modifier, paddingValues: PaddingValu
             )
 
             Text(
-                text = "You did not receive any notification",
+                text = stringResource(R.string.you_did_not_receive_any_notification),
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,

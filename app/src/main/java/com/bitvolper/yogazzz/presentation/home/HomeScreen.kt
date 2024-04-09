@@ -47,6 +47,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -114,18 +115,18 @@ fun HomeScreen(modifier: Modifier = Modifier,
                             Column(modifier = modifier
                                 .padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
 
-                                Text(text = "Serenity Flow:",
+                                Text(text = stringResource(R.string.serenity_flow),
                                     style = MaterialTheme.typography.titleLarge,
                                     fontWeight = FontWeight.SemiBold)
 
-                                Text(text = "Yoga For Beginner",
+                                Text(text = stringResource(R.string.yoga_for_beginner),
                                     style = MaterialTheme.typography.titleLarge,
                                     fontWeight = FontWeight.SemiBold)
 
                                 Button(onClick = {
                                     SerenityDetailActivity.startActivity(context as Activity, null)
                                 }) {
-                                    Text(text = "Get Started")
+                                    Text(text = stringResource(R.string.get_started))
                                 }
                             }
                         }
@@ -174,7 +175,7 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
                             .wrapContentWidth(align = Alignment.End)
                             .size(150.dp))
 
-                    Text(text = "Improved\nFlexibility", style = MaterialTheme.typography.titleMedium, modifier = modifier.padding(8.dp), lineHeight = 30.sp)
+                    Text(text = stringResource(R.string.improved_flexibility), style = MaterialTheme.typography.titleMedium, modifier = modifier.padding(8.dp), lineHeight = 30.sp)
                 }
             }
 
@@ -201,7 +202,7 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
                             .wrapContentWidth(align = Alignment.End)
                             .size(150.dp))
 
-                    Text(text = "Stress\nReduction", style = MaterialTheme.typography.titleMedium, modifier = modifier.padding(8.dp), lineHeight = 30.sp)
+                    Text(text = stringResource(R.string.stress_reduction), style = MaterialTheme.typography.titleMedium, modifier = modifier.padding(8.dp), lineHeight = 30.sp)
                 }
             }
         }
@@ -231,7 +232,7 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
                             .size(150.dp))
 
 
-                    Text(text = "Improved\nPosture", style = MaterialTheme.typography.titleMedium, modifier = modifier.padding(8.dp), lineHeight = 30.sp)
+                    Text(text = stringResource(R.string.improved_posture), style = MaterialTheme.typography.titleMedium, modifier = modifier.padding(8.dp), lineHeight = 30.sp)
                 }
             }
 
@@ -257,7 +258,7 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
                             .wrapContentWidth(align = Alignment.End)
                             .size(150.dp))
 
-                    Text(text = "Recovery", style = MaterialTheme.typography.titleMedium, modifier = modifier.padding(8.dp), lineHeight = 30.sp)
+                    Text(text = stringResource(R.string.recovery), style = MaterialTheme.typography.titleMedium, modifier = modifier.padding(8.dp), lineHeight = 30.sp)
                 }
             }
         }
@@ -286,7 +287,7 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
                             .size(150.dp))
 
 
-                    Text(text = "Mindfulness\n& Presence", style = MaterialTheme.typography.titleMedium, modifier = modifier.padding(8.dp), lineHeight = 30.sp)
+                    Text(text = stringResource(R.string.mindfulness_presence), style = MaterialTheme.typography.titleMedium, modifier = modifier.padding(8.dp), lineHeight = 30.sp)
                 }
             }
 
@@ -312,7 +313,7 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
                             .wrapContentWidth(align = Alignment.End)
                             .size(150.dp))
 
-                    Text(text = "Spritual\nGrowth", style = MaterialTheme.typography.titleMedium, modifier = modifier.padding(8.dp), lineHeight = 30.sp)
+                    Text(text = stringResource(R.string.spritual_growth), style = MaterialTheme.typography.titleMedium, modifier = modifier.padding(8.dp), lineHeight = 30.sp)
                 }
             }
         }
@@ -340,7 +341,7 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
                             .wrapContentWidth(align = Alignment.End)
                             .size(150.dp))
 
-                    Text(text = "Emotional\nBalance", style = MaterialTheme.typography.titleMedium, modifier = modifier.padding(8.dp), lineHeight = 30.sp)
+                    Text(text = stringResource(R.string.emotional_balance), style = MaterialTheme.typography.titleMedium, modifier = modifier.padding(8.dp), lineHeight = 30.sp)
                 }
             }
 
@@ -367,7 +368,7 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
                             .size(150.dp))
 
 
-                    Text(text = "Enhanced\nSleep\nQuality", style = MaterialTheme.typography.titleMedium, modifier = modifier.padding(8.dp), lineHeight = 30.sp)
+                    Text(text = stringResource(R.string.enhanced_sleep_quality), style = MaterialTheme.typography.titleMedium, modifier = modifier.padding(8.dp), lineHeight = 30.sp)
                 }
             }
         }
@@ -444,7 +445,10 @@ fun RecommendationCard(modifier: Modifier = Modifier,
                         imageVector = Icons.Rounded.Diamond,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.primaryContainer,
-                        modifier = modifier.fillMaxSize().wrapContentSize(align = Alignment.TopStart).padding(4.dp)
+                        modifier = modifier
+                            .fillMaxSize()
+                            .wrapContentSize(align = Alignment.TopStart)
+                            .padding(4.dp)
                     )
                 }
             }
@@ -481,7 +485,7 @@ private fun YogaRecommendationCompose(recommendation: YogaRecommendation = YogaR
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = "Recommendation For You",
+                text = stringResource(R.string.recommendation_for_you),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold
             )
@@ -489,7 +493,7 @@ private fun YogaRecommendationCompose(recommendation: YogaRecommendation = YogaR
             Spacer(modifier = Modifier.weight(1f))
 
             Text(
-                text = "View All",
+                text = stringResource(R.string.view_all),
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.primary,

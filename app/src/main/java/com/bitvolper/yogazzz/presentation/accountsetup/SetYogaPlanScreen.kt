@@ -17,12 +17,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.utility.AccountSetupContinueComposable
 import com.bitvolper.yogazzz.utility.ListPicker
@@ -46,14 +48,14 @@ fun SetYogaPlanScreen(modifier: Modifier = Modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally) {
 
-        Text(text = "Set Your Weekly Yoga Plan",
+        Text(text = stringResource(R.string.set_your_weekly_yoga_plan),
             style = MaterialTheme.typography.headlineLarge,
             fontWeight = FontWeight.SemiBold,
             modifier = modifier.padding(horizontal = 16.dp),
             textAlign = TextAlign.Center
             )
 
-        Text(text = "How often can you dedicate time to yoga each week?",
+        Text(text = stringResource(R.string.how_often_can_you_dedicate_time_to_yoga_each_week),
             style = MaterialTheme.typography.bodyLarge,
             modifier = modifier.padding(horizontal = 16.dp),
             textAlign = TextAlign.Center)
@@ -61,7 +63,10 @@ fun SetYogaPlanScreen(modifier: Modifier = Modifier,
         com.bitvolper.yogazzz.presentation.accountsetup.utility.ListPicker(
             initialValue = value,
             list = values.toImmutableWrapper(),
-            modifier = modifier.weight(1f).requiredWidth(200.dp).padding(vertical = 8.dp),
+            modifier = modifier
+                .weight(1f)
+                .requiredWidth(200.dp)
+                .padding(vertical = 8.dp),
             onValueChange = {
                 value = it
             },

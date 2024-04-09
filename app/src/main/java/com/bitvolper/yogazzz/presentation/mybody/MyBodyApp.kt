@@ -312,7 +312,7 @@ private fun MyBodyTopAppBar() {
     CenterAlignedTopAppBar(
         title = {
             Text(
-                text = "My Body",
+                text = stringResource(id = R.string.my_body),
                 fontWeight = FontWeight.SemiBold)
         },
         navigationIcon = {
@@ -755,17 +755,20 @@ private fun BottomSheetGenderContent(modifier: Modifier = Modifier, onNegativeCl
                     .clickable(
                         onClick = { onPositiveClick(0) },
                         interactionSource = remember { MutableInteractionSource() },
-                        indication = null))
+                        indication = null
+                    ))
 
             Text(text = "Woman",
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
-                modifier = modifier.fillMaxWidth()
+                modifier = modifier
+                    .fillMaxWidth()
                     .clickable(
                         onClick = { onPositiveClick(1) },
                         interactionSource = remember { MutableInteractionSource() },
-                        indication = null)
+                        indication = null
+                    )
             )
         }
     }

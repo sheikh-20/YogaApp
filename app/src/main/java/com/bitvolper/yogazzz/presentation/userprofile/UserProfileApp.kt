@@ -46,6 +46,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.presentation.viewmodel.AccountViewModel
 import kotlinx.coroutines.launch
 
@@ -143,7 +144,7 @@ private fun UserProfileTopAppBar() {
     CenterAlignedTopAppBar(
         title = {
             Text(
-                text = "My Profile",
+                text = stringResource(R.string.my_profile),
                 fontWeight = FontWeight.SemiBold)
         },
         navigationIcon = {
@@ -215,17 +216,20 @@ private fun BottomSheetContent(modifier: Modifier = Modifier, onNegativeClick: (
                     .clickable(
                         onClick = { onPositiveClick(0) },
                         interactionSource = remember { MutableInteractionSource() },
-                        indication = null))
+                        indication = null
+                    ))
 
             Text(text = "Woman",
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
-                modifier = modifier.fillMaxWidth()
+                modifier = modifier
+                    .fillMaxWidth()
                     .clickable(
                         onClick = { onPositiveClick(1) },
                         interactionSource = remember { MutableInteractionSource() },
-                        indication = null)
+                        indication = null
+                    )
             )
         }
     }

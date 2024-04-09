@@ -33,10 +33,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.utility.AccountSetupContinueComposable
 import com.bitvolper.yogazzz.utility.Experience
@@ -58,13 +60,13 @@ fun ExperienceLevelScreen(modifier: Modifier = Modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally) {
 
-        Text(text = "Have You Experienced Yoga Before?",
+        Text(text = stringResource(R.string.have_you_experienced_yoga_before),
             style = MaterialTheme.typography.headlineLarge,
             fontWeight = FontWeight.SemiBold,
             modifier = modifier.padding(horizontal = 16.dp),
             textAlign = TextAlign.Center)
 
-        Text(text = "Share your yoga background with us",
+        Text(text = stringResource(R.string.share_your_yoga_background_with_us),
             style = MaterialTheme.typography.bodyLarge,
             modifier = modifier.padding(horizontal = 16.dp))
 
@@ -111,8 +113,8 @@ private fun ExperienceCardComposable(experienceLevel: Experience.ExperienceLevel
                 colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.primary))
 
             Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(text = experienceLevel.title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
-                Text(text = experienceLevel.description, style = MaterialTheme.typography.bodyMedium)
+                Text(text = stringResource(id = experienceLevel.title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
+                Text(text = stringResource(id = experienceLevel.description), style = MaterialTheme.typography.bodyMedium)
             }
 
             if (selectedExperienceLevel) {

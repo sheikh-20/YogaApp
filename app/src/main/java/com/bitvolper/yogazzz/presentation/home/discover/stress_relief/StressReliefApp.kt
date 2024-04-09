@@ -14,8 +14,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.presentation.viewmodel.DiscoverViewModel
 
 @Composable
@@ -38,7 +40,7 @@ private fun StressReliefTopAppBar() {
     CenterAlignedTopAppBar(
         title = {
             Text(
-                text = "Stress Relief",
+                text = stringResource(id = R.string.stress_relief),
                 fontWeight = FontWeight.SemiBold)
         },
         navigationIcon = {

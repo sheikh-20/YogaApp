@@ -13,7 +13,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import com.bitvolper.yogazzz.R
 
 @Composable
 fun SupportApp(modifier: Modifier = Modifier) {
@@ -34,7 +36,7 @@ private fun SupportTopAppBar() {
     CenterAlignedTopAppBar(
         title = {
             Text(
-                text = "Help & Support",
+                text = stringResource(id = R.string.help_support),
                 fontWeight = FontWeight.SemiBold)
         },
         navigationIcon = {

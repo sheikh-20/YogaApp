@@ -26,7 +26,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.bitvolper.yogazzz.R
 import com.patrykandpatrick.vico.core.component.shape.ShapeComponent
 import com.patrykandpatrick.vico.core.marker.Marker
 import com.patrykandpatrick.vico.core.model.CartesianLayerModel
@@ -187,7 +189,7 @@ fun ExposedRefreshBottomMenu(modifier: Modifier = Modifier,
 
         ExposedDropdownMenu(modifier = modifier.then(modifier.requiredWidth(120.dp)), expanded = isExpanded, onDismissRequest = { onExpand(false) }) {
             DropdownMenuItem(
-                text = { Text(text = "Refresh", style = MaterialTheme.typography.bodyLarge) },
+                text = { Text(text = stringResource(R.string.refresh), style = MaterialTheme.typography.bodyLarge) },
                 onClick = {
                     onExpand(false)
                     onRefresh()

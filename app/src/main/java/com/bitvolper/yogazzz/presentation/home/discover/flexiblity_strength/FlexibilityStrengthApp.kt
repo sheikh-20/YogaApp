@@ -14,8 +14,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.domain.model.FlexibilityStrength
 import com.bitvolper.yogazzz.presentation.viewmodel.DiscoverViewModel
 
@@ -39,7 +41,7 @@ private fun FlexibilityStrengthTopAppBar() {
     CenterAlignedTopAppBar(
         title = {
             Text(
-                text = "Flexibility Strength",
+                text = stringResource(id = R.string.flexibility_strength),
                 fontWeight = FontWeight.SemiBold)
         },
         navigationIcon = {

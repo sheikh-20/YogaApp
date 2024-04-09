@@ -114,7 +114,7 @@ fun CreateNewPasswordScreen(modifier: Modifier = Modifier, onContinueClick: () -
                     .fillMaxWidth().requiredHeight(50.dp),
                 colors = ButtonDefaults.filledTonalButtonColors(containerColor = Color.Red)) {
 
-                Text(text = stringResource(R.string.continues), color = colorResource(id = R.color.white), modifier = modifier.padding(4.dp))
+                Text(text = stringResource(R.string.continue_text), color = colorResource(id = R.color.white), modifier = modifier.padding(4.dp))
 
             }
         }

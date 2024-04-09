@@ -1,7 +1,9 @@
 package com.bitvolper.yogazzz.di
 
+import com.bitvolper.yogazzz.data.repository.AppLanguagePreferenceRepository
 import com.bitvolper.yogazzz.data.repository.AppThemePreferenceRepository
 import com.bitvolper.yogazzz.data.repository.AuthRepository
+import com.bitvolper.yogazzz.data.repository.GetAppLanguagePreferenceRepositoryImpl
 import com.bitvolper.yogazzz.data.repository.GetAppThemePreferenceRepositoryImpl
 import com.bitvolper.yogazzz.data.repository.GetNotificationPreferenceImpl
 import com.bitvolper.yogazzz.data.repository.GoogleRepositoryImpl
@@ -12,6 +14,7 @@ import com.bitvolper.yogazzz.data.repository.PasswordResetRepository
 import com.bitvolper.yogazzz.data.repository.PasswordResetRepositoryImpl
 import com.bitvolper.yogazzz.data.repository.SignInEmailRepositoryImpl
 import com.bitvolper.yogazzz.data.repository.SignUpEmailRepositoryImpl
+import com.bitvolper.yogazzz.domain.model.AppLanguagePreference
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -45,6 +48,9 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun providesAppThemePreferenceImpl(getAppThemePreferenceRepositoryImpl: GetAppThemePreferenceRepositoryImpl): AppThemePreferenceRepository
+
+    @Binds
+    abstract fun providesAppLanguagePreferenceImpl(getAppLanguagePreferenceRepositoryImpl: GetAppLanguagePreferenceRepositoryImpl): AppLanguagePreferenceRepository
 
     @Binds
     abstract fun providesResetPasswordRepositoryImpl(passwordResetRepositoryImpl: PasswordResetRepositoryImpl): PasswordResetRepository

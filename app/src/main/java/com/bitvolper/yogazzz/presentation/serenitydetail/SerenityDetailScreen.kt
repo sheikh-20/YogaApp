@@ -57,7 +57,9 @@ import com.bitvolper.yogazzz.presentation.serenitydetail.yogaexercise.YogaExerci
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.utility.Resource
 import com.google.accompanist.pager.ExperimentalPagerApi
+import timber.log.Timber
 
+private const val TAG = "SerenityDetailScreen"
 @Composable
 fun SerenityDetailScreen(modifier: Modifier = Modifier,
                          paddingValues: PaddingValues = PaddingValues(),
@@ -136,7 +138,7 @@ fun SerenityDetailScreen(modifier: Modifier = Modifier,
                                 horizontalAlignment = Alignment.CenterHorizontally) {
                                 Icon(imageVector = Icons.Rounded.SelfImprovement, contentDescription = null)
 
-                                Text(text = yogaExerciseUIState.data.data?.first()?.moments ?: "",
+                                Text(text = "${yogaExerciseUIState.data.data.first()?.pose?.size ?: 0}",
                                     style = MaterialTheme.typography.bodyLarge,
                                     fontWeight = FontWeight.SemiBold)
 
@@ -155,7 +157,9 @@ fun SerenityDetailScreen(modifier: Modifier = Modifier,
                                 horizontalAlignment = Alignment.CenterHorizontally) {
                                 Icon(imageVector = Icons.Rounded.Schedule, contentDescription = null)
 
-                                Text(text = yogaExerciseUIState.data.data?.first()?.duration ?: "",
+                                Timber.tag(TAG).d(yogaExerciseUIState.data.data.first()?.pose?.map { it?.duration ?: "" }.toString())
+
+                                Text(text = sumTimeListToMinutes(yogaExerciseUIState.data.data.first()?.pose?.map { it?.duration ?: "" }?.toList() ?: listOf()).toString(),
                                     style = MaterialTheme.typography.bodyLarge,
                                     fontWeight = FontWeight.SemiBold)
 

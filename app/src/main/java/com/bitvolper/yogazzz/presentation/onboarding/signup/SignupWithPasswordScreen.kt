@@ -159,7 +159,7 @@ fun SignupWithPasswordScreen(modifier: Modifier = Modifier,
             verticalArrangement = Arrangement.spacedBy(16.dp)) {
 
             Text(
-                text = "Join YogazzZ today \uD83D\uDC64",
+                text = stringResource(R.string.join_yogazzz_today),
                 style = MaterialTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Start,
@@ -169,7 +169,7 @@ fun SignupWithPasswordScreen(modifier: Modifier = Modifier,
             )
 
             Text(
-                text = "Start your personalized wellness experiences.",
+                text = stringResource(R.string.start_your_personalized_wellness_experiences),
                 style = MaterialTheme.typography.bodyLarge,
                 textAlign = TextAlign.Start,
                 modifier = modifier
@@ -180,7 +180,7 @@ fun SignupWithPasswordScreen(modifier: Modifier = Modifier,
             Column(modifier = modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
 
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text(text = "Email")
+                    Text(text = stringResource(id = R.string.email))
 
                     EmailComponent(
                         email = email,
@@ -190,7 +190,7 @@ fun SignupWithPasswordScreen(modifier: Modifier = Modifier,
                 }
 
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(text = "Password")
+                    Text(text = stringResource(id = R.string.password))
 
                     PasswordComponent(
                         password = password,
@@ -203,16 +203,16 @@ fun SignupWithPasswordScreen(modifier: Modifier = Modifier,
                 Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start) {
                     Checkbox(checked = isReadCondition, onCheckedChange = { isReadCondition = true })
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(text = "I agree to YogazzZ Terms & Conditions ", style = MaterialTheme.typography.labelLarge)
+                        Text(text = stringResource(R.string.i_agree_to_yogazzz_terms_conditions), style = MaterialTheme.typography.labelLarge)
                     }
                 }
 
                 Row(modifier = modifier
                     .fillMaxWidth()
                     .wrapContentWidth(align = Alignment.CenterHorizontally), verticalAlignment = Alignment.CenterVertically) {
-                    Text(text = "Already have an account?")
+                    Text(text = stringResource(R.string.already_have_an_account))
                     TextButton(onClick = onSignInClick) {
-                        Text(text = "Sign In", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
+                        Text(text = stringResource(R.string.sign_in), fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
                     }
                 }
             }
@@ -224,11 +224,13 @@ fun SignupWithPasswordScreen(modifier: Modifier = Modifier,
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Divider(modifier = modifier.weight(1f), color = Color.LightGray)
-                Text(text = "or")
+                Text(text = stringResource(id = R.string.or))
                 Divider(modifier = modifier.weight(1f), color = Color.LightGray)
             }
 
-            Column(modifier = modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            Column(modifier = modifier
+                .fillMaxWidth()
+                .padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 LoginComponent(icon = R.drawable.ic_google, text = R.string.continue_with_google) {
                     coroutineScope.launch {
                         val result = SignInGoogleInteractor.signIn(context)

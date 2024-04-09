@@ -58,6 +58,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.ui.res.stringResource
 import com.bitvolper.yogazzz.domain.model.AccountInfo
 import kotlin.math.absoluteValue
 
@@ -79,14 +80,16 @@ fun SelectGenderScreen(modifier: Modifier = Modifier,
         ),
         verticalArrangement = Arrangement.spacedBy(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
 
-        Text(text = "Select Your Gender", style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.SemiBold)
+        Text(text = stringResource(R.string.select_your_gender), style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.SemiBold)
 
-        Text(text = "Let's start by understanding you", style = MaterialTheme.typography.bodyMedium)
+        Text(text = stringResource(R.string.let_s_start_by_understanding_you), style = MaterialTheme.typography.bodyMedium)
 
 
         HorizontalPager(
             state = pager,
-            modifier = modifier.fillMaxWidth().weight(1f),
+            modifier = modifier
+                .fillMaxWidth()
+                .weight(1f),
             contentPadding = PaddingValues(horizontal = 80.dp),
         ) { index ->
 
@@ -122,7 +125,7 @@ fun SelectGenderScreen(modifier: Modifier = Modifier,
                     .requiredHeight(50.dp),
                     border = BorderStroke(0.dp, Color.Transparent),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
-                    Text(text = "Skip", color = MaterialTheme.colorScheme.onPrimaryContainer)
+                    Text(text = stringResource(id = R.string.skip), color = MaterialTheme.colorScheme.onPrimaryContainer)
                 }
 
                 Button(
@@ -131,7 +134,7 @@ fun SelectGenderScreen(modifier: Modifier = Modifier,
                         .weight(1f)
                         .requiredHeight(50.dp)) {
 
-                    Text(text = "Continue")
+                    Text(text = stringResource(id = R.string.continues))
                 }
             }
         }
@@ -176,7 +179,7 @@ private fun ShowGenderImage(modifier: Modifier = Modifier, gender: Gender.Gender
             Image(painter = painterResource(id = gender.image), contentDescription = null, modifier = Modifier.fillMaxSize())
         }
 
-        Text(text = gender.title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
+        Text(text = stringResource(id = gender.title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
     }
 }
 

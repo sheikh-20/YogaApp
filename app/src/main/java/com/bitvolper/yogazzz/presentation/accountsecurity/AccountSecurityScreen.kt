@@ -23,9 +23,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 
 @Composable
@@ -70,8 +72,8 @@ fun AccountSecurityScreen(modifier: Modifier = Modifier,
             interactionSource = remember { MutableInteractionSource() },
             indication = null)) {
             Column(modifier = modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(text = "Deactivate Account", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                Text(text = "Temporarily deactivate your account. Easily activate when you're ready.", style = MaterialTheme.typography.bodyMedium)
+                Text(text = stringResource(R.string.deactivate_account), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                Text(text = stringResource(R.string.temporarily_deactivate_your_account_easily_activate_when_you_re_ready), style = MaterialTheme.typography.bodyMedium)
             }
 
             Icon(imageVector = Icons.Rounded.ArrowForwardIos, contentDescription = null)
@@ -82,8 +84,8 @@ fun AccountSecurityScreen(modifier: Modifier = Modifier,
             interactionSource = remember { MutableInteractionSource() },
             indication = null)) {
             Column(modifier = modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(text = "Delete Account", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, color = Color.Red)
-                Text(text = "Permanently remove your account and data. Proceed with caution.", style = MaterialTheme.typography.bodyMedium)
+                Text(text = stringResource(R.string.delete_account), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, color = Color.Red)
+                Text(text = stringResource(R.string.permanently_remove_your_account_and_data_proceed_with_caution), style = MaterialTheme.typography.bodyMedium)
             }
 
             Icon(imageVector = Icons.Rounded.ArrowForwardIos, contentDescription = null)

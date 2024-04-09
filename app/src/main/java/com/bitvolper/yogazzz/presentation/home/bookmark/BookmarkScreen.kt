@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -79,7 +80,9 @@ fun BookmarkScreen(modifier: Modifier = Modifier,
 
 
                     if (bookmarkUIState.data.data?.isEmpty() == true) {
-                        Column(modifier = modifier.fillMaxSize().wrapContentSize(align = Alignment.Center), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                        Column(modifier = modifier
+                            .fillMaxSize()
+                            .wrapContentSize(align = Alignment.Center), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                             Image(painter = painterResource(id = R.drawable.ic_empty),
                                 contentDescription = null,
                                 modifier = modifier
@@ -87,14 +90,14 @@ fun BookmarkScreen(modifier: Modifier = Modifier,
                                     .wrapContentWidth(align = Alignment.CenterHorizontally)
                                     .size(150.dp))
 
-                            Text(text = "Empty",
+                            Text(text = stringResource(R.string.empty),
                                 style = MaterialTheme.typography.titleLarge,
                                 modifier = modifier.fillMaxWidth(),
                                 textAlign = TextAlign.Center,
                                 fontWeight = FontWeight.SemiBold)
 
                             Text(
-                                text = "You did not bookmark any exercise",
+                                text = stringResource(R.string.you_did_not_bookmark_any_exercise),
                                 style = MaterialTheme.typography.bodyLarge,
                                 modifier = modifier.fillMaxWidth(),
                                 textAlign = TextAlign.Center,

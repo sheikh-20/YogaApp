@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -25,11 +26,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.utility.AccountSetupContinueComposable
 import com.bitvolper.yogazzz.utility.toImmutableWrapper
@@ -59,9 +62,9 @@ fun SelectCurrentBodyWeightScreen(modifier: Modifier = Modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally) {
 
-        Text(text = "Your Current Weight", style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.SemiBold)
+        Text(text = stringResource(R.string.your_current_weight), style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.SemiBold)
 
-        Text(text = "Share your current weight.", style = MaterialTheme.typography.bodyLarge)
+        Text(text = stringResource(R.string.share_your_current_weight), style = MaterialTheme.typography.bodyLarge)
 
         Row(modifier = modifier
             .fillMaxWidth()
@@ -93,19 +96,20 @@ fun SelectCurrentBodyWeightScreen(modifier: Modifier = Modifier,
             }
         }
 
+        Spacer(modifier = modifier.weight(1f))
+
         if (currentMeasure == MeasureWeight.Kg.id) {
             com.bitvolper.yogazzz.presentation.accountsetup.utility.ListPicker(
                 initialValue = kgValue,
                 list = kgValues.toImmutableWrapper(),
                 modifier = modifier
-                    .weight(1f)
                     .requiredWidth(200.dp)
                     .padding(vertical = 8.dp),
                 onValueChange = {
                     kgValue = it
                 },
                 textStyle = TextStyle(fontSize = 32.sp),
-                outOfBoundsPageCount = 4,
+                outOfBoundsPageCount = 3,
                 verticalPadding = 8.dp,
             )
         } else {
@@ -113,17 +117,18 @@ fun SelectCurrentBodyWeightScreen(modifier: Modifier = Modifier,
                 initialValue = lbsValue,
                 list = lbsValues.toImmutableWrapper(),
                 modifier = modifier
-                    .weight(1f)
                     .requiredWidth(200.dp)
                     .padding(vertical = 8.dp),
                 onValueChange = {
                     lbsValue = it
                 },
                 textStyle = TextStyle(fontSize = 32.sp),
-                outOfBoundsPageCount = 4,
+                outOfBoundsPageCount = 3,
                 verticalPadding = 8.dp,
             )
         }
+
+        Spacer(modifier = modifier.weight(1f))
 
         AccountSetupContinueComposable(
             onSkipClick = onSkipClick,

@@ -35,6 +35,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -76,13 +77,13 @@ fun DisplayYogaPlanScreen(modifier: Modifier = Modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally) {
 
-        Text(text = "Your Yoga Plan is Ready!",
+        Text(text = stringResource(R.string.your_yoga_plan_is_ready),
             style = MaterialTheme.typography.headlineLarge,
             fontWeight = FontWeight.SemiBold,
             modifier = modifier.padding(horizontal = 16.dp),
             textAlign = TextAlign.Center)
 
-        Text(text = "Your personalized yoga plan has been generated based on your goals & physics",
+        Text(text = stringResource(R.string.your_personalized_yoga_plan_has_been_generated_based_on_your_goals_physics),
             style = MaterialTheme.typography.bodyLarge,
             modifier = modifier.padding(horizontal = 16.dp),
             textAlign = TextAlign.Center)
@@ -131,7 +132,10 @@ fun DisplayYogaPlanScreen(modifier: Modifier = Modifier,
                     border = BorderStroke(0.dp, Color.Transparent),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
 
-                    Text(text = "Go to Homepage", color = MaterialTheme.colorScheme.onPrimaryContainer)
+                    Text(text = stringResource(R.string.go_to_homepage),
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis)
                 }
 
                 Button(
@@ -140,7 +144,7 @@ fun DisplayYogaPlanScreen(modifier: Modifier = Modifier,
                         .weight(1f)
                         .requiredHeight(50.dp)) {
 
-                    Text(text = "Get Started")
+                    Text(text = stringResource(id = R.string.get_started))
                 }
             }
         }

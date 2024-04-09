@@ -22,11 +22,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.presentation.accountsetup.utility.ListPicker
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.utility.AccountSetupContinueComposable
@@ -51,14 +53,17 @@ fun CollectAgeScreen(modifier: Modifier = Modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally) {
 
-        Text(text = "How Old Are You?", style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.SemiBold)
+        Text(text = stringResource(R.string.how_old_are_you), style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.SemiBold)
 
-        Text(text = "Share your age with us", style = MaterialTheme.typography.bodyLarge)
+        Text(text = stringResource(R.string.share_your_age_with_us), style = MaterialTheme.typography.bodyLarge)
 
         ListPicker(
             initialValue = value,
             list = values.toImmutableWrapper(),
-            modifier = modifier.weight(1f).requiredWidth(200.dp).padding(vertical = 8.dp),
+            modifier = modifier
+                .weight(1f)
+                .requiredWidth(200.dp)
+                .padding(vertical = 8.dp),
             onValueChange = {
                 value = it
             },

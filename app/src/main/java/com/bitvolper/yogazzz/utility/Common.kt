@@ -1,5 +1,7 @@
 package com.bitvolper.yogazzz.utility
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bitvolper.yogazzz.R
 import timber.log.Timber
@@ -60,7 +63,7 @@ fun AccountSetupContinueComposable(modifier: Modifier = Modifier, onSkipClick: (
                 .requiredHeight(50.dp),
                 border = BorderStroke(0.dp, Color.Transparent),
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
-                Text(text = "Skip", color = MaterialTheme.colorScheme.onPrimaryContainer)
+                Text(text = stringResource(id = R.string.skip), color = MaterialTheme.colorScheme.onPrimaryContainer)
             }
 
             Button(
@@ -69,7 +72,7 @@ fun AccountSetupContinueComposable(modifier: Modifier = Modifier, onSkipClick: (
                     .weight(1f)
                     .requiredHeight(50.dp)) {
 
-                Text(text = "Continue")
+                Text(text = stringResource(id = R.string.continues))
             }
         }
     }
@@ -77,75 +80,75 @@ fun AccountSetupContinueComposable(modifier: Modifier = Modifier, onSkipClick: (
 
 object Gender {
     data class GenderData(
-        val image: Int, val title: String
+        val image: Int, val title: Int
     )
 
-    val man = GenderData(image = R.drawable.ic_male, title = "Man")
-    val woman = GenderData(image = R.drawable.ic_female, title = "Woman")
+    val man = GenderData(image = R.drawable.ic_male, title = R.string.man)
+    val woman = GenderData(image = R.drawable.ic_female, title = R.string.woman)
 }
 
 object Body {
     data class BodyPart(
-        val part: String
+        @StringRes val part: Int
     )
 
     val bodyParts = listOf<BodyPart>(
-        BodyPart(part = "Full Body"),
-        BodyPart(part = "Shoulders"),
-        BodyPart(part = "Chest"),
-        BodyPart(part = "Arms"),
-        BodyPart(part = "Back"),
-        BodyPart(part = "Stomach"),
-        BodyPart(part = "Legs")
+        BodyPart(part = R.string.full_body),
+        BodyPart(part = R.string.shoulders),
+        BodyPart(part = R.string.chest),
+        BodyPart(part = R.string.arms),
+        BodyPart(part = R.string.back),
+        BodyPart(part = R.string.stomach),
+        BodyPart(part = R.string.legs)
     )
 
     data class BodyPartImage(
-        val part: String,
+        @StringRes val part: Int,
         val image: Int,
         val color: Int
     )
     
     val bodyPartsImage = listOf<BodyPartImage>(
-        BodyPartImage(part = "Shoulders", image = R.drawable.ic_shoulders, color = R.color.category1),
-        BodyPartImage(part = "Chest", image = R.drawable.ic_chest, color = R.color.category2),
-        BodyPartImage(part = "Arms", image = R.drawable.ic_arms, color = R.color.category3),
-        BodyPartImage(part = "Back", image = R.drawable.ic_back, color = R.color.category4),
-        BodyPartImage(part = "Stomach", image = R.drawable.ic_stomach, color = R.color.category5),
-        BodyPartImage(part = "Legs", image = R.drawable.ic_legs, color = R.color.category6),
+        BodyPartImage(part = R.string.shoulders, image = R.drawable.ic_shoulders, color = R.color.category1),
+        BodyPartImage(part = R.string.chest, image = R.drawable.ic_chest, color = R.color.category2),
+        BodyPartImage(part = R.string.arms, image = R.drawable.ic_arms, color = R.color.category3),
+        BodyPartImage(part = R.string.back, image = R.drawable.ic_back, color = R.color.category4),
+        BodyPartImage(part = R.string.stomach, image = R.drawable.ic_stomach, color = R.color.category5),
+        BodyPartImage(part = R.string.legs, image = R.drawable.ic_legs, color = R.color.category6),
     )
 }
 
 object Goal {
     data class YogaGoal(
-        val name: String
+        @StringRes val name: Int
     )
 
     val goals = listOf<YogaGoal>(
-        YogaGoal(name = "\uD83C\uDFCB\uD83C\uDFFB \t\tWeight loss"),
-        YogaGoal(name = "\uD83D\uDE34 \t\tBetter Sleep Quality"),
-        YogaGoal(name = "\uD83E\uDDD8\uD83C\uDFFB \t\tBody Relaxation"),
-        YogaGoal(name = "\uD83C\uDF4F \t\tImprove Health"),
-        YogaGoal(name = "\uD83C\uDF2C\uFE0F \t\tRelieve Stress"),
-        YogaGoal(name = "\uD83E\uDE70 \t\tPosture Correction")
+        YogaGoal(name = R.string.weight_loss),
+        YogaGoal(name = R.string.better_sleep_quality),
+        YogaGoal(name = R.string.body_relaxation),
+        YogaGoal(name = R.string.improve_health),
+        YogaGoal(name = R.string.relieve_stress),
+        YogaGoal(name = R.string.posture_correction)
     )
 }
 
 object Experience {
     data class  ExperienceLevel(
         val imageVector: ImageVector,
-        val title: String,
-        val description: String
+        @StringRes val title: Int,
+        @StringRes val description: Int
     )
 
     val levels = listOf<ExperienceLevel>(
         ExperienceLevel(
-            imageVector = Icons.Rounded.SignalCellularAlt1Bar, title = "Beginner", "I'm new to yoga",
+            imageVector = Icons.Rounded.SignalCellularAlt1Bar, title = R.string.beginner, R.string.i_m_new_to_yoga,
         ),
         ExperienceLevel(
-            imageVector = Icons.Rounded.SignalCellularAlt2Bar, title = "Intermediate", "I practice yoga regularly",
+            imageVector = Icons.Rounded.SignalCellularAlt2Bar, title = R.string.intermediate, R.string.i_practice_yoga_regularly,
         ),
         ExperienceLevel(
-            imageVector = Icons.Rounded.SignalCellularAlt, title = "Expert", "I'm experienced and living with yoga",
+            imageVector = Icons.Rounded.SignalCellularAlt, title = R.string.expert, R.string.i_m_experienced_and_living_with_yoga,
         )
     )
 }
