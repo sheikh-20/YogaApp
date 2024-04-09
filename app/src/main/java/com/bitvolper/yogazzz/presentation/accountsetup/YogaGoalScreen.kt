@@ -27,9 +27,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.utility.AccountSetupContinueComposable
 import com.bitvolper.yogazzz.utility.Body
@@ -54,9 +56,9 @@ fun YogaGoalScreen(modifier: Modifier = Modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally) {
 
-        Text(text = "What's your Yoga Goal?", style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.SemiBold)
+        Text(text = stringResource(R.string.what_s_your_yoga_goal), style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.SemiBold)
 
-        Text(text = "Tell us what you aim to achieve with YogazzZ", style = MaterialTheme.typography.bodyMedium)
+        Text(text = stringResource(R.string.tell_us_what_you_aim_to_achieve_with_yogazzz), style = MaterialTheme.typography.bodyMedium)
 
         LazyColumn(modifier = modifier
             .fillMaxWidth()
@@ -68,9 +70,11 @@ fun YogaGoalScreen(modifier: Modifier = Modifier,
                     colors = CardDefaults.cardColors(containerColor = Color.Transparent)
                 ) {
 
-                    Row(modifier = modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 20.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Row(modifier = modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 20.dp), verticalAlignment = Alignment.CenterVertically) {
                         Text(
-                            text = Goal.goals[it].name,
+                            text = stringResource(id = Goal.goals[it].name),
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.SemiBold,
                             modifier = modifier.weight(1f)

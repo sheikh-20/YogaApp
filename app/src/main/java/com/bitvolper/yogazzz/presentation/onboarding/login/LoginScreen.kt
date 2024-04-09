@@ -143,12 +143,12 @@ fun LoginScreen(modifier: Modifier = Modifier,
 
        Column(verticalArrangement = Arrangement.spacedBy(16.dp),
            horizontalAlignment = Alignment.CenterHorizontally) {
-           Text(text = "Let's get started",
+           Text(text = stringResource(R.string.let_s_get_started),
                style = MaterialTheme.typography.headlineLarge,
                fontWeight = FontWeight.SemiBold,
                textAlign = TextAlign.Center)
 
-           Text(text = "Let's dive into your account!",
+           Text(text = stringResource(R.string.let_s_dive_into_your_account),
                style = MaterialTheme.typography.bodyLarge,
                textAlign = TextAlign.Center)
        }
@@ -180,7 +180,7 @@ fun LoginScreen(modifier: Modifier = Modifier,
                 .fillMaxWidth()
                 .requiredHeight(50.dp),
                 elevation = ButtonDefaults.elevatedButtonElevation(defaultElevation = 4.dp)) {
-                Text(text = "Sign Up", fontWeight = FontWeight.SemiBold)
+                Text(text = stringResource(id = R.string.sign_up), fontWeight = FontWeight.SemiBold)
             }
 
             Button(onClick = onSignInClick, modifier = modifier
@@ -192,7 +192,7 @@ fun LoginScreen(modifier: Modifier = Modifier,
                     ),
                 elevation = ButtonDefaults.elevatedButtonElevation(defaultElevation = 4.dp)
             ) {
-                Text(text = "Log In", fontWeight = FontWeight.SemiBold)
+                Text(text = stringResource(id = R.string.signin), fontWeight = FontWeight.SemiBold)
             }
         }
 
@@ -203,11 +203,11 @@ fun LoginScreen(modifier: Modifier = Modifier,
             .wrapContentWidth(align = Alignment.CenterHorizontally),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically) {
-            Text(text = "Privacy Policy", style = MaterialTheme.typography.bodySmall)
+            Text(text = stringResource(id = R.string.privacy_policy_text), style = MaterialTheme.typography.bodySmall)
 
             HorizontalPagerIndicator(pagerState = rememberPagerState(), indicatorWidth = 5.dp, inactiveColor = MaterialTheme.colorScheme.onBackground, activeColor = MaterialTheme.colorScheme.onBackground)
 
-            Text(text = "Terms & Services", style = MaterialTheme.typography.bodySmall)
+            Text(text = stringResource(R.string.terms_services), style = MaterialTheme.typography.bodySmall)
         }
     }
 }

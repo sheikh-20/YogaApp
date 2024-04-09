@@ -29,20 +29,25 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.bitvolper.yogazzz.R
+import com.bitvolper.yogazzz.domain.model.AppLanguagePreference
 import com.bitvolper.yogazzz.presentation.dialog.LoginDialog
 import com.bitvolper.yogazzz.presentation.dialog.SignupDialog
 import com.bitvolper.yogazzz.presentation.onboarding.forgotpassword.ContactDetailsScreen
 import com.bitvolper.yogazzz.presentation.onboarding.login.LoginScreen
 import com.bitvolper.yogazzz.presentation.onboarding.login.LoginWithPasswordScreen
 import com.bitvolper.yogazzz.presentation.onboarding.signup.SignupWithPasswordScreen
+import com.bitvolper.yogazzz.presentation.viewmodel.AccountViewModel
 import com.bitvolper.yogazzz.presentation.viewmodel.OnboardingViewModel
+import com.bitvolper.yogazzz.utility.SetLanguage
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OnboardingApp(modifier: Modifier = Modifier,
                   navController: NavHostController = rememberNavController(),
-                  onboardingViewModel: OnboardingViewModel = hiltViewModel()) {
+                  onboardingViewModel: OnboardingViewModel = hiltViewModel(),
+                  accountViewModel: AccountViewModel = hiltViewModel()) {
 
 
     val context = LocalContext.current
@@ -53,6 +58,12 @@ fun OnboardingApp(modifier: Modifier = Modifier,
 
     val loginUIState by onboardingViewModel.loginUIState.collectAsState()
     val signupUIState by onboardingViewModel.signupUIState.collectAsState()
+
+    val appLanguageUIState by accountViewModel.appLanguageIndex.collectAsState(initial = AppLanguagePreference(0))
+
+    SetLanguage(appLanguageUIState.language)
+
+
 
     var showOnboardDialog by remember { mutableStateOf(ShowOnboardDialog.Default) }
 
@@ -115,7 +126,7 @@ fun OnboardingApp(modifier: Modifier = Modifier,
                     onForgotPasswordClick = {
                         if (onboardingViewModel.email.isEmpty()) {
                             coroutineScope.launch {
-                                snackbarHostState.showSnackbar(message = "Enter your email address", duration = SnackbarDuration.Short)
+                                snackbarHostState.showSnackbar(message = context.getString(R.string.enter_your_email_address), duration = SnackbarDuration.Short)
                             }
                         } else {
                             navController.navigate(OnboardingScreen.ForgotPassword.name)

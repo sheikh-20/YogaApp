@@ -30,9 +30,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -137,31 +139,35 @@ fun MyBodyScreen(modifier: Modifier = Modifier,
             ) { index ->
                 when (index) {
                     0 -> {
-                        Column(modifier = modifier.fillMaxSize().padding(horizontal = 16.dp),
+                        Column(modifier = modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 16.dp),
                             verticalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
 
-                            BodyPartCard(title = "Height", value = "$height cm", onClick = onHeightButtonClick)
-                            BodyPartCard(title = "Weight", value = "$currentWeight kg", onClick = onCurrentWeightButtonClick)
-                            BodyPartCard(title = "Target Weight", value = "$targetWeight kg", onClick = onTargetWeightButtonClick)
-                            BodyPartCard(title = "Age", value = "${calculateAgeFromMilliseconds(age)}", onClick = onAgeButtonClick)
-                            BodyPartCard(title = "Gender", value = if (gender == 0) "Man" else "Woman", onClick = onGenderButtonClick)
+                            BodyPartCard(title = stringResource(R.string.height), value = "$height cm", onClick = onHeightButtonClick)
+                            BodyPartCard(title = stringResource(id = R.string.weight), value = "$currentWeight kg", onClick = onCurrentWeightButtonClick)
+                            BodyPartCard(title = stringResource(R.string.target_weight), value = "$targetWeight kg", onClick = onTargetWeightButtonClick)
+                            BodyPartCard(title = stringResource(R.string.age), value = "${calculateAgeFromMilliseconds(age)}", onClick = onAgeButtonClick)
+                            BodyPartCard(title = stringResource(id = R.string.gender), value = if (gender == 0) stringResource(id = R.string.man) else stringResource(id = R.string.woman), onClick = onGenderButtonClick)
 
                         }
                     }
 
                     1 -> {
-                        Column(modifier = modifier.fillMaxSize().padding(horizontal = 16.dp),
+                        Column(modifier = modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 16.dp),
                             verticalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
 
                             val heightInFeet = heightFt.toString().split(".")
 
-                            BodyPartCard(title = "Height", value = "${heightInFeet[0]} ft ${heightInFeet[1]} in", onClick = onHeightFtButtonClick)
-                            BodyPartCard(title = "Weight", value = "$currentWeightInLb lb", onClick = onCurrentWeightLbButtonClick)
-                            BodyPartCard(title = "Target Weight", value = "$targetWeightInLb lb", onClick = onTargetWeightLbButtonClick)
-                            BodyPartCard(title = "Age", value = "${calculateAgeFromMilliseconds(age)}", onClick = onAgeButtonClick)
-                            BodyPartCard(title = "Gender", value = if (gender == 0) "Man" else "Woman", onClick = onGenderButtonClick)
+                            BodyPartCard(title = stringResource(R.string.height), value = "${heightInFeet[0]} ft ${heightInFeet[1]} in", onClick = onHeightFtButtonClick)
+                            BodyPartCard(title = stringResource(id = R.string.weight), value = "$currentWeightInLb lb", onClick = onCurrentWeightLbButtonClick)
+                            BodyPartCard(title = stringResource(R.string.target_weight), value = "$targetWeightInLb lb", onClick = onTargetWeightLbButtonClick)
+                            BodyPartCard(title = stringResource(R.string.age), value = "${calculateAgeFromMilliseconds(age)}", onClick = onAgeButtonClick)
+                            BodyPartCard(title = stringResource(id = R.string.gender), value = if (gender == 0) stringResource(id = R.string.man) else stringResource(id = R.string.woman), onClick = onGenderButtonClick)
                         }
                     }
                 }

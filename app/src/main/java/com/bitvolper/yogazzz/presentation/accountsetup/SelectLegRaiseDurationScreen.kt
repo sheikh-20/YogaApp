@@ -29,6 +29,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -59,13 +60,13 @@ fun SelectLegRaiseDurationScreen(modifier: Modifier = Modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally) {
 
-        Text(text = "How Many Leg Raises Can You Do at One Time?",
+        Text(text = stringResource(R.string.how_many_leg_raises_can_you_do_at_one_time),
             style = MaterialTheme.typography.headlineLarge,
             fontWeight = FontWeight.SemiBold,
             modifier = modifier.padding(horizontal = 16.dp),
             textAlign = TextAlign.Center)
 
-        Text(text = "Let's talk about lower body strength",
+        Text(text = stringResource(R.string.let_s_talk_about_lower_body_strength),
             style = MaterialTheme.typography.bodyLarge,
             modifier = modifier.padding(horizontal = 16.dp))
 

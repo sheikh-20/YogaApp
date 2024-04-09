@@ -14,8 +14,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.presentation.viewmodel.DiscoverViewModel
 
 @Composable
@@ -38,7 +40,7 @@ private fun AdjustYogaLevelTopAppBar() {
     CenterAlignedTopAppBar(
         title = {
             Text(
-                text = "Adjust Yoga Level",
+                text = stringResource(id = R.string.adjust_your_yoga_level),
                 fontWeight = FontWeight.SemiBold)
         },
         navigationIcon = {

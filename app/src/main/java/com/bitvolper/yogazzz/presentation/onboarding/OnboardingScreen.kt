@@ -2,6 +2,7 @@ package com.bitvolper.yogazzz.presentation.onboarding
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -43,6 +44,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -95,7 +97,7 @@ fun OnboardingScreen(modifier: Modifier = Modifier, onClick: () -> Unit = { }) {
                         .requiredHeight(50.dp),
                         border = BorderStroke(0.dp, Color.Transparent),
                         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
-                        Text(text = "Skip", color = MaterialTheme.colorScheme.onPrimaryContainer)
+                        Text(text = stringResource(R.string.skip), color = MaterialTheme.colorScheme.onPrimaryContainer)
                     }
                 }
 
@@ -114,9 +116,9 @@ fun OnboardingScreen(modifier: Modifier = Modifier, onClick: () -> Unit = { }) {
                         .requiredHeight(50.dp)) {
 
                     if (pager.currentPage == pager.pageCount - 1) {
-                        Text(text = "Get started")
+                        Text(text = stringResource(id = R.string.get_started))
                     } else {
-                        Text(text = "Next")
+                        Text(text = stringResource(R.string.next))
                     }
                 }
             }
@@ -131,18 +133,18 @@ private fun OnboardingContent(modifier: Modifier = Modifier, state: PagerState =
     val datasource = listOf<HorizontalData>(
         HorizontalData(
             image = R.drawable.ic_home_screen,
-            title = "YogazzZ - Your Yoga Journey Starts Here",
-            description = "Get ready to embark on a transformative yoga journey with YogazzZ. Discover a wide range of yogas, tailored to your goals."
+            title = stringResource(R.string.yogazzz_your_yoga_journey_starts_here),
+            description = stringResource(R.string.get_ready_to_embark_on_a_transformative_yoga_journey_with_yogazzz_discover_a_wide_range_of_yogas_tailored_to_your_goals)
         ),
         HorizontalData(
             image = R.drawable.ic_home_screen2,
-            title = "Tailored Exercise Plan for Your Needs",
-            description = "YogazzZ personalizes yoga just for you. Whether you're a beginner or a yoga enthusiast, our app adapt to your needs"
+            title = stringResource(R.string.tailored_exercise_plan_for_your_needs),
+            description = stringResource(R.string.yogazzz_personalizes_yoga_just_for_you_whether_you_re_a_beginner_or_a_yoga_enthusiast_our_app_adapt_to_your_needs)
         ),
         HorizontalData(
             image = R.drawable.ic_home_screen3,
-            title = "Stay Informed About Your Yoga Progress",
-            description = "Stay motivated and track your progress effortlessly. Start your yoga journey today and achieve the results you've always wanted"
+            title = stringResource(R.string.stay_informed_about_your_yoga_progress),
+            description = stringResource(R.string.stay_motivated_and_track_your_progress_effortlessly_start_your_yoga_journey_today_and_achieve_the_results_you_ve_always_wanted)
         ),
     )
 

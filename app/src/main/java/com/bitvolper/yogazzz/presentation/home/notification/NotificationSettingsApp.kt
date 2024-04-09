@@ -17,9 +17,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.domain.model.NotificationPreference
 import com.bitvolper.yogazzz.presentation.viewmodel.AccountViewModel
 
@@ -51,18 +53,12 @@ private fun NotificationSettingsTopAppBar() {
     CenterAlignedTopAppBar(
         title = {
             Text(
-                text = "Notification",
+                text = stringResource(R.string.notification),
                 fontWeight = FontWeight.SemiBold)
         },
         navigationIcon = {
             IconButton(onClick = { (context as Activity).finish() }) {
                 Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null)
-            }
-        },
-        actions = {
-            IconButton(onClick = { /*TODO*/ },
-                modifier = Modifier.padding(horizontal = 4.dp)) {
-                Icon(imageVector = Icons.Rounded.Settings, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
             }
         }
     )

@@ -43,6 +43,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -152,7 +153,7 @@ fun LoginWithPasswordScreen(modifier: Modifier = Modifier,
             verticalArrangement = Arrangement.spacedBy(16.dp)) {
 
             Text(
-                text = "Welcome back \uD83D\uDC4B",
+                text = stringResource(R.string.welcome_back),
                 style = MaterialTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Start,
@@ -162,7 +163,7 @@ fun LoginWithPasswordScreen(modifier: Modifier = Modifier,
             )
 
             Text(
-                text = "Please enter your email and password to sign in.",
+                text = stringResource(R.string.please_enter_your_email_and_password_to_sign_in),
                 style = MaterialTheme.typography.bodyLarge,
                 textAlign = TextAlign.Start,
                 modifier = modifier
@@ -173,7 +174,7 @@ fun LoginWithPasswordScreen(modifier: Modifier = Modifier,
             Column(modifier = modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
 
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text(text = "Email")
+                    Text(text = stringResource(id = R.string.email))
 
                     EmailComponent(
                         email = email,
@@ -183,7 +184,7 @@ fun LoginWithPasswordScreen(modifier: Modifier = Modifier,
                 }
 
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(text = "Password")
+                    Text(text = stringResource(id = R.string.password))
 
                     PasswordComponent(
                         password = password,
@@ -194,8 +195,10 @@ fun LoginWithPasswordScreen(modifier: Modifier = Modifier,
                 }
 
 
-                TextButton(onClick = onForgotPasswordClick, modifier = modifier.fillMaxWidth().wrapContentWidth(align = Alignment.CenterHorizontally)) {
-                    Text(text = "Forgot Password")
+                TextButton(onClick = onForgotPasswordClick, modifier = modifier
+                    .fillMaxWidth()
+                    .wrapContentWidth(align = Alignment.CenterHorizontally)) {
+                    Text(text = stringResource(R.string.forgot_password))
                 }
             }
 
@@ -206,7 +209,7 @@ fun LoginWithPasswordScreen(modifier: Modifier = Modifier,
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Divider(modifier = modifier.weight(1f), color = Color.LightGray)
-                Text(text = "or", style = MaterialTheme.typography.titleMedium)
+                Text(text = stringResource(R.string.or), style = MaterialTheme.typography.titleMedium)
                 Divider(modifier = modifier.weight(1f), color = Color.LightGray)
             }
 
@@ -250,7 +253,7 @@ fun LoginWithPasswordScreen(modifier: Modifier = Modifier,
                 if (isLoading) {
                     CircularProgressIndicator(modifier = modifier.size(30.dp), strokeWidth = 2.dp, trackColor = Color.White)
                 } else {
-                    Text(text = "Log In", modifier = modifier.padding(4.dp))
+                    Text(text = stringResource(id = R.string.signin), modifier = modifier.padding(4.dp))
                 }
             }
         }

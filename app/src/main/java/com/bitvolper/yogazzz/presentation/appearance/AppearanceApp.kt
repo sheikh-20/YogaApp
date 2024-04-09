@@ -29,7 +29,6 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -44,6 +43,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.bitvolper.yogazzz.R
+import com.bitvolper.yogazzz.domain.model.AppLanguagePreference
 import com.bitvolper.yogazzz.domain.model.AppThemePreference
 import com.bitvolper.yogazzz.presentation.viewmodel.AccountViewModel
 import kotlinx.coroutines.launch
@@ -53,6 +54,7 @@ fun AppearanceApp(modifier: Modifier = Modifier, accountViewModel: AccountViewMo
 
     var showBottomSheet by remember { mutableStateOf(BottomSheet.Default) }
     val appThemeUIState by accountViewModel.appThemeIndex.collectAsState(initial = AppThemePreference(0))
+    val appLanguageUIState by accountViewModel.appLanguageIndex.collectAsState(initial = AppLanguagePreference(0))
 
     when (showBottomSheet) {
         BottomSheet.Default -> {  }
@@ -75,6 +77,25 @@ fun AppearanceApp(modifier: Modifier = Modifier, accountViewModel: AccountViewMo
                 }
             )
         }
+        BottomSheet.Language -> {
+            BottomSheet(
+                onDismiss = { showBottomSheet = BottomSheet.Default },
+                onNegativeClick = { showBottomSheet = BottomSheet.Default },
+                onPositiveClick = {
+                    showBottomSheet = BottomSheet.Default
+                    accountViewModel.updateAppLanguageIndex(it)
+                },
+                contentSheet = {
+                        onNegativeClick, onPositiveClick ->
+
+                    BottomSheetLanguageContent(
+                        onNegativeClick = onNegativeClick,
+                        onPositiveClick = onPositiveClick,
+                        selectedLanguage = appLanguageUIState.language
+                    )
+                }
+            )
+        }
     }
 
     Scaffold(
@@ -82,7 +103,12 @@ fun AppearanceApp(modifier: Modifier = Modifier, accountViewModel: AccountViewMo
             AppearanceTopAppBar()
         }
     ){ paddingValues ->
-        AppearanceScreen(paddingValues = paddingValues, onThemeClick = {  showBottomSheet = BottomSheet.ShowTheme }, appThemeIndex = appThemeUIState.themeIndex)
+        AppearanceScreen(
+            paddingValues = paddingValues,
+            onThemeClick = {  showBottomSheet = BottomSheet.ShowTheme },
+            appThemeIndex = appThemeUIState.themeIndex,
+            onLanguageClick = { showBottomSheet = BottomSheet.Language },
+            appLanguageIndex = appLanguageUIState.language)
     }
 }
 
@@ -94,8 +120,9 @@ private fun AppearanceTopAppBar() {
     CenterAlignedTopAppBar(
         title = {
             Text(
-                text = "App Appearance",
-                fontWeight = FontWeight.SemiBold)
+                text = stringResource(id = R.string.app_appearance),
+                fontWeight = FontWeight.SemiBold
+            )
         },
         navigationIcon = {
             IconButton(onClick = { (context as Activity).finish() }) {
@@ -198,6 +225,67 @@ private fun BottomSheetContent(modifier: Modifier = Modifier,
     }
 }
 
+
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun BottomSheetLanguageContent(modifier: Modifier = Modifier,
+                               onNegativeClick: () -> Unit = { },
+                               onPositiveClick: (Int) -> Unit = { _ -> },
+                               selectedLanguage: Int = 0) {
+
+    val theme = listOf(Pair(0, "English"), Pair(1, "Spanish"))
+
+    var currentSelectedAppLanguage by remember { mutableStateOf<Int?>(null) }
+
+    Column(modifier = modifier
+        .padding(16.dp)
+        .systemBarsPadding(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Text(text = "Choose Language",
+            style = MaterialTheme.typography.headlineSmall,
+            textAlign = TextAlign.Center,
+            modifier = modifier.fillMaxWidth(),
+            fontWeight = FontWeight.Bold)
+
+        Divider()
+
+        Column {
+
+            theme.forEach {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    RadioButton(selected = if (currentSelectedAppLanguage != null) currentSelectedAppLanguage == it.first else selectedLanguage == it.first, onClick = { currentSelectedAppLanguage = it.first })
+
+                    Text(text = it.second,
+                        style = MaterialTheme.typography.bodyLarge)
+                }
+            }
+        }
+
+        Divider()
+
+        Row(modifier = modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically) {
+
+            OutlinedButton(
+                onClick = onNegativeClick,
+                modifier = modifier
+                    .weight(1f)
+                    .requiredHeight(50.dp),
+                border = BorderStroke(0.dp, Color.Transparent),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
+                Text(text = "Cancel", color = MaterialTheme.colorScheme.onPrimaryContainer)
+            }
+
+            Button(onClick = { onPositiveClick(currentSelectedAppLanguage ?: 0) }, modifier = modifier
+                .weight(1f)
+                .requiredHeight(50.dp)) {
+                Text(text = "Ok")
+            }
+        }
+    }
+}
+
 enum class BottomSheet {
-    Default, ShowTheme
+    Default, ShowTheme, Language
 }

@@ -19,16 +19,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 
 @Composable
 fun AppearanceScreen(modifier: Modifier = Modifier,
                      paddingValues: PaddingValues = PaddingValues(),
                      onThemeClick: () -> Unit = {  },
-                     appThemeIndex: Int = 0) {
+                     appThemeIndex: Int = 0,
+
+                     onLanguageClick: () -> Unit = { },
+                     appLanguageIndex: Int = 0) {
     Column(modifier = modifier
         .fillMaxSize()
         .padding(
@@ -40,12 +45,15 @@ fun AppearanceScreen(modifier: Modifier = Modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp)) {
 
         Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            Text(text = "Theme", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, modifier = modifier.weight(1f))
+            Text(text = stringResource(R.string.theme), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, modifier = modifier.weight(1f))
 
             Text(text = when(appThemeIndex) {
-                0 -> { "System Default" }
-                1 -> { "Light" }
-                else -> { "Dark" }
+                0 -> {
+                    stringResource(R.string.system_default) }
+                1 -> {
+                    stringResource(R.string.light) }
+                else -> {
+                    stringResource(R.string.dark) }
                                             }, style = MaterialTheme.typography.bodyLarge)
             IconButton(onClick = onThemeClick, modifier = modifier.then(modifier.size(30.dp))) {
                 Icon(imageVector = Icons.Rounded.ArrowForwardIos, contentDescription = null)
@@ -53,10 +61,14 @@ fun AppearanceScreen(modifier: Modifier = Modifier,
         }
 
         Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            Text(text = "App Language", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, modifier = modifier.weight(1f))
+            Text(text = stringResource(R.string.app_language), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, modifier = modifier.weight(1f))
 
-            Text(text = "English", style = MaterialTheme.typography.bodyLarge)
-            IconButton(onClick = { /*TODO*/ }, modifier = modifier.then(modifier.size(30.dp))) {
+            Text(text = when(appLanguageIndex) {
+                0 -> {
+                    stringResource(R.string.english) }
+                else -> {
+                    stringResource(R.string.spanish) } }, style = MaterialTheme.typography.bodyLarge)
+            IconButton(onClick = onLanguageClick, modifier = modifier.then(modifier.size(30.dp))) {
                 Icon(imageVector = Icons.Rounded.ArrowForwardIos, contentDescription = null)
             }
         }

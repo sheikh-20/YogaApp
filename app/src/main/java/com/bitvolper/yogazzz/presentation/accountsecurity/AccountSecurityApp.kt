@@ -114,7 +114,7 @@ private fun AccountSecurityTopAppBar() {
     CenterAlignedTopAppBar(
         title = {
             Text(
-                text = "Account & Security",
+                text = stringResource(id = R.string.account_security),
                 fontWeight = FontWeight.SemiBold)
         },
         navigationIcon = {

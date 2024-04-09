@@ -13,8 +13,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 
 @Composable
@@ -36,7 +38,7 @@ private fun NotificationTopAppBar() {
     CenterAlignedTopAppBar(
         title = {
             Text(
-                text = "Notifications",
+                text = stringResource(id = R.string.notifications),
                 fontWeight = FontWeight.SemiBold)
         },
         navigationIcon = {

@@ -55,9 +55,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.domain.model.History
 import com.bitvolper.yogazzz.domain.model.Reports
 import com.bitvolper.yogazzz.presentation.home.account.showFeedbackDialog
@@ -188,19 +190,19 @@ private fun TitleCardCompose(modifier: Modifier = Modifier, history: History = H
             Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Icon(imageVector = Icons.Rounded.SelfImprovement, contentDescription = null, tint = Color(0xFFf54336))
                 Text(text = "${history.data?.size ?: 0}", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
-                Text(text = "yoga", style = MaterialTheme.typography.bodySmall)
+                Text(text = stringResource(R.string.yoga), style = MaterialTheme.typography.bodySmall)
             }
 
             Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Icon(imageVector = Icons.Rounded.AccessTime, contentDescription = null, tint = Color(0xFF4db05a))
                 Text(text = "${history.data?.sumBy { it?.duration?.toInt() ?: 0 }}", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
-                Text(text = "minutes", style = MaterialTheme.typography.bodySmall)
+                Text(text = stringResource(R.string.minutes), style = MaterialTheme.typography.bodySmall)
             }
 
             Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Icon(imageVector = Icons.Rounded.LocalFireDepartment, contentDescription = null, tint = Color(0xFFfe9e26))
                 Text(text = "${history.data?.sumBy { it?.kcal?.toInt() ?: 0 }}", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
-                Text(text = "kcal", style = MaterialTheme.typography.bodySmall)
+                Text(text = stringResource(R.string.kcal), style = MaterialTheme.typography.bodySmall)
             }
         }
     }
@@ -367,7 +369,7 @@ private fun StatisticsCardCompose(modifier: Modifier = Modifier, history: Histor
             .padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = "Statistics",
+                Text(text = stringResource(R.string.statistics),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -412,18 +414,18 @@ private fun StatisticsCardCompose(modifier: Modifier = Modifier, history: Histor
 
                     Icon(imageVector = Icons.Rounded.Rectangle, contentDescription = null, tint = Color(0xFFf54336))
 
-                    Text(text = "Yoga", style = MaterialTheme.typography.bodyMedium)
+                    Text(text = stringResource(id = R.string.yoga), style = MaterialTheme.typography.bodyMedium)
                 }
 
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                     Icon(imageVector = Icons.Rounded.Rectangle, contentDescription = null, tint = Color(0xFF4db05a))
-                    Text(text = "Minutes", style = MaterialTheme.typography.bodyMedium)
+                    Text(text = stringResource(id = R.string.minutes), style = MaterialTheme.typography.bodyMedium)
                 }
 
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                     Icon(imageVector = Icons.Rounded.Rectangle, contentDescription = null, tint = Color(0xFFfe9e26))
 
-                    Text(text = "Kcal", style = MaterialTheme.typography.bodyMedium)
+                    Text(text = stringResource(id = R.string.kcal), style = MaterialTheme.typography.bodyMedium)
                 }
             }
         }
@@ -464,7 +466,7 @@ private fun WeightCardCompose(modifier: Modifier = Modifier) {
             .padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = "Weight",
+                Text(text = stringResource(R.string.weight),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.SemiBold
                 )
