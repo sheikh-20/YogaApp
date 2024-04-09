@@ -51,6 +51,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -109,23 +110,23 @@ fun AccountScreen(modifier: Modifier = Modifier,
         }
 
         Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
-            AccountContentCompose(title = "My Body", icon = Icons.Rounded.Person) {
+            AccountContentCompose(title = stringResource(R.string.my_body), icon = Icons.Rounded.Person) {
                 MyBodyActivity.startActivity(context as Activity)
             }
 
-            AccountContentCompose(title = "Notifications", icon = Icons.Rounded.Notifications) {
+            AccountContentCompose(title = stringResource(R.string.notifications), icon = Icons.Rounded.Notifications) {
                 NotificationSettingsActivity.startActivity(context as Activity)
             }
 
-            AccountContentCompose(title = "Account & Security", icon = Icons.Rounded.Security) {
+            AccountContentCompose(title = stringResource(R.string.account_security), icon = Icons.Rounded.Security) {
                 AccountSecurityActivity.startActivity(context as Activity)
             }
 
-            AccountContentCompose(title = "Billing & Subscription", icon = Icons.Rounded.StarBorder) {
+            AccountContentCompose(title = stringResource(R.string.billing_subscription), icon = Icons.Rounded.StarBorder) {
                 BillingSubscriptionActivity.startActivity(context as Activity)
             }
 
-            AccountContentCompose(title = "App Appearance", icon = Icons.Rounded.RemoveRedEye) {
+            AccountContentCompose(title = stringResource(R.string.app_appearance), icon = Icons.Rounded.RemoveRedEye) {
                 AppearanceActivity.startActivity(context as Activity)
             }
 
@@ -133,19 +134,24 @@ fun AccountScreen(modifier: Modifier = Modifier,
 //                AnalyticsActivity.startActivity(context as Activity)
 //            }
 
-            AccountContentCompose(title = "Help & Support", icon = Icons.Rounded.SupportAgent) {
+            AccountContentCompose(title = stringResource(R.string.help_support), icon = Icons.Rounded.SupportAgent) {
                 SupportActivity.startActivity(context as Activity)
             }
 
             Row(modifier = modifier
-                .fillMaxWidth().clickable(onClick = onSignOutClick, interactionSource = interactionSource, indication = null)
+                .fillMaxWidth()
+                .clickable(
+                    onClick = onSignOutClick,
+                    interactionSource = interactionSource,
+                    indication = null
+                )
                 .padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
                 Icon(imageVector = Icons.Rounded.Logout, contentDescription = null, tint = Color.Red)
 
                 Spacer(modifier = modifier.width(8.dp))
 
                 Text(
-                    text = "Logout",
+                    text = stringResource(id = R.string.logout),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold,
                     modifier = modifier
@@ -179,13 +185,18 @@ private fun ProfileViewCompose(modifier: Modifier = Modifier, userName: String =
                     is Resource.Loading -> {
                         Icon(painterResource(id = R.drawable.ic_image_placeholder),
                             contentDescription = null,
-                            modifier = modifier.size(60.dp).clip(RoundedCornerShape(50)))
+                            modifier = modifier
+                                .size(60.dp)
+                                .clip(RoundedCornerShape(50)))
                     }
 
                     is Resource.Failure -> {
                         Icon(imageVector = Icons.Rounded.Spa,
                             contentDescription = null,
-                            modifier = modifier.size(60.dp).clip(RoundedCornerShape(50)).padding(16.dp))
+                            modifier = modifier
+                                .size(60.dp)
+                                .clip(RoundedCornerShape(50))
+                                .padding(16.dp))
                     }
 
                     is Resource.Success -> {
@@ -198,7 +209,9 @@ private fun ProfileViewCompose(modifier: Modifier = Modifier, userName: String =
                             placeholder = painterResource(id = R.drawable.ic_image_placeholder),
                             contentDescription = null,
                             contentScale = ContentScale.Crop,
-                            modifier = modifier.size(60.dp).clip(RoundedCornerShape(50)),
+                            modifier = modifier
+                                .size(60.dp)
+                                .clip(RoundedCornerShape(50)),
                         )
                     }
                 }
@@ -234,11 +247,11 @@ private fun SubscriptionCompose(modifier: Modifier = Modifier, onClick: () -> Un
                 .padding(4.dp))
 
             Column(modifier = modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(text = "Upgrade Plan to Unlock More!",
+                Text(text = stringResource(R.string.upgrade_plan_to_unlock_more),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold)
 
-                Text(text = "Enjoy all the benefits and explore more possibilities", style = MaterialTheme.typography.bodySmall)
+                Text(text = stringResource(R.string.enjoy_all_the_benefits_and_explore_more_possibilities), style = MaterialTheme.typography.bodySmall)
             }
 
             IconButton(onClick = { /*TODO*/ }) {

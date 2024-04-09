@@ -9,11 +9,13 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bitvolper.yogazzz.domain.model.AccountInfo
+import com.bitvolper.yogazzz.domain.model.AppLanguagePreference
 import com.bitvolper.yogazzz.domain.model.AppThemePreference
 import com.bitvolper.yogazzz.domain.model.FaqQuestion
 import com.bitvolper.yogazzz.domain.model.History
 import com.bitvolper.yogazzz.domain.model.NotificationPreference
 import com.bitvolper.yogazzz.domain.model.Subscription
+import com.bitvolper.yogazzz.domain.usecase.AppLanguageUseCase
 import com.bitvolper.yogazzz.domain.usecase.AppThemeUseCase
 import com.bitvolper.yogazzz.domain.usecase.HomeUseCase
 import com.bitvolper.yogazzz.domain.usecase.PushNotificationUseCase
@@ -45,6 +47,7 @@ import javax.inject.Inject
 class AccountViewModel @Inject constructor(
     private val pushNotificationUseCase: PushNotificationUseCase,
     private val appThemeUseCase: AppThemeUseCase,
+    private val appLanguageUseCase: AppLanguageUseCase,
     private val homeUseCase: HomeUseCase) : ViewModel() {
 
         private companion object {
@@ -78,6 +81,13 @@ class AccountViewModel @Inject constructor(
         initialValue = AppThemePreference(0)
     )
 
+    val appLanguageIndex: Flow<AppLanguagePreference> = appLanguageUseCase.readLanguagePreference.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000L),
+        initialValue = AppLanguagePreference(0)
+    )
+
+
 
     private var _accountInfoUIState = MutableStateFlow<AccountInfo>(AccountInfo())
     val accountInfoUIState: StateFlow<AccountInfo> get() = _accountInfoUIState
@@ -97,6 +107,9 @@ class AccountViewModel @Inject constructor(
         appThemeUseCase.updateAppThemePreference(value)
     }
 
+    fun updateAppLanguageIndex(value: Int) = viewModelScope.launch {
+        appLanguageUseCase.updateLanguagePreference(value)
+    }
 
     fun getFaqQuestion() = viewModelScope.launch {
         try {

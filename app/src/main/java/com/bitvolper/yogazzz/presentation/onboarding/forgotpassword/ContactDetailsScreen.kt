@@ -69,7 +69,7 @@ fun ContactDetailsScreen(modifier: Modifier = Modifier,
             contentScale = ContentScale.Crop,
         )
 
-        Text(text = "Select which contact details should we use to reset your password",
+        Text(text = stringResource(R.string.select_which_contact_details_should_we_use_to_reset_your_password),
             style = MaterialTheme.typography.bodyLarge)
 
         OutlinedButton(onClick = {  },
@@ -98,7 +98,7 @@ fun ContactDetailsScreen(modifier: Modifier = Modifier,
                 }
 
                 Column {
-                    Text(text = "Via email",
+                    Text(text = stringResource(R.string.via_email),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onBackground)
 
@@ -114,7 +114,7 @@ fun ContactDetailsScreen(modifier: Modifier = Modifier,
         Button(onClick = {
             onPasswordResetOtp()
             coroutineScope.launch {
-                snackbarHostState.showSnackbar(message = "Password reset email sent successfully", duration = SnackbarDuration.Short)
+                snackbarHostState.showSnackbar(message = context.getString(R.string.password_reset_email_sent_successfully), duration = SnackbarDuration.Short)
                 onComplete()
             }
                          },
@@ -128,7 +128,7 @@ fun ContactDetailsScreen(modifier: Modifier = Modifier,
                 .fillMaxWidth()
                 .requiredHeight(50.dp)) {
 
-            Text(text = "Continue",
+            Text(text = stringResource(id = R.string.continues),
                 modifier = modifier.padding(4.dp))
         }
     }

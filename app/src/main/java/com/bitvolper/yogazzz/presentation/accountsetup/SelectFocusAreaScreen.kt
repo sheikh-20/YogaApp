@@ -43,7 +43,9 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitvolper.yogazzz.R
@@ -73,9 +75,13 @@ fun SelectFocusAreaScreen(modifier: Modifier = Modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally) {
 
-        Text(text = "What's your Focus Area?", style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.SemiBold)
+        Text(text = stringResource(R.string.what_s_your_focus_area),
+            style = MaterialTheme.typography.headlineLarge,
+            fontWeight = FontWeight.SemiBold,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis)
 
-        Text(text = "Where would you like to channel your energy?", style = MaterialTheme.typography.bodyMedium)
+        Text(text = stringResource(R.string.where_would_you_like_to_channel_your_energy), style = MaterialTheme.typography.bodyMedium)
 
         Row(modifier = modifier
             .fillMaxWidth()
@@ -94,10 +100,12 @@ fun SelectFocusAreaScreen(modifier: Modifier = Modifier,
                         colors = CardDefaults.cardColors(containerColor = Color.Transparent)
                     ) {
                         Text(
-                            text = Body.bodyParts[it].part,
+                            text = stringResource(id = Body.bodyParts[it].part),
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.SemiBold,
-                            modifier = modifier.padding(12.dp)
+                            modifier = modifier.padding(12.dp),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
                         )
                     }
                 }
@@ -130,7 +138,7 @@ fun SelectFocusAreaScreen(modifier: Modifier = Modifier,
                     .requiredHeight(50.dp),
                     border = BorderStroke(0.dp, Color.Transparent),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
-                    Text(text = "Skip", color = MaterialTheme.colorScheme.onPrimaryContainer)
+                    Text(text = stringResource(id = R.string.skip), color = MaterialTheme.colorScheme.onPrimaryContainer)
                 }
 
                 Button(
@@ -139,7 +147,7 @@ fun SelectFocusAreaScreen(modifier: Modifier = Modifier,
                         .weight(1f)
                         .requiredHeight(50.dp)) {
 
-                    Text(text = "Continue")
+                    Text(text = stringResource(id = R.string.continues))
                 }
             }
         }

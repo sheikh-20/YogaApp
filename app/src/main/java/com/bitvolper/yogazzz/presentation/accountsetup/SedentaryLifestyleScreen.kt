@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -56,13 +57,13 @@ fun SedentaryLifestyleScreen(modifier: Modifier = Modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally) {
 
-        Text(text = "Do You Live a Sedentary Lifestyle?",
+        Text(text = stringResource(R.string.do_you_live_a_sedentary_lifestyle),
             style = MaterialTheme.typography.headlineLarge,
             fontWeight = FontWeight.SemiBold,
             modifier = modifier.padding(horizontal = 16.dp),
             textAlign = TextAlign.Center)
 
-        Text(text = "Tell us about your routine",
+        Text(text = stringResource(R.string.tell_us_about_your_routine),
             style = MaterialTheme.typography.bodyLarge,
             modifier = modifier.padding(horizontal = 16.dp))
 
@@ -70,18 +71,20 @@ fun SedentaryLifestyleScreen(modifier: Modifier = Modifier,
             contentDescription = null,
             modifier = modifier.requiredHeight(200.dp), contentScale = ContentScale.Crop)
 
-        Row(modifier = modifier.fillMaxWidth().wrapContentWidth(align = Alignment.CenterHorizontally)) {
+        Row(modifier = modifier
+            .fillMaxWidth()
+            .wrapContentWidth(align = Alignment.CenterHorizontally)) {
             IconButton(onClick = { isSedentaryLifestyle = false }, modifier = modifier.size(120.dp)) {
                 Box(contentAlignment = Alignment.Center) {
                     Icon(imageVector = Icons.Rounded.Circle, contentDescription = null, tint = if (!isSedentaryLifestyle) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline, modifier = modifier.fillMaxSize())
-                    Text(text = "No", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold, color = Color.White)
+                    Text(text = stringResource(R.string.no), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold, color = Color.White)
                 }
             }
 
             IconButton(onClick = { isSedentaryLifestyle = true }, modifier = modifier.size(120.dp)) {
                 Box(contentAlignment = Alignment.Center) {
                     Icon(imageVector = Icons.Rounded.Circle, contentDescription = null, tint = if (isSedentaryLifestyle) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline, modifier = modifier.fillMaxSize())
-                    Text(text = "Yes", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold, color = Color.White)
+                    Text(text = stringResource(R.string.yes), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold, color = Color.White)
                 }
             }
         }

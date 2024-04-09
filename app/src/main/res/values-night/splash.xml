@@ -2,7 +2,7 @@
 <resources>
     <style name="Theme.YogaApp.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_yoga</item>
-        <item name="windowSplashScreenBackground">#FF655de6</item>
+        <item name="windowSplashScreenBackground">#FF1C1B1F</item>
         <item name="postSplashScreenTheme">@style/Theme.YogaApp</item>
     </style>
 </resources>

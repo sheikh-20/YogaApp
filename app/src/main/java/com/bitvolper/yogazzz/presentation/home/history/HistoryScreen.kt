@@ -57,6 +57,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -246,14 +247,14 @@ private fun HistoryCompose(modifier: Modifier = Modifier, history: History = His
                                 .wrapContentWidth(align = Alignment.CenterHorizontally)
                                 .size(150.dp))
 
-                        Text(text = "Empty",
+                        Text(text = stringResource(id = R.string.empty),
                             style = MaterialTheme.typography.titleMedium,
                             modifier = modifier.fillMaxWidth(),
                             textAlign = TextAlign.Center,
                             fontWeight = FontWeight.SemiBold)
 
                         Text(
-                            text = "You did not exercise on this date",
+                            text = stringResource(R.string.you_did_not_exercise_on_this_date),
                             style = MaterialTheme.typography.bodyMedium,
                             modifier = modifier.fillMaxWidth(),
                             textAlign = TextAlign.Center,

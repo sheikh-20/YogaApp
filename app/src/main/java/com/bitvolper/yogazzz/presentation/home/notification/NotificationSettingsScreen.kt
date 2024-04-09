@@ -17,9 +17,11 @@ import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.domain.model.NotificationPreference
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 
@@ -33,13 +35,18 @@ fun NotificationSettingsScreen(modifier: Modifier = Modifier,
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(top = paddingValues.calculateTopPadding(), start = 16.dp, end = 16.dp, bottom = 16.dp)
+            .padding(
+                top = paddingValues.calculateTopPadding(),
+                start = 16.dp,
+                end = 16.dp,
+                bottom = 16.dp
+            )
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(8.dp)) {
 
         Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             androidx.compose.material3.Text(
-                text = "Daily Reminder",
+                text = stringResource(R.string.daily_reminder),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
                 modifier = modifier.weight(1f)
@@ -49,7 +56,7 @@ fun NotificationSettingsScreen(modifier: Modifier = Modifier,
 
         Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             androidx.compose.material3.Text(
-                text = "New Content Alerts",
+                text = stringResource(R.string.new_content_alerts),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
                 modifier = modifier.weight(1f)
@@ -59,7 +66,7 @@ fun NotificationSettingsScreen(modifier: Modifier = Modifier,
 
         Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             androidx.compose.material3.Text(
-                text = "Subscription Renewal Reminders",
+                text = stringResource(R.string.subscription_renewal_reminders),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
                 modifier = modifier.weight(1f)
@@ -69,7 +76,7 @@ fun NotificationSettingsScreen(modifier: Modifier = Modifier,
 
         Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             androidx.compose.material3.Text(
-                text = "Progress Milestones",
+                text = stringResource(R.string.progress_milestones),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
                 modifier = modifier.weight(1f)
@@ -79,7 +86,7 @@ fun NotificationSettingsScreen(modifier: Modifier = Modifier,
 
         Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             androidx.compose.material3.Text(
-                text = "Achievement Unlocks",
+                text = stringResource(R.string.achievement_unlocks),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
                 modifier = modifier.weight(1f)
@@ -89,7 +96,7 @@ fun NotificationSettingsScreen(modifier: Modifier = Modifier,
 
         Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             androidx.compose.material3.Text(
-                text = "Customer Support Updates",
+                text = stringResource(R.string.customer_support_updates),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
                 modifier = modifier.weight(1f)
@@ -99,7 +106,7 @@ fun NotificationSettingsScreen(modifier: Modifier = Modifier,
 
         Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             androidx.compose.material3.Text(
-                text = "Feedback & Updates",
+                text = stringResource(R.string.feedback_updates),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
                 modifier = modifier.weight(1f)

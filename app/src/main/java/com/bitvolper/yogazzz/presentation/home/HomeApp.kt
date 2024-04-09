@@ -70,6 +70,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.bitvolper.yogazzz.R
+import com.bitvolper.yogazzz.domain.model.AppLanguagePreference
 import com.bitvolper.yogazzz.presentation.home.account.AccountScreen
 import com.bitvolper.yogazzz.presentation.home.bookmark.BookmarkActivity
 import com.bitvolper.yogazzz.presentation.home.discover.DiscoverScreen
@@ -84,6 +85,7 @@ import com.bitvolper.yogazzz.presentation.viewmodel.DiscoverViewModel
 import com.bitvolper.yogazzz.presentation.viewmodel.HomeViewModel
 import com.bitvolper.yogazzz.presentation.viewmodel.OnboardingViewModel
 import com.bitvolper.yogazzz.utility.Resource
+import com.bitvolper.yogazzz.utility.SetLanguage
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.launch
@@ -131,6 +133,9 @@ fun HomeApp(modifier: Modifier = Modifier,
     val reportsUIState by homeViewModel.reportsUIState.collectAsState()
     val accountInfoUIState by accountViewModel.accountInfoUIState.collectAsState()
 
+    val appLanguageUIState by accountViewModel.appLanguageIndex.collectAsState(initial = AppLanguagePreference(0))
+
+    SetLanguage(appLanguageUIState.language)
 
     when (showBottomSheet) {
         BottomSheet.Default -> {}
@@ -388,7 +393,7 @@ private fun HomeTopAppBar(navController: NavHostController,
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Discover",
+                        text = stringResource(id = R.string.discover),
                         fontWeight = FontWeight.SemiBold)
                 },
                 navigationIcon = {
@@ -409,7 +414,7 @@ private fun HomeTopAppBar(navController: NavHostController,
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Reports",
+                        text = stringResource(id = R.string.reports),
                         fontWeight = FontWeight.SemiBold)
                 },
                 navigationIcon = {
@@ -431,7 +436,7 @@ private fun HomeTopAppBar(navController: NavHostController,
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "History",
+                        text = stringResource(id = R.string.history),
                         fontWeight = FontWeight.SemiBold)
                 },
                 navigationIcon = {
@@ -453,7 +458,7 @@ private fun HomeTopAppBar(navController: NavHostController,
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Account",
+                        text = stringResource(id = R.string.account),
                         fontWeight = FontWeight.SemiBold)
                 },
                 navigationIcon = {

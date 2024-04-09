@@ -51,6 +51,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -124,13 +125,17 @@ fun UserProfileScreen(modifier: Modifier = Modifier,
                     is Resource.Loading -> {
                         Icon(painterResource(id = R.drawable.ic_image_placeholder),
                             contentDescription = null,
-                            modifier = modifier.size(80.dp).clip(RoundedCornerShape(50)))
+                            modifier = modifier
+                                .size(80.dp)
+                                .clip(RoundedCornerShape(50)))
                     }
 
                     is Resource.Failure -> {
                         Icon(imageVector = Icons.Rounded.Spa,
                             contentDescription = null,
-                            modifier = modifier.size(80.dp).clip(RoundedCornerShape(50)))
+                            modifier = modifier
+                                .size(80.dp)
+                                .clip(RoundedCornerShape(50)))
                     }
 
                     is Resource.Success -> {
@@ -143,7 +148,9 @@ fun UserProfileScreen(modifier: Modifier = Modifier,
                             placeholder = painterResource(id = R.drawable.ic_image_placeholder),
                             contentDescription = null,
                             contentScale = ContentScale.Crop,
-                            modifier = modifier.size(80.dp).clip(RoundedCornerShape(50)),
+                            modifier = modifier
+                                .size(80.dp)
+                                .clip(RoundedCornerShape(50)),
                         )
                     }
                 }
@@ -152,7 +159,7 @@ fun UserProfileScreen(modifier: Modifier = Modifier,
 
             Column {
                 Text(
-                    text = "Full Name",
+                    text = stringResource(R.string.full_name),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -162,7 +169,7 @@ fun UserProfileScreen(modifier: Modifier = Modifier,
                     onValueChange = onFullNameChange,
                     label = {
                         if (fullNameInteractionSource.collectIsFocusedAsState().value.not() && fullName.isEmpty()) {
-                            Text(text = "Full name")
+                            Text(text = stringResource(R.string.full_name))
                         }
                     },
                     modifier = modifier.fillMaxWidth(),
@@ -180,7 +187,7 @@ fun UserProfileScreen(modifier: Modifier = Modifier,
 
             Column {
                 Text(
-                    text = "Email",
+                    text = stringResource(id = R.string.email),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -190,7 +197,7 @@ fun UserProfileScreen(modifier: Modifier = Modifier,
                     onValueChange = onEmailChange,
                     label = {
                         if (emailInteractionSource.collectIsFocusedAsState().value.not() && email.isEmpty()) {
-                            Text(text = "Email")
+                            Text(text = stringResource(id = R.string.email))
                         }
                     },
                     modifier = modifier.fillMaxWidth(),
@@ -205,7 +212,7 @@ fun UserProfileScreen(modifier: Modifier = Modifier,
                         )
                     }),
                     leadingIcon = {
-                                  Icon(imageVector = Icons.Rounded.Email, contentDescription = null)
+                        Icon(imageVector = Icons.Rounded.Email, contentDescription = null)
                     },
                     interactionSource = emailInteractionSource,
                     enabled = false
@@ -214,17 +221,17 @@ fun UserProfileScreen(modifier: Modifier = Modifier,
 
             Column {
                 Text(
-                    text = "Gender",
+                    text = stringResource(R.string.gender),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold
                 )
 
                 OutlinedTextField(
-                    value = if (gender == 0) "Man" else "Woman",
+                    value = if (gender == 0) stringResource(R.string.man) else stringResource(R.string.woman),
                     onValueChange = {  },
                     label = {
                         if (genderInteractionSource.collectIsFocusedAsState().value.not() && gender.toString().isEmpty()) {
-                            Text(text = "Gender")
+                            Text(text = stringResource(R.string.gender))
                         }
                     },
                     modifier = modifier.fillMaxWidth(),
@@ -252,7 +259,7 @@ fun UserProfileScreen(modifier: Modifier = Modifier,
 
             Column {
                 Text(
-                    text = "Birthday Date",
+                    text = stringResource(R.string.birthday_date),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -307,7 +314,7 @@ fun UserProfileScreen(modifier: Modifier = Modifier,
                         .weight(1f)
                         .requiredHeight(50.dp)) {
 
-                    Text(text = "Update")
+                    Text(text = stringResource(R.string.update))
                 }
             }
         }

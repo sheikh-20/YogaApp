@@ -39,7 +39,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -70,9 +72,13 @@ fun SelectDesiredBodyShapeScreen(modifier: Modifier = Modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally) {
 
-        Text(text = "Your Desired Body Shape", style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.SemiBold)
+        Text(text = stringResource(R.string.your_desired_body_shape),
+            style = MaterialTheme.typography.headlineLarge,
+            fontWeight = FontWeight.SemiBold,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis)
 
-        Text(text = "What's your ideal aspiration?", style = MaterialTheme.typography.bodyLarge)
+        Text(text = stringResource(R.string.what_s_your_ideal_aspiration), style = MaterialTheme.typography.bodyLarge)
 
 
         Box(modifier = modifier
@@ -81,7 +87,10 @@ fun SelectDesiredBodyShapeScreen(modifier: Modifier = Modifier,
 
             Image(imageVector = Icons.Rounded.FastForward,
                 contentDescription = null,
-                modifier = modifier.fillMaxSize().wrapContentSize(align = Alignment.Center).size(250.dp),
+                modifier = modifier
+                    .fillMaxSize()
+                    .wrapContentSize(align = Alignment.Center)
+                    .size(250.dp),
                 colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.primary),
                 contentScale = ContentScale.Crop)
 
@@ -90,7 +99,9 @@ fun SelectDesiredBodyShapeScreen(modifier: Modifier = Modifier,
                 .fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
 
 
-                Box(modifier = modifier.fillMaxHeight().weight(1f)) {
+                Box(modifier = modifier
+                    .fillMaxHeight()
+                    .weight(1f)) {
 
                     Canvas(modifier = Modifier.fillMaxSize()) {
 
@@ -115,13 +126,17 @@ fun SelectDesiredBodyShapeScreen(modifier: Modifier = Modifier,
                         2 -> {
                             Image(painter = painterResource(id = R.drawable.ic_lean),
                                 contentDescription = null,
-                                modifier = modifier.fillMaxSize().scale(1.05f, 1f),
+                                modifier = modifier
+                                    .fillMaxSize()
+                                    .scale(1.05f, 1f),
                                 contentScale = ContentScale.Crop)
                         }
                         3 -> {
                             Image(painter = painterResource(id = R.drawable.ic_lean),
                                 contentDescription = null,
-                                modifier = modifier.fillMaxSize().scale(1.2f, 1f),
+                                modifier = modifier
+                                    .fillMaxSize()
+                                    .scale(1.2f, 1f),
                                 contentScale = ContentScale.Crop)
                         }
                         4 -> {
@@ -133,7 +148,9 @@ fun SelectDesiredBodyShapeScreen(modifier: Modifier = Modifier,
                     }
                 }
 
-                Box(modifier = modifier.fillMaxHeight().weight(1f)) {
+                Box(modifier = modifier
+                    .fillMaxHeight()
+                    .weight(1f)) {
 
                     Canvas(modifier = Modifier.fillMaxSize()) {
 
@@ -158,13 +175,17 @@ fun SelectDesiredBodyShapeScreen(modifier: Modifier = Modifier,
                         2 -> {
                             Image(painter = painterResource(id = R.drawable.ic_lean),
                                 contentDescription = null,
-                                modifier = modifier.fillMaxSize().scale(1.05f, 1f),
+                                modifier = modifier
+                                    .fillMaxSize()
+                                    .scale(1.05f, 1f),
                                 contentScale = ContentScale.Crop)
                         }
                         3 -> {
                             Image(painter = painterResource(id = R.drawable.ic_lean),
                                 contentDescription = null,
-                                modifier = modifier.fillMaxSize().scale(1.2f, 1f),
+                                modifier = modifier
+                                    .fillMaxSize()
+                                    .scale(1.2f, 1f),
                                 contentScale = ContentScale.Crop)
                         }
                         4 -> {
@@ -179,7 +200,9 @@ fun SelectDesiredBodyShapeScreen(modifier: Modifier = Modifier,
         }
 
         Column(modifier = modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp)) {
-            ForecastSlider(dates = listOf("Muscular", "Ideal", "Normal", "Fat", "Obeses"), currentPosition.toFloat()) {
+            ForecastSlider(dates = listOf(stringResource(R.string.muscular),
+                stringResource(R.string.ideal), stringResource(R.string.normal),
+                stringResource(R.string.fat), stringResource(R.string.obeses)), currentPosition.toFloat()) {
                 currentPosition = it
             }
         }

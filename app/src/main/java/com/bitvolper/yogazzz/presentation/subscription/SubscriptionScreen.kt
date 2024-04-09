@@ -35,9 +35,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.domain.model.Subscription
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.utility.Resource
@@ -143,10 +145,16 @@ fun SubscriptionScreen(modifier: Modifier = Modifier,
 
                             Button(
                                 onClick = { purchaseSubscription() },
-                                modifier = modifier.fillMaxWidth().requiredHeight(50.dp).padding(horizontal = 16.dp),
+                                modifier = modifier
+                                    .fillMaxWidth()
+                                    .requiredHeight(50.dp)
+                                    .padding(horizontal = 16.dp),
                                 enabled = false) {
 
-                                Text(text = "Continue - ${subscriptionUIState.data.data[pager.currentPage]?.price}")
+                                Text(text = stringResource(
+                                    R.string.continue_text,
+                                    subscriptionUIState.data.data[pager.currentPage]?.price ?: 0
+                                ))
                             }
                         }
                     }
@@ -192,7 +200,9 @@ private fun SubscriptionCard(modifier: Modifier = Modifier,
             Divider()
 
             subscription.description?.forEach {
-                Row(modifier = modifier.fillMaxWidth().wrapContentWidth(align = Alignment.Start),
+                Row(modifier = modifier
+                    .fillMaxWidth()
+                    .wrapContentWidth(align = Alignment.Start),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Icon(imageVector = Icons.Rounded.Check, contentDescription = null)
                     Text(text = it ?: "", style = MaterialTheme.typography.bodyLarge)

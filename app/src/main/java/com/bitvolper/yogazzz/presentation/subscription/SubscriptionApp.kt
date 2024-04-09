@@ -17,9 +17,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.presentation.viewmodel.AccountViewModel
 import com.bitvolper.yogazzz.presentation.viewmodel.SubscriptionViewModel
 import timber.log.Timber
@@ -57,7 +59,7 @@ private fun SubscriptionTopAppBar() {
     CenterAlignedTopAppBar(
         title = {
             Text(
-                text = "Upgrade Plan",
+                text = stringResource(R.string.upgrade_plan),
                 fontWeight = FontWeight.SemiBold)
         },
         navigationIcon = {
