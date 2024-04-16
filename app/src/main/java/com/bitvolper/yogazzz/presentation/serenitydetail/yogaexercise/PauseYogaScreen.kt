@@ -2,6 +2,8 @@ package com.bitvolper.yogazzz.presentation.serenitydetail.yogaexercise
 
 import android.app.Activity
 import android.content.res.Configuration
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -28,9 +31,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,6 +53,8 @@ fun PauseYogaScreen(modifier: Modifier = Modifier,
                     currentYogaExercise: ExerciseUIState = ExerciseUIState(),
                     onResumeClick: () -> Unit = { },
                     onRestartClick: () -> Unit = { }) {
+
+    BackHandler { onResumeClick() }
 
     val context = LocalContext.current
 
@@ -115,15 +122,25 @@ fun PauseYogaScreen(modifier: Modifier = Modifier,
 
         Spacer(modifier = modifier.weight(1f))
 
-        Button(onClick = onResumeClick, modifier = modifier.fillMaxWidth().requiredHeight(50.dp)) {
-            Text(text = "RESUME")
+        Button(onClick = onResumeClick, modifier = modifier
+            .fillMaxWidth()
+            .requiredHeight(50.dp)) {
+            Text(text = stringResource(R.string.resume))
         }
 
-        OutlinedButton(onClick = onRestartClick, modifier = modifier.fillMaxWidth().requiredHeight(50.dp)) {
-            Text(text = "Restart")
+        OutlinedButton(onClick = onRestartClick, modifier = modifier
+            .fillMaxWidth()
+            .requiredHeight(50.dp),
+            border = BorderStroke(0.dp, Color.Transparent),
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
+            Text(text = stringResource(R.string.restart),  color = MaterialTheme.colorScheme.onPrimaryContainer,)
         }
-        OutlinedButton(onClick = { (context as Activity).finish() }, modifier = modifier.fillMaxWidth().requiredHeight(50.dp)) {
-            Text(text = "Quit")
+        OutlinedButton(onClick = { (context as Activity).finish() }, modifier = modifier
+            .fillMaxWidth()
+            .requiredHeight(50.dp),
+            border = BorderStroke(0.dp, Color.Transparent),
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
+            Text(text = stringResource(R.string.quit),  color = MaterialTheme.colorScheme.onPrimaryContainer,)
         }
     }
 }

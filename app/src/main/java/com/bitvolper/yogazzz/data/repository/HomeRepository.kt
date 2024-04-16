@@ -36,25 +36,25 @@ import javax.inject.Inject
 interface HomeRepository {
     fun getYogaCategory(): Flow<Resource<YogaCategory>>
 
-    fun getYogaRecommendation(): Flow<Resource<YogaRecommendation>>
+    fun getYogaRecommendation(language: String): Flow<Resource<YogaRecommendation>>
 
-    fun getYogaCategoryWithRecommendation(): Flow<Resource<YogaCategoryWithRecommendation>>
+    fun getYogaCategoryWithRecommendation(language: String): Flow<Resource<YogaCategoryWithRecommendation>>
 
-    fun getPopularYoga(): Flow<Resource<YogaData>>
+    fun getPopularYoga(language: String): Flow<Resource<YogaData>>
 
-    fun getYogaAdjustLevel(): Flow<Resource<YogaData>>
+    fun getYogaAdjustLevel(language: String): Flow<Resource<YogaData>>
 
-    fun getFlexibilityStrength(): Flow<Resource<YogaData>>
+    fun getFlexibilityStrength(language: String): Flow<Resource<YogaData>>
 
-    fun getStressRelief(): Flow<Resource<YogaData>>
+    fun getStressRelief(language: String): Flow<Resource<YogaData>>
 
-    fun getPopularYogaWithFlexibility(): Flow<Resource<PopularYogaWithFlexibility>>
+    fun getPopularYogaWithFlexibility(language: String): Flow<Resource<PopularYogaWithFlexibility>>
 
     fun getYogaExercise(id: Int): Flow<Resource<YogaExercise>>
 
-    fun getSerenityFlow(id: String): Flow<Resource<SerenityData>>
+    fun getSerenityFlow(id: String, language: String): Flow<Resource<SerenityData>>
 
-    fun getBookmarkYogaExercise(id: List<String>): Flow<Resource<SerenityData>>
+    fun getBookmarkYogaExercise(id: List<String>, language: String): Flow<Resource<SerenityData>>
 
     suspend fun updateBookmarkYogaExercise(bookmark: Boolean)
 
@@ -62,9 +62,9 @@ interface HomeRepository {
 
     fun getSubscription(): Flow<Resource<Subscription>>
 
-    fun getMeditation(): Flow<Resource<Meditation>>
+    fun getMeditation(language: String): Flow<Resource<Meditation>>
 
-    fun getYogaExerciseByCategory(category: String): Flow<Resource<SerenityData>>
+    fun getYogaExerciseByCategory(category: String, language: String): Flow<Resource<SerenityData>>
 
     suspend fun updateUserInfo(userId: String, accountInfo: AccountInfo)
 
@@ -74,7 +74,7 @@ interface HomeRepository {
 
     fun getUserInfo(userId: String): Flow<Resource<AccountInfo>>
 
-    fun getHistory(id: List<AccountInfo.HistoryData>): Flow<Resource<History>>
+    fun getHistory(id: List<AccountInfo.HistoryData>, language: String): Flow<Resource<History>>
 
     fun getReports(id: List<AccountInfo.Reports>): Flow<Resource<Reports>>
 }
@@ -115,7 +115,7 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
             emit(Resource.Failure(it))
         }
 
-    override fun getYogaRecommendation(): Flow<Resource<YogaRecommendation>> = flow {
+    override fun getYogaRecommendation(language: String): Flow<Resource<YogaRecommendation>> = flow {
 
         Timber.tag(TAG).d("Called")
         emit(Resource.Loading)
@@ -127,6 +127,7 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
 
             val result = firestore.collection("yoga_exercise")
                 .whereEqualTo("category", "recommendation")
+                .whereEqualTo("language", language)
                 .get()
                 .await()
 
@@ -152,7 +153,7 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
             emit(Resource.Failure(it))
         }
 
-    override fun getYogaCategoryWithRecommendation(): Flow<Resource<YogaCategoryWithRecommendation>> = flow {
+    override fun getYogaCategoryWithRecommendation(language: String): Flow<Resource<YogaCategoryWithRecommendation>> = flow {
         Timber.tag(TAG).d("Called")
         emit(Resource.Loading)
 
@@ -162,6 +163,7 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
 
             val recommendationResult =  firestore.collection("yoga_exercise")
                 .whereEqualTo("category", "recommendation")
+                .whereEqualTo("language", language)
                 .get()
                 .await()
 
@@ -190,7 +192,7 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
             emit(Resource.Failure(it))
     }
 
-    override fun getPopularYoga(): Flow<Resource<YogaData>> = flow {
+    override fun getPopularYoga(language: String): Flow<Resource<YogaData>> = flow {
 
         Timber.tag(TAG).d("Called")
         emit(Resource.Loading)
@@ -201,6 +203,7 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
 
             val result = firestore.collection("yoga_exercise")
                 .whereEqualTo("category", "popularYoga")
+                .whereEqualTo("language", language)
                 .get()
                 .await()
 
@@ -221,7 +224,7 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
             emit(Resource.Failure(it))
         }
 
-    override fun getYogaAdjustLevel(): Flow<Resource<YogaData>> = flow {
+    override fun getYogaAdjustLevel(language: String): Flow<Resource<YogaData>> = flow {
 
         Timber.tag(TAG).d("Called")
         emit(Resource.Loading)
@@ -232,6 +235,7 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
 
             val result = firestore.collection("yoga_exercise")
                 .whereEqualTo("category", "adjustYogaLevel")
+                .whereEqualTo("language", language)
                 .get()
                 .await()
 
@@ -252,7 +256,7 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
             emit(Resource.Failure(it))
         }
 
-    override fun getFlexibilityStrength(): Flow<Resource<YogaData>> = flow {
+    override fun getFlexibilityStrength(language: String): Flow<Resource<YogaData>> = flow {
 
         Timber.tag(TAG).d("Called")
         emit(Resource.Loading)
@@ -263,6 +267,7 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
 
             val result = firestore.collection("yoga_exercise")
                 .whereEqualTo("category", "flexibilityYoga")
+                .whereEqualTo("language", language)
                 .get()
                 .await()
 
@@ -283,7 +288,7 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
         emit(Resource.Failure(it))
     }
 
-    override fun getStressRelief(): Flow<Resource<YogaData>> = flow {
+    override fun getStressRelief(language: String): Flow<Resource<YogaData>> = flow {
 
         Timber.tag(TAG).d("Called")
         emit(Resource.Loading)
@@ -294,6 +299,7 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
 
             val result = firestore.collection("yoga_exercise")
                 .whereEqualTo("category", "stressRelief")
+                .whereEqualTo("language", language)
                 .get()
                 .await()
 
@@ -314,7 +320,7 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
             emit(Resource.Failure(it))
         }
 
-    override fun getPopularYogaWithFlexibility(): Flow<Resource<PopularYogaWithFlexibility>> = flow {
+    override fun getPopularYogaWithFlexibility(language: String): Flow<Resource<PopularYogaWithFlexibility>> = flow {
         Timber.tag(TAG).d("Called")
         emit(Resource.Loading)
 
@@ -324,21 +330,25 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
 
             val popularYogaResult = firestore.collection("yoga_exercise")
                 .whereEqualTo("category", "popularYoga")
+                .whereEqualTo("language", language)
                 .get()
                 .await()
 
             val adjustYogaLevelResult = firestore.collection("yoga_exercise")
                 .whereEqualTo("category", "adjustYogaLevel")
+                .whereEqualTo("language", language)
                 .get()
                 .await()
 
             val flexibilityStrengthResult = firestore.collection("yoga_exercise")
                 .whereEqualTo("category", "flexibilityYoga")
+                .whereEqualTo("language", language)
                 .get()
                 .await()
 
             val stressReliefResult = firestore.collection("yoga_exercise")
                 .whereEqualTo("category", "stressRelief")
+                .whereEqualTo("language", language)
                 .get()
                 .await()
 
@@ -411,7 +421,7 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
         }
 
 
-    override fun getSerenityFlow(id: String): Flow<Resource<SerenityData>> = flow {
+    override fun getSerenityFlow(id: String, language: String): Flow<Resource<SerenityData>> = flow {
 
         Timber.tag(TAG).d("Called")
         emit(Resource.Loading)
@@ -422,6 +432,7 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
 
             val result = firestore.collection("yoga_exercise")
                 .whereEqualTo("id", id)
+                .whereEqualTo("language", language)
                 .get()
                 .await()
 
@@ -447,7 +458,7 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
             emit(Resource.Failure(it))
         }
 
-    override fun getBookmarkYogaExercise(id: List<String>): Flow<Resource<SerenityData>> = flow {
+    override fun getBookmarkYogaExercise(id: List<String>, language: String): Flow<Resource<SerenityData>> = flow {
 
         Timber.tag(TAG).d("Called")
         emit(Resource.Loading)
@@ -458,6 +469,7 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
 
             val result = firestore.collection("yoga_exercise")
                 .whereIn("id", id)
+                .whereEqualTo("language", language)
                 .get()
                 .await()
 
@@ -550,7 +562,7 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
     }
 
 
-    override fun getMeditation(): Flow<Resource<Meditation>> = flow {
+    override fun getMeditation(language: String): Flow<Resource<Meditation>> = flow {
 
         Timber.tag(TAG).d("Called")
         emit(Resource.Loading)
@@ -561,6 +573,7 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
 
             val result = firestore.collection("yoga_exercise")
                 .whereEqualTo("type", "meditation")
+                .whereEqualTo("language", language)
                 .get()
                 .await()
 
@@ -587,7 +600,7 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
         }
 
 
-    override fun getHistory(id: List<AccountInfo.HistoryData>): Flow<Resource<History>> = flow {
+    override fun getHistory(id: List<AccountInfo.HistoryData>, language: String): Flow<Resource<History>> = flow {
 
         Timber.tag(TAG).d("Called")
         emit(Resource.Loading)
@@ -598,6 +611,7 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
 
             val result = firestore.collection("yoga_exercise")
                 .whereIn("id", id.map { it.id })
+                .whereEqualTo("language", language)
                 .get()
                 .await()
 
@@ -698,7 +712,7 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
             emit(Resource.Failure(it))
         }
 
-    override fun getYogaExerciseByCategory(category: String): Flow<Resource<SerenityData>> = flow {
+    override fun getYogaExerciseByCategory(category: String, language: String): Flow<Resource<SerenityData>> = flow {
 
         Timber.tag(TAG).d("Called")
         emit(Resource.Loading)
@@ -710,6 +724,7 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
 
             val result = firestore.collection("yoga_exercise")
                 .whereEqualTo("category", category)
+                .whereEqualTo("language", language)
                 .get()
                 .await()
 

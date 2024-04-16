@@ -38,10 +38,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -104,7 +108,19 @@ fun SerenityDetailScreen(modifier: Modifier = Modifier,
                         error = painterResource(id = R.drawable.ic_broken_image),
                         placeholder = painterResource(id = R.drawable.ic_image_placeholder),
                         contentDescription = null,
-                        modifier = modifier.requiredHeight(250.dp),
+                        modifier = modifier
+                            .requiredHeight(250.dp)
+                            .drawWithCache {
+                                val gradient = Brush.verticalGradient(
+                                    colors = listOf(Color(0xFFE0E0E0), Color.Transparent),
+                                    startY = size.height / 6f,
+                                    endY = size.height
+                                )
+                                onDrawWithContent {
+                                    drawContent()
+                                    drawRect(gradient, blendMode = BlendMode.Multiply)
+                                }
+                            },
                         contentScale = ContentScale.Crop)
 
                     Text(text = yogaExerciseUIState.data.data?.first()?.title ?: "",
@@ -142,7 +158,7 @@ fun SerenityDetailScreen(modifier: Modifier = Modifier,
                                     style = MaterialTheme.typography.bodyLarge,
                                     fontWeight = FontWeight.SemiBold)
 
-                                Text(text = "movements", style = MaterialTheme.typography.bodyMedium)
+                                Text(text = stringResource(R.string.movements), style = MaterialTheme.typography.bodyMedium)
                             }
                         }
 
@@ -163,7 +179,7 @@ fun SerenityDetailScreen(modifier: Modifier = Modifier,
                                     style = MaterialTheme.typography.bodyLarge,
                                     fontWeight = FontWeight.SemiBold)
 
-                                Text(text = "minutes", style = MaterialTheme.typography.bodyMedium)
+                                Text(text = stringResource(id = R.string.minutes), style = MaterialTheme.typography.bodyMedium)
                             }
                         }
 
@@ -183,7 +199,7 @@ fun SerenityDetailScreen(modifier: Modifier = Modifier,
                                     style = MaterialTheme.typography.bodyLarge,
                                     fontWeight = FontWeight.SemiBold)
 
-                                Text(text = "kcal", style = MaterialTheme.typography.bodyMedium)
+                                Text(text = stringResource(id = R.string.kcal), style = MaterialTheme.typography.bodyMedium)
                             }
                         }
                     }
@@ -215,7 +231,7 @@ fun SerenityDetailScreen(modifier: Modifier = Modifier,
                                 .weight(1f)
                                 .requiredHeight(50.dp)) {
 
-                            Text(text = "START")
+                            Text(text = stringResource(R.string.start))
                         }
                     }
                 }

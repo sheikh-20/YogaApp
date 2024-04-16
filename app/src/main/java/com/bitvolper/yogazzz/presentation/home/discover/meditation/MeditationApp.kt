@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -29,6 +30,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.presentation.home.BottomNavigationScreens
 import com.bitvolper.yogazzz.presentation.home.HomeScreen
 import com.bitvolper.yogazzz.presentation.viewmodel.AccountViewModel
@@ -122,7 +124,7 @@ private fun MeditationTopAppBar(navController: NavHostController, onMeditationSt
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Meditation",
+                        text = stringResource(id = R.string.meditation),
                         fontWeight = FontWeight.SemiBold)
                 },
                 navigationIcon = {

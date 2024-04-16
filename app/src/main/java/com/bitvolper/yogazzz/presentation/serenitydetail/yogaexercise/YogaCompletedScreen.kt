@@ -39,7 +39,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -118,11 +120,11 @@ fun YogaCompletedScreen(modifier: Modifier = Modifier,
                 contentScale = ContentScale.Crop
             )
 
-            Text(text = "Congratulations",
+            Text(text = stringResource(R.string.congratulations),
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.SemiBold)
 
-            Text(text = "You've completed the yoga!", style = MaterialTheme.typography.bodyMedium)
+            Text(text = stringResource(R.string.you_ve_completed_the_yoga), style = MaterialTheme.typography.bodyMedium)
 
             Row(modifier = modifier
                 .fillMaxWidth()
@@ -143,7 +145,7 @@ fun YogaCompletedScreen(modifier: Modifier = Modifier,
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.SemiBold)
 
-                    Text(text = "movements", style = MaterialTheme.typography.bodyMedium)
+                    Text(text = stringResource(id = R.string.movements), style = MaterialTheme.typography.bodyMedium)
                 }
 
                 Divider(modifier = modifier
@@ -163,7 +165,7 @@ fun YogaCompletedScreen(modifier: Modifier = Modifier,
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.SemiBold)
 
-                    Text(text = "minutes", style = MaterialTheme.typography.bodyMedium)
+                    Text(text = stringResource(id = R.string.minutes), style = MaterialTheme.typography.bodyMedium)
                 }
 
                 Divider(modifier = modifier
@@ -183,7 +185,7 @@ fun YogaCompletedScreen(modifier: Modifier = Modifier,
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.SemiBold)
 
-                    Text(text = "kcal", style = MaterialTheme.typography.bodyMedium)
+                    Text(text = stringResource(id = R.string.kcal), style = MaterialTheme.typography.bodyMedium)
                 }
             }
 
@@ -205,7 +207,10 @@ fun YogaCompletedScreen(modifier: Modifier = Modifier,
                             .requiredHeight(50.dp),
                         border = BorderStroke(0.dp, Color.Transparent),
                         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
-                        Text(text = "Go to Homepage", color = MaterialTheme.colorScheme.onPrimaryContainer)
+                        Text(text = stringResource(id = R.string.go_to_homepage),
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis)
                     }
 
 
@@ -215,7 +220,7 @@ fun YogaCompletedScreen(modifier: Modifier = Modifier,
                             .weight(1f)
                             .requiredHeight(50.dp)) {
 
-                        Text(text = "View Report")
+                        Text(text = stringResource(R.string.view_report))
                     }
                 }
             }

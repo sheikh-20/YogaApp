@@ -1,6 +1,7 @@
 package com.bitvolper.yogazzz.presentation.mybody
 
 import android.app.Activity
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -19,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
@@ -46,6 +48,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
@@ -86,7 +89,7 @@ fun MyBodyApp(modifier: Modifier = Modifier, accountViewModel: AccountViewModel 
                         openDialog = false
                     }
                 ) {
-                    Text("OK")
+                    Text(stringResource(id = R.string.ok))
                 }
             },
             dismissButton = {
@@ -95,7 +98,7 @@ fun MyBodyApp(modifier: Modifier = Modifier, accountViewModel: AccountViewModel 
                         openDialog = false
                     }
                 ) {
-                    Text("CANCEL")
+                    Text(stringResource(id = R.string.cancel_text))
                 }
             }
         ) {
@@ -376,7 +379,7 @@ private fun BottomSheetHeightContent(modifier: Modifier = Modifier,
     Column(modifier = modifier
         .padding(16.dp)
         .systemBarsPadding(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Text(text = "Enter Height",
+        Text(text = stringResource(R.string.enter_height),
             style = MaterialTheme.typography.headlineSmall,
             textAlign = TextAlign.Center,
             modifier = modifier.fillMaxWidth(),
@@ -406,16 +409,19 @@ private fun BottomSheetHeightContent(modifier: Modifier = Modifier,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically) {
 
+
             OutlinedButton(onClick = onNegativeClick, modifier = modifier
                 .weight(1f)
-                .requiredHeight(50.dp)) {
-                Text(text = stringResource(id = R.string.cancel))
+                .requiredHeight(50.dp),
+                border = BorderStroke(0.dp, Color.Transparent),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
+                Text(text = stringResource(id = R.string.cancel), color = MaterialTheme.colorScheme.onPrimaryContainer)
             }
 
             Button(onClick = { onPositiveClick(height) }, modifier = modifier
                 .weight(1f)
                 .requiredHeight(50.dp)) {
-                Text(text = "Ok")
+                Text(text = stringResource(R.string.ok_text))
             }
         }
     }
@@ -437,7 +443,7 @@ private fun BottomSheetHeightFtContent(modifier: Modifier = Modifier,
     Column(modifier = modifier
         .padding(16.dp)
         .systemBarsPadding(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Text(text = "Enter Height",
+        Text(text = stringResource(id = R.string.enter_height),
             style = MaterialTheme.typography.headlineSmall,
             textAlign = TextAlign.Center,
             modifier = modifier.fillMaxWidth(),
@@ -469,14 +475,16 @@ private fun BottomSheetHeightFtContent(modifier: Modifier = Modifier,
 
             OutlinedButton(onClick = onNegativeClick, modifier = modifier
                 .weight(1f)
-                .requiredHeight(50.dp)) {
-                Text(text = stringResource(id = R.string.cancel))
+                .requiredHeight(50.dp),
+                border = BorderStroke(0.dp, Color.Transparent),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
+                Text(text = stringResource(id = R.string.cancel), color = MaterialTheme.colorScheme.onPrimaryContainer)
             }
 
             Button(onClick = { onPositiveClick(heightInFt) }, modifier = modifier
                 .weight(1f)
                 .requiredHeight(50.dp)) {
-                Text(text = "Ok")
+                Text(text = stringResource(id = R.string.ok_text))
             }
         }
     }
@@ -498,7 +506,7 @@ private fun BottomSheetCurrentWeightContent(modifier: Modifier = Modifier,
     Column(modifier = modifier
         .padding(16.dp)
         .systemBarsPadding(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Text(text = "Enter Weight",
+        Text(text = stringResource(R.string.enter_weight),
             style = MaterialTheme.typography.headlineSmall,
             textAlign = TextAlign.Center,
             modifier = modifier.fillMaxWidth(),
@@ -529,14 +537,16 @@ private fun BottomSheetCurrentWeightContent(modifier: Modifier = Modifier,
 
             OutlinedButton(onClick = onNegativeClick, modifier = modifier
                 .weight(1f)
-                .requiredHeight(50.dp)) {
-                Text(text = stringResource(id = R.string.cancel))
+                .requiredHeight(50.dp),
+                border = BorderStroke(0.dp, Color.Transparent),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
+                Text(text = stringResource(id = R.string.cancel), color = MaterialTheme.colorScheme.onPrimaryContainer)
             }
 
             Button(onClick = { onPositiveClick(currentWeight) }, modifier = modifier
                 .weight(1f)
                 .requiredHeight(50.dp)) {
-                Text(text = "Ok")
+                Text(text = stringResource(id = R.string.ok_text))
             }
         }
     }
@@ -558,7 +568,7 @@ private fun BottomSheetCurrentWeightLbContent(modifier: Modifier = Modifier,
     Column(modifier = modifier
         .padding(16.dp)
         .systemBarsPadding(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Text(text = "Enter Weight",
+        Text(text = stringResource(id = R.string.enter_weight),
             style = MaterialTheme.typography.headlineSmall,
             textAlign = TextAlign.Center,
             modifier = modifier.fillMaxWidth(),
@@ -589,14 +599,16 @@ private fun BottomSheetCurrentWeightLbContent(modifier: Modifier = Modifier,
 
             OutlinedButton(onClick = onNegativeClick, modifier = modifier
                 .weight(1f)
-                .requiredHeight(50.dp)) {
-                Text(text = stringResource(id = R.string.cancel))
+                .requiredHeight(50.dp),
+                border = BorderStroke(0.dp, Color.Transparent),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
+                Text(text = stringResource(id = R.string.cancel), color = MaterialTheme.colorScheme.onPrimaryContainer)
             }
 
             Button(onClick = { onPositiveClick(currentWeightInLb) }, modifier = modifier
                 .weight(1f)
                 .requiredHeight(50.dp)) {
-                Text(text = "Ok")
+                Text(text = stringResource(id = R.string.ok_text))
             }
         }
     }
@@ -618,7 +630,7 @@ private fun BottomSheetTargetWeightContent(modifier: Modifier = Modifier,
     Column(modifier = modifier
         .padding(16.dp)
         .systemBarsPadding(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Text(text = "Enter Weight",
+        Text(text = stringResource(id = R.string.enter_weight),
             style = MaterialTheme.typography.headlineSmall,
             textAlign = TextAlign.Center,
             modifier = modifier.fillMaxWidth(),
@@ -649,14 +661,16 @@ private fun BottomSheetTargetWeightContent(modifier: Modifier = Modifier,
 
             OutlinedButton(onClick = onNegativeClick, modifier = modifier
                 .weight(1f)
-                .requiredHeight(50.dp)) {
-                Text(text = stringResource(id = R.string.cancel))
+                .requiredHeight(50.dp),
+                border = BorderStroke(0.dp, Color.Transparent),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
+                Text(text = stringResource(id = R.string.cancel), color = MaterialTheme.colorScheme.onPrimaryContainer)
             }
 
             Button(onClick = { onPositiveClick(targetWeight) }, modifier = modifier
                 .weight(1f)
                 .requiredHeight(50.dp)) {
-                Text(text = "Ok")
+                Text(text = stringResource(id = R.string.ok_text))
             }
         }
     }
@@ -680,7 +694,7 @@ private fun BottomSheetTargetWeightLbContent(modifier: Modifier = Modifier,
     Column(modifier = modifier
         .padding(16.dp)
         .systemBarsPadding(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Text(text = "Enter Weight",
+        Text(text = stringResource(id = R.string.enter_weight),
             style = MaterialTheme.typography.headlineSmall,
             textAlign = TextAlign.Center,
             modifier = modifier.fillMaxWidth(),
@@ -711,14 +725,16 @@ private fun BottomSheetTargetWeightLbContent(modifier: Modifier = Modifier,
 
             OutlinedButton(onClick = onNegativeClick, modifier = modifier
                 .weight(1f)
-                .requiredHeight(50.dp)) {
-                Text(text = stringResource(id = R.string.cancel))
+                .requiredHeight(50.dp),
+                border = BorderStroke(0.dp, Color.Transparent),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
+                Text(text = stringResource(id = R.string.cancel), color = MaterialTheme.colorScheme.onPrimaryContainer)
             }
 
             Button(onClick = { onPositiveClick(targetWeightInLb) }, modifier = modifier
                 .weight(1f)
                 .requiredHeight(50.dp)) {
-                Text(text = "Ok")
+                Text(text = stringResource(id = R.string.ok_text))
             }
         }
     }
@@ -733,7 +749,7 @@ private fun BottomSheetGenderContent(modifier: Modifier = Modifier, onNegativeCl
     Column(modifier = modifier
         .padding(16.dp)
         .systemBarsPadding(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Text(text = "Select Gender",
+        Text(text = stringResource(id = R.string.select_gender),
             style = MaterialTheme.typography.headlineSmall,
             textAlign = TextAlign.Center,
             modifier = modifier.fillMaxWidth(),
@@ -746,7 +762,7 @@ private fun BottomSheetGenderContent(modifier: Modifier = Modifier, onNegativeCl
             .fillMaxWidth()
             .padding(top = 8.dp), verticalArrangement = Arrangement.spacedBy(24.dp)) {
 
-            Text(text = "Man",
+            Text(text = stringResource(id = R.string.man),
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
@@ -758,7 +774,7 @@ private fun BottomSheetGenderContent(modifier: Modifier = Modifier, onNegativeCl
                         indication = null
                     ))
 
-            Text(text = "Woman",
+            Text(text = stringResource(id = R.string.woman),
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,

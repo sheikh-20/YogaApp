@@ -13,6 +13,7 @@ data class SerenityData(
         val level: String? = null,
         val moments: String? = null,
         val kcal: String? = null,
+        val language: String? = null,
         val type: String? = null,
         val pose: List<Pose?>? = null
     ) {

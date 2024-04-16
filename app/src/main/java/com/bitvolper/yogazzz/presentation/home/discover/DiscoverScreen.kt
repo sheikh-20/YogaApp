@@ -243,8 +243,8 @@ private fun MeditationCard(modifier: Modifier = Modifier) {
             Column(modifier = modifier
                 .weight(1f)
                 .padding(start = 16.dp, top = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(text = "Meditation", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
-                Text(text = "Achieve a state of profound of calmness and clarity with our \"Calmness",
+                Text(text = stringResource(R.string.meditation), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
+                Text(text = stringResource(R.string.achieve_a_state_of_profound_of_calmness_and_clarity_with_our_calmness),
                     style = MaterialTheme.typography.bodyMedium,
                     maxLines = 2, overflow = TextOverflow.Ellipsis)
             }

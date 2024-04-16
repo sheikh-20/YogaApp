@@ -1,8 +1,10 @@
 package com.bitvolper.yogazzz.presentation.viewmodel
 
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bitvolper.yogazzz.domain.model.AccountInfo
+import com.bitvolper.yogazzz.domain.model.AppLanguagePreference
 import com.bitvolper.yogazzz.domain.model.History
 import com.bitvolper.yogazzz.domain.model.PopularYogaWithFlexibility
 import com.bitvolper.yogazzz.domain.model.Reports
@@ -12,14 +14,18 @@ import com.bitvolper.yogazzz.domain.model.YogaCategoryWithRecommendation
 import com.bitvolper.yogazzz.domain.model.YogaData
 import com.bitvolper.yogazzz.domain.model.YogaExercise
 import com.bitvolper.yogazzz.domain.model.YogaRecommendation
+import com.bitvolper.yogazzz.domain.usecase.AppLanguageUseCase
 import com.bitvolper.yogazzz.domain.usecase.HomeUseCase
 import com.bitvolper.yogazzz.utility.Resource
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -27,7 +33,8 @@ import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase): ViewModel() {
+class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase,
+                                        private val appLanguageUseCase: AppLanguageUseCase): ViewModel() {
 
     private companion object {
         const val TAG = "HomeViewModel"
@@ -63,6 +70,13 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase): V
     private var _reportsUIState = MutableStateFlow<Resource<Reports>>(Resource.Loading)
     val reportsUIState: StateFlow<Resource<Reports>> get() = _reportsUIState
 
+    val appLanguageIndex: Flow<AppLanguagePreference> = appLanguageUseCase.readLanguagePreference.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000L),
+        initialValue = AppLanguagePreference(0)
+    )
+
+
     private fun getSignedInUser() {
         auth.currentUser?.apply {
             _profileInfoUiState.value = UserData(
@@ -76,9 +90,21 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase): V
 
     fun getHomeContent() = viewModelScope.launch {
         try {
-            Timber.tag(TAG).d("View model called")
-            homeUseCase.getYogaCategoryWithRecommendation().collectLatest {
-                _homeUIState.value = it
+            appLanguageIndex.collectLatest {
+                when (it.language) {
+                    0 -> {
+                        Timber.tag(TAG).d("View model called")
+                        homeUseCase.getYogaCategoryWithRecommendation("en").collectLatest { data ->
+                            _homeUIState.value = data
+                        }
+                    }
+                    else  -> {
+                        Timber.tag(TAG).d("View model called")
+                        homeUseCase.getYogaCategoryWithRecommendation("es").collectLatest { data ->
+                            _homeUIState.value = data
+                        }
+                    }
+                }
             }
         } catch (exception: IOException) {
             Timber.tag(TAG).e(exception)
@@ -87,9 +113,21 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase): V
 
     fun getYogaExerciseByCategory(category: String = "improvedFlexibility") = viewModelScope.launch {
         try {
-            Timber.tag(TAG).d("View model called")
-            homeUseCase.getYogaExerciseByCategory(category).collectLatest {
-                _yogaCategoryUIState.value = it
+            appLanguageIndex.collectLatest {
+                when (it.language) {
+                    0 -> {
+                        Timber.tag(TAG).d("View model called")
+                        homeUseCase.getYogaExerciseByCategory(category, "en").collectLatest {
+                            _yogaCategoryUIState.value = it
+                        }
+                    }
+                    else  -> {
+                        Timber.tag(TAG).d("View model called")
+                        homeUseCase.getYogaExerciseByCategory(category, "es").collectLatest {
+                            _yogaCategoryUIState.value = it
+                        }
+                    }
+                }
             }
         } catch (exception: IOException) {
             Timber.tag(TAG).e(exception)
@@ -97,10 +135,23 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase): V
     }
 
     fun getYogaRecommendation() = viewModelScope.launch {
+
         try {
-            Timber.tag(TAG).d("View model called")
-            homeUseCase.getRecommendation().collectLatest {
-                _recommendationUIState.value = it
+            appLanguageIndex.collectLatest {
+                when (it.language) {
+                    0 -> {
+                        Timber.tag(TAG).d("View model called")
+                        homeUseCase.getRecommendation("en").collectLatest { data ->
+                            _recommendationUIState.value = data
+                        }
+                    }
+                    else  -> {
+                        Timber.tag(TAG).d("View model called")
+                        homeUseCase.getRecommendation("es").collectLatest { data ->
+                            _recommendationUIState.value = data
+                        }
+                    }
+                }
             }
         } catch (exception: IOException) {
             Timber.tag(TAG).e(exception)
@@ -120,9 +171,21 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase): V
 
     fun getSerenityFlow(id: String = "c0fdad9b-307c-4000-a342-346cb8f8abac") = viewModelScope.launch {
         try {
-            Timber.tag(TAG).d("View model called")
-            homeUseCase.getSerenityFlow(id).collectLatest {
-                _serenityFlowUIState.value = it
+            appLanguageIndex.collectLatest {
+                when (it.language) {
+                    0 -> {
+                        Timber.tag(TAG).d("View model called")
+                        homeUseCase.getSerenityFlow(id, "en").collectLatest { data ->
+                            _serenityFlowUIState.value = data
+                        }
+                    }
+                    else  -> {
+                        Timber.tag(TAG).d("View model called")
+                        homeUseCase.getSerenityFlow(id, "es").collectLatest { data ->
+                            _serenityFlowUIState.value = data
+                        }
+                    }
+                }
             }
         } catch (exception: IOException) {
             Timber.tag(TAG).e(exception)
@@ -131,8 +194,21 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase): V
 
     fun getBookmark(id: List<String>) = viewModelScope.launch {
         try {
-            homeUseCase.getBookmarkYogaExercise(id).collectLatest {
-                _bookmarkUIState.value = it
+            appLanguageIndex.collectLatest {
+                when (it.language) {
+                    0 -> {
+                        Timber.tag(TAG).d("View model called")
+                        homeUseCase.getBookmarkYogaExercise(id, "en").collectLatest { data ->
+                            _bookmarkUIState.value = data
+                        }
+                    }
+                    else  -> {
+                        Timber.tag(TAG).d("View model called")
+                        homeUseCase.getBookmarkYogaExercise(id, "es").collectLatest { data ->
+                            _bookmarkUIState.value = data
+                        }
+                    }
+                }
             }
         } catch (exception: IOException) {
             Timber.tag(TAG).e(exception)
@@ -145,8 +221,21 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase): V
 
     fun getHistory(id: List<AccountInfo.HistoryData>) = viewModelScope.launch {
         try {
-            homeUseCase.getHistory(id).collectLatest {
-                _historyUIState.value = it
+            appLanguageIndex.collectLatest {
+                when (it.language) {
+                    0 -> {
+                        Timber.tag(TAG).d("View model called")
+                        homeUseCase.getHistory(id, "en").collectLatest { data ->
+                            _historyUIState.value = data
+                        }
+                    }
+                    else  -> {
+                        Timber.tag(TAG).d("View model called")
+                        homeUseCase.getHistory(id, "es").collectLatest { data ->
+                            _historyUIState.value = data
+                        }
+                    }
+                }
             }
         } catch (exception: IOException) {
             Timber.tag(TAG).e(exception)

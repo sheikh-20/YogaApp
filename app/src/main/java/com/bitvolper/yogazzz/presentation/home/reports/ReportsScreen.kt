@@ -214,19 +214,20 @@ private fun TitleCardCompose(modifier: Modifier = Modifier, history: History = H
 private fun StatisticsCardCompose(modifier: Modifier = Modifier, history: History = History()) {
 
     val modelProducer = remember { CartesianChartModelProducer.build() }
+    val context = LocalContext.current
 
     var isExpanded by remember { mutableStateOf(false) }
-    var selectedPeriod by remember { mutableStateOf("This Week") }
+    var selectedPeriod by remember { mutableStateOf(Pair(1, context.getString(R.string.this_week))) }
 
     val today = listOf(LocalDate.now().toString())
     val (datesOfWeek, localDate) = getDateForWeek()
     val (datesOfMonth, localDateMonth) = getDateForMonth()
     val (datesOf6Months, localDate6Months) = getDateFor6Months()
 
-    val bottomAxisValueFormatter = when(selectedPeriod) {
-        "Today" -> AxisValueFormatter<AxisPosition.Horizontal.Bottom> { x, _, _ -> today[x.toInt() % today.size] }
-        "This Week" -> AxisValueFormatter<AxisPosition.Horizontal.Bottom> { x, _, _ -> datesOfWeek[x.toInt() % datesOfWeek.size] }
-        "This Month" -> AxisValueFormatter<AxisPosition.Horizontal.Bottom> { x, _, _ -> datesOfMonth[x.toInt() % datesOfMonth.size] }
+    val bottomAxisValueFormatter = when(selectedPeriod.first) {
+        0 -> AxisValueFormatter<AxisPosition.Horizontal.Bottom> { x, _, _ -> today[x.toInt() % today.size] }
+        1 -> AxisValueFormatter<AxisPosition.Horizontal.Bottom> { x, _, _ -> datesOfWeek[x.toInt() % datesOfWeek.size] }
+        2 -> AxisValueFormatter<AxisPosition.Horizontal.Bottom> { x, _, _ -> datesOfMonth[x.toInt() % datesOfMonth.size] }
         else -> AxisValueFormatter<AxisPosition.Horizontal.Bottom> { x, _, _ -> datesOf6Months[x.toInt() % datesOf6Months.size] }
     }
 
@@ -268,8 +269,8 @@ private fun StatisticsCardCompose(modifier: Modifier = Modifier, history: Histor
 //        }
 //    }
 
-    when (selectedPeriod) {
-        "Today" -> {
+    when (selectedPeriod.first) {
+        0 -> {
             LaunchedEffect(Unit) {
                 withContext(Dispatchers.Default) {
                     modelProducer.tryRunTransaction {
@@ -292,7 +293,7 @@ private fun StatisticsCardCompose(modifier: Modifier = Modifier, history: Histor
                 }
             }
         }
-        "This Week" -> {
+        1 -> {
             LaunchedEffect(Unit) {
                 withContext(Dispatchers.Default) {
                     modelProducer.tryRunTransaction {
@@ -315,7 +316,7 @@ private fun StatisticsCardCompose(modifier: Modifier = Modifier, history: Histor
                 }
             }
         }
-        "This Month" -> {
+        2 -> {
             LaunchedEffect(Unit) {
                 withContext(Dispatchers.Default) {
                     modelProducer.tryRunTransaction {
@@ -438,8 +439,9 @@ private fun StatisticsCardCompose(modifier: Modifier = Modifier, history: Histor
 @Composable
 private fun WeightCardCompose(modifier: Modifier = Modifier) {
 
+    val context = LocalContext.current
     var isExpanded by remember { mutableStateOf(false) }
-    var selectedPeriod by remember { mutableStateOf("Last 6 Months") }
+    var selectedPeriod by remember { mutableStateOf(Pair(1, context.getString(R.string.last_6_months))) }
 
     val (datesOfWeek, localDate) = getDayForWeek()
     val (dayOfMonth, localDateMonth) = getDayForMonth()
@@ -455,8 +457,8 @@ private fun WeightCardCompose(modifier: Modifier = Modifier) {
     LaunchedEffect(Unit) { modelProducer.tryRunTransaction { lineSeries { series(78, 66, 75, 78, 70, 78) } } }
 
 
-    val bottomAxisValueFormatter = when (selectedPeriod) {
-        "This Week" -> AxisValueFormatter<AxisPosition.Horizontal.Bottom> { x, _, _ -> datesOfWeek[x.toInt() % datesOfWeek.size] }
+    val bottomAxisValueFormatter = when (selectedPeriod.first) {
+        0 -> AxisValueFormatter<AxisPosition.Horizontal.Bottom> { x, _, _ -> datesOfWeek[x.toInt() % datesOfWeek.size] }
         else -> AxisValueFormatter<AxisPosition.Horizontal.Bottom> { x, _, _ -> dayOf6Months[x.toInt() % dayOf6Months.size] }
     }
 
