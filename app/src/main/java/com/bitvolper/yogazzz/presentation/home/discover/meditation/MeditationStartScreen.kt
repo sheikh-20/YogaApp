@@ -51,6 +51,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.toLowerCase
@@ -71,10 +72,21 @@ fun MeditationStartScreen(modifier: Modifier = Modifier,
                           meditationUIState: Resource<Meditation> = Resource.Loading,
                           onCardClick: (Meditation.Data) -> Unit = { _ ->  }) {
 
-    val category = listOf(Pair(0, "All"), Pair(1, "Calm"), Pair(2, "Breath"), Pair(3, "Gratitude"), Pair(4, "Morning"))
+    val category = listOf(
+        Pair(0, stringResource(id = R.string.all)),
+        Pair(1, stringResource(R.string.calm)),
+        Pair(2, stringResource(R.string.breath)),
+        Pair(3, stringResource(R.string.gratitude)),
+        Pair(4, stringResource(R.string.morning)))
+
     var selectedCategoryIndex by remember { mutableIntStateOf(0) }
 
-    val time = listOf(Pair(0, "All"), Pair(1, "< 10 mins"), Pair(2, "10 - 20 mins"), Pair(3, "> 20 mins"))
+    val time = listOf(
+        Pair(0, stringResource(id = R.string.all)),
+        Pair(1, stringResource(id = R.string._10_mins)),
+        Pair(2, stringResource(id = R.string._10_20_mins)),
+        Pair(3, stringResource(id = R.string._20_mins)))
+
     var selectedTimeIndex by remember { mutableIntStateOf(0) }
 
     val color = MaterialTheme.colorScheme.primary
@@ -104,12 +116,12 @@ fun MeditationStartScreen(modifier: Modifier = Modifier,
                 .wrapContentSize(align = Alignment.BottomStart)
                 .padding(20.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                Text(text = "Meditation",
+                Text(text = stringResource(id = R.string.meditation),
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
                     color = Color.White)
 
-                Text(text = "Achieve a state of profound calmness and clarity with our \"Calm Mind Meditation\"",
+                Text(text = stringResource(id = R.string.achieve_a_state_of_profound_of_calmness_and_clarity_with_our_calmness),
                     style = MaterialTheme.typography.bodyLarge,
                     color = Color(0xFFf2f2f2)
                 )
@@ -204,7 +216,8 @@ fun MeditationCard(modifier: Modifier = Modifier,
 
     Row(modifier = modifier
         .fillMaxWidth()
-        .clickable(onClick = { onCardClick(meditation) },
+        .clickable(
+            onClick = { onCardClick(meditation) },
             interactionSource = remember { MutableInteractionSource() },
             indication = null
         ),

@@ -156,7 +156,7 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
                 CategoryDetailActivity.startActivity(
                     activity = context as Activity,
                     category = "improvedFlexibility",
-                    title = "Improved Flexibility",
+                    title = context.getString(R.string.improved_flexibility),
                     image = R.drawable.ic_category1,
                     color = R.color.category1) },
 
@@ -183,7 +183,7 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
                 CategoryDetailActivity.startActivity(
                     activity = context as Activity,
                     category = "stressReduction",
-                    title = "Stress Reduction",
+                    title = context.getString(R.string.stress_reduction),
                     image = R.drawable.ic_category2,
                     color = R.color.category2)
                            },
@@ -213,7 +213,7 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
                 CategoryDetailActivity.startActivity(
                     activity = context as Activity,
                     category = "improvedPosture",
-                    title = "Improved Posture",
+                    title = context.getString(R.string.improved_posture),
                     image = R.drawable.ic_category3,
                     color = R.color.category3)
                            },
@@ -240,7 +240,7 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
                 CategoryDetailActivity.startActivity(
                     activity = context as Activity,
                     category = "recovery",
-                    title = "Recovery",
+                    title = context.getString(R.string.recovery),
                     image = R.drawable.ic_category4,
                     color = R.color.category4)
                            },
@@ -268,7 +268,7 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
                 CategoryDetailActivity.startActivity(
                     activity = context as Activity,
                     category = "mindfulnessPresence",
-                    title = "Minfulness & Presence",
+                    title = context.getString(R.string.mindfulness_presence),
                     image = R.drawable.ic_category5,
                     color = R.color.category5)
                            },
@@ -295,7 +295,7 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
                 CategoryDetailActivity.startActivity(
                     activity = context as Activity,
                     category = "spritualGrowth",
-                    title = "Spritual Growth",
+                    title = context.getString(R.string.spritual_growth),
                     image = R.drawable.ic_category6,
                     color = R.color.category6)
                            },
@@ -323,7 +323,7 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
                 CategoryDetailActivity.startActivity(
                     activity = context as Activity,
                     category = "emotionalBalance",
-                    title = "Emotional Growth",
+                    title = context.getString(R.string.emotional_balance),
                     image = R.drawable.ic_category7,
                     color = R.color.category7)
                            },
@@ -349,7 +349,7 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
                 CategoryDetailActivity.startActivity(
                     activity = context as Activity,
                     category = "sleepQuality",
-                    title = "Enhanced Sleep Quality",
+                    title = context.getString(R.string.enhanced_sleep_quality),
                     image = R.drawable.ic_category8,
                     color = R.color.category8)
                            },

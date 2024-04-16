@@ -44,6 +44,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -169,7 +170,7 @@ private fun GetReadyCompose(modifier: Modifier = Modifier, exercisetitle: String
         .fillMaxWidth()
         .wrapContentSize(align = Alignment.Center),
         verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Text(text = "Get Ready!",
+        Text(text = stringResource(R.string.get_ready),
             style = MaterialTheme.typography.displaySmall,
             color = MaterialTheme.colorScheme.primary,
             fontWeight = FontWeight.SemiBold,
@@ -289,7 +290,7 @@ private fun YogaStartCompose(modifier: Modifier = Modifier,
             .requiredHeight(50.dp), ) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Icon(imageVector = Icons.Rounded.Pause, contentDescription = null)
-                Text(text = "PAUSE", fontWeight = FontWeight.SemiBold)
+                Text(text = stringResource(R.string.pause), fontWeight = FontWeight.SemiBold)
             }
         }
 
@@ -304,7 +305,7 @@ private fun YogaStartCompose(modifier: Modifier = Modifier,
 
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Icon(imageVector = Icons.Rounded.SkipPrevious, contentDescription = null)
-                    Text(text = "Previous", color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)
+                    Text(text = stringResource(R.string.previous), color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)
                 }
             }
 
@@ -317,7 +318,7 @@ private fun YogaStartCompose(modifier: Modifier = Modifier,
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
 
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(text = "Skip", color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)
+                    Text(text = stringResource(id = R.string.skip), color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)
                     Icon(imageVector = Icons.Rounded.SkipNext, contentDescription = null)
                 }
             }

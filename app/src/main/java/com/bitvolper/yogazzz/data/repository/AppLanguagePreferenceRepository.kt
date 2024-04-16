@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import java.io.IOException
+import java.util.Locale
 import javax.inject.Inject
 
 interface AppLanguagePreferenceRepository {
@@ -34,7 +35,7 @@ class GetAppLanguagePreferenceRepositoryImpl @Inject constructor(private val dat
                 }
             }
             .map {  preference ->
-                val appTheme = preference[PreferenceKeys.APP_LANGUAGE_INDEX] ?: 0
+                val appTheme = preference[PreferenceKeys.APP_LANGUAGE_INDEX] ?: getDeviceLanguage()
                 AppLanguagePreference(appTheme)
             }
 
@@ -44,4 +45,13 @@ class GetAppLanguagePreferenceRepositoryImpl @Inject constructor(private val dat
         }
     }
 
+    private fun getDeviceLanguage(): Int {
+        val locale = Locale.getDefault()
+        val language = locale.language
+
+        return when (language) {
+            "en" -> 0
+            else -> 1
+        }
+    }
 }

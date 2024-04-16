@@ -95,7 +95,7 @@ fun UserProfileApp(modifier: Modifier = Modifier, accountViewModel: AccountViewM
                         openDialog = false
                     }
                 ) {
-                    Text("OK")
+                    Text(stringResource(R.string.ok))
                 }
             },
             dismissButton = {
@@ -104,7 +104,7 @@ fun UserProfileApp(modifier: Modifier = Modifier, accountViewModel: AccountViewM
                         openDialog = false
                     }
                 ) {
-                    Text("CANCEL")
+                    Text(stringResource(R.string.cancel_text))
                 }
             }
         ) {
@@ -194,7 +194,7 @@ private fun BottomSheetContent(modifier: Modifier = Modifier, onNegativeClick: (
     Column(modifier = modifier
         .padding(16.dp)
         .systemBarsPadding(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Text(text = "Select Gender",
+        Text(text = stringResource(R.string.select_gender),
             style = MaterialTheme.typography.headlineSmall,
             textAlign = TextAlign.Center,
             modifier = modifier.fillMaxWidth(),
@@ -207,7 +207,7 @@ private fun BottomSheetContent(modifier: Modifier = Modifier, onNegativeClick: (
             .fillMaxWidth()
             .padding(top = 8.dp), verticalArrangement = Arrangement.spacedBy(24.dp)) {
 
-            Text(text = "Man",
+            Text(text = stringResource(id = R.string.man),
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
@@ -219,7 +219,7 @@ private fun BottomSheetContent(modifier: Modifier = Modifier, onNegativeClick: (
                         indication = null
                     ))
 
-            Text(text = "Woman",
+            Text(text = stringResource(id = R.string.woman),
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,

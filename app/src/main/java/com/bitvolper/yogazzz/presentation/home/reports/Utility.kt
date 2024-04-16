@@ -26,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bitvolper.yogazzz.R
@@ -69,8 +70,10 @@ val CartesianLayerModel.Entry.y
 fun ExposedBottomMenu(modifier: Modifier = Modifier,
                       isExpanded: Boolean = false,
                       onExpand: (Boolean) -> Unit = { },
-                      selectedPeriod: String = "",
-                      onSelectPeriod: (String) -> Unit = {  }) {
+                      selectedPeriod: Pair<Int, String> = Pair(1, "This Week"),
+                      onSelectPeriod: (Pair<Int, String>) -> Unit = { _ -> }) {
+
+    val context = LocalContext.current
 
     ExposedDropdownMenuBox(
         expanded = isExpanded,
@@ -83,7 +86,7 @@ fun ExposedBottomMenu(modifier: Modifier = Modifier,
             border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outline),
             colors = ChipDefaults.chipColors(backgroundColor = Color.Transparent)) {
             Row {
-                Text(text = selectedPeriod, style = MaterialTheme.typography.titleMedium)
+                Text(text = selectedPeriod.second, style = MaterialTheme.typography.titleMedium)
 
                 Icon(imageVector = Icons.Rounded.KeyboardArrowDown, contentDescription = null)
             }
@@ -91,31 +94,31 @@ fun ExposedBottomMenu(modifier: Modifier = Modifier,
 
         ExposedDropdownMenu(expanded = isExpanded, onDismissRequest = { onExpand(false) }) {
             DropdownMenuItem(
-                text = { Text(text = "Today") },
+                text = { Text(text = stringResource(R.string.today)) },
                 onClick = {
                     onExpand(false)
-                    onSelectPeriod("Today")
+                    onSelectPeriod(Pair(0, context.getString(R.string.today)))
                 })
 
             DropdownMenuItem(
-                text = { Text(text = "This Week") },
+                text = { Text(text = stringResource(R.string.this_week)) },
                 onClick = {
                     onExpand(false)
-                    onSelectPeriod("This Week")
+                    onSelectPeriod(Pair(1, context.getString(R.string.this_week)))
                 })
 
             DropdownMenuItem(
-                text = { Text(text = "This Month") },
+                text = { Text(text = stringResource(R.string.this_month)) },
                 onClick = {
                     onExpand(false)
-                    onSelectPeriod("This Month")
+                    onSelectPeriod(Pair(2, context.getString(R.string.this_month)))
                 })
 
             DropdownMenuItem(
-                text = { Text(text = "Last 6 Months") },
+                text = { Text(text = stringResource(R.string.last_6_months)) },
                 onClick = {
                     onExpand(false)
-                    onSelectPeriod("Last 6 Months")
+                    onSelectPeriod(Pair(3, context.getString(R.string.last_6_months)))
                 })
         }
     }
@@ -125,10 +128,12 @@ fun ExposedBottomMenu(modifier: Modifier = Modifier,
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun ExposedBottomMenuWeight(modifier: Modifier = Modifier,
-                      isExpanded: Boolean = false,
-                      onExpand: (Boolean) -> Unit = { },
-                      selectedPeriod: String = "",
-                      onSelectPeriod: (String) -> Unit = {  }) {
+                            isExpanded: Boolean = false,
+                            onExpand: (Boolean) -> Unit = { },
+                            selectedPeriod: Pair<Int, String> = Pair(1, stringResource(R.string.this_week)),
+                            onSelectPeriod: (Pair<Int, String>) -> Unit = {  }) {
+
+    val context = LocalContext.current
 
     ExposedDropdownMenuBox(
         expanded = isExpanded,
@@ -141,7 +146,7 @@ fun ExposedBottomMenuWeight(modifier: Modifier = Modifier,
             border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outline),
             colors = ChipDefaults.chipColors(backgroundColor = Color.Transparent)) {
             Row {
-                Text(text = selectedPeriod, style = MaterialTheme.typography.titleMedium)
+                Text(text = selectedPeriod.second, style = MaterialTheme.typography.titleMedium)
 
                 Icon(imageVector = Icons.Rounded.KeyboardArrowDown, contentDescription = null)
             }
@@ -150,17 +155,17 @@ fun ExposedBottomMenuWeight(modifier: Modifier = Modifier,
         ExposedDropdownMenu(expanded = isExpanded, onDismissRequest = { onExpand(false) }) {
 
             DropdownMenuItem(
-                text = { Text(text = "This Week") },
+                text = { Text(text = stringResource(id = R.string.this_week)) },
                 onClick = {
                     onExpand(false)
-                    onSelectPeriod("This Week")
+                    onSelectPeriod(Pair(1, context.getString(R.string.this_week)))
                 })
 
             DropdownMenuItem(
-                text = { Text(text = "Last 6 Months") },
+                text = { Text(text = stringResource(id = R.string.last_6_months)) },
                 onClick = {
                     onExpand(false)
-                    onSelectPeriod("Last 6 Months")
+                    onSelectPeriod(Pair(1, context.getString(R.string.last_6_months)))
                 })
         }
     }

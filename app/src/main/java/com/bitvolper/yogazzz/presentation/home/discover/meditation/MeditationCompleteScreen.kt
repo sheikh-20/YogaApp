@@ -44,6 +44,7 @@ import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -101,13 +102,13 @@ fun MeditationCompleteScreen(modifier: Modifier = Modifier,
                 .padding(20.dp)
                 .size(30.dp))
 
-        Text(text = "Well Done",
+        Text(text = stringResource(R.string.well_done),
             style = MaterialTheme.typography.titleLarge,
             modifier = modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.SemiBold)
 
-        Text(text = "You have completed the meditation.",
+        Text(text = stringResource(R.string.you_have_completed_the_meditation),
             style = MaterialTheme.typography.bodyLarge,
             modifier = modifier.fillMaxWidth(),
             textAlign = TextAlign.Center)
@@ -118,7 +119,7 @@ fun MeditationCompleteScreen(modifier: Modifier = Modifier,
             .padding(horizontal = 16.dp)) {
 
             Column(modifier = modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                Text(text = "How do you feel after this session", modifier = modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+                Text(text = stringResource(R.string.how_do_you_feel_after_this_session), modifier = modifier.fillMaxWidth(), textAlign = TextAlign.Center)
 
                 Spacer(modifier = modifier.requiredHeight(4.dp))
 
@@ -165,7 +166,7 @@ fun MeditationCompleteScreen(modifier: Modifier = Modifier,
                         .weight(1f)
                         .requiredHeight(50.dp)) {
 
-                    Text(text = "Finish")
+                    Text(text = stringResource(R.string.finish))
 
                 }
             }

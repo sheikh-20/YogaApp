@@ -155,7 +155,12 @@ fun SerenityDetailApp(modifier: Modifier = Modifier,
                 },
                 currentExerciseIndex = yogaExerciseViewModel.currentExerciseIndex.inc().div(yogaExerciseViewModel.totalExerciseSize.toFloat()),
                 currentExerciseUIState = currentExerciseUIState,
-                isBookmark = accountUIState.bookmark)
+                isBookmark = accountUIState.bookmark,
+
+                onPauseScreenResumeClick = {
+                    yogaExerciseViewModel.resumeExerciseTimer()
+                    navController.navigateUp()
+                })
         }
     ) { paddingValues ->
 
@@ -378,17 +383,18 @@ private fun BottomSheetSubscriptionContent(modifier: Modifier = Modifier, onNega
             tint = MaterialTheme.colorScheme.primary
         )
 
-        Text(text = "Unlock Premium Benefits",
+        Text(text = stringResource(R.string.unlock_premium_benefits),
             style = MaterialTheme.typography.headlineSmall,
             textAlign = TextAlign.Center,
             modifier = modifier.fillMaxWidth(),
             fontWeight = FontWeight.Bold)
 
-        Text(text = "Upgrade to YogazzZ Premium to unlock even more amazing benefits to supercharge your yoga journey",
+        Text(
+            text = stringResource(R.string.upgrade_to_yogazzz_premium_to_unlock_even_more_amazing_benefits_to_supercharge_your_yoga_journey),
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
             modifier = modifier.fillMaxWidth(),
-            )
+        )
 
         Divider()
 
@@ -401,13 +407,13 @@ private fun BottomSheetSubscriptionContent(modifier: Modifier = Modifier, onNega
                 .requiredHeight(50.dp),
                 border = BorderStroke(0.dp, Color.Transparent),
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
-                Text(text = "Not now", color = MaterialTheme.colorScheme.onPrimaryContainer)
+                Text(text = stringResource(R.string.not_now), color = MaterialTheme.colorScheme.onPrimaryContainer)
             }
 
             Button(onClick = onPositiveClick, modifier = modifier
                 .weight(1f)
                 .requiredHeight(50.dp)) {
-                Text(text = "Upgrade")
+                Text(text = stringResource(R.string.upgrade))
             }
         }
     }
@@ -423,7 +429,9 @@ private fun SerenityDetailTopAppBar(navController: NavHostController? = null,
                                     onBookmarkRemove: (String) -> Unit = { },
                                     showSoundEffect: () -> Unit = {  },
                                     currentExerciseIndex: Float = 0f,
-                                    isBookmark: List<String>? = listOf()) {
+                                    isBookmark: List<String>? = listOf(),
+
+                                    onPauseScreenResumeClick: () -> Unit = {  }) {
 
     val context = LocalContext.current
 
@@ -435,23 +443,23 @@ private fun SerenityDetailTopAppBar(navController: NavHostController? = null,
                 },
                 navigationIcon = {
                     IconButton(onClick = { (context as Activity).finish() }) {
-                        Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null)
+                        Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null, tint = Color(0xFFFFFBFE))
                     }
                 },
                 actions = {
                     IconButton(onClick = { /*TODO*/ }) {
-                        Icon(imageVector = Icons.Rounded.Share, contentDescription = null)
+                        Icon(imageVector = Icons.Rounded.Share, contentDescription = null, tint = Color(0xFFFFFBFE))
                     }
 
                     when (yogaExerciseUIState) {
                         is Resource.Loading -> {
                             IconButton(onClick = { /*TODO*/ }) {
-                                Icon(imageVector = Icons.Rounded.BookmarkBorder, contentDescription = null)
+                                Icon(imageVector = Icons.Rounded.BookmarkBorder, contentDescription = null, tint = Color(0xFFFFFBFE))
                             }
                         }
                         is Resource.Failure -> {
                             IconButton(onClick = { /*TODO*/ }) {
-                                Icon(imageVector = Icons.Rounded.BookmarkBorder, contentDescription = null)
+                                Icon(imageVector = Icons.Rounded.BookmarkBorder, contentDescription = null,  tint = Color(0xFFFFFBFE))
                             }
                         }
                         is Resource.Success -> {
@@ -459,17 +467,19 @@ private fun SerenityDetailTopAppBar(navController: NavHostController? = null,
                             if (isBookmark?.contains(yogaExerciseUIState.data.data?.first()?.id ?: return@CenterAlignedTopAppBar) == true) {
 
                                 IconButton(onClick = {
-                                    Toast.makeText(context, "Bookmark removed", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context,
+                                        context.getString(R.string.bookmark_removed), Toast.LENGTH_SHORT).show()
                                     onBookmarkRemove(yogaExerciseUIState.data.data?.first()?.id ?: return@IconButton) }) {
 
-                                    Icon(imageVector = Icons.Rounded.Bookmark, contentDescription = null)
+                                    Icon(imageVector = Icons.Rounded.Bookmark, contentDescription = null, tint = Color(0xFFFFFBFE))
                                 }
                             } else {
                                 IconButton(onClick = {
-                                    Toast.makeText(context, "Bookmark added", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context,
+                                        context.getString(R.string.bookmark_added), Toast.LENGTH_SHORT).show()
                                     onBookmarkAdd(yogaExerciseUIState.data.data?.first()?.id ?: return@IconButton) }) {
 
-                                    Icon(imageVector = Icons.Rounded.BookmarkBorder, contentDescription = null)
+                                    Icon(imageVector = Icons.Rounded.BookmarkBorder, contentDescription = null, tint = Color(0xFFFFFBFE))
                                 }
                             }
                         }
@@ -481,10 +491,10 @@ private fun SerenityDetailTopAppBar(navController: NavHostController? = null,
         YogaExercise.Pause.name -> {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(text = "PAUSE", fontWeight = FontWeight.SemiBold)
+                    Text(text = stringResource(id = R.string.pause), fontWeight = FontWeight.SemiBold)
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController?.navigateUp() }) {
+                    IconButton(onClick = onPauseScreenResumeClick) {
                         Icon(imageVector = Icons.Rounded.Close, contentDescription = null)
                     }
                 },
