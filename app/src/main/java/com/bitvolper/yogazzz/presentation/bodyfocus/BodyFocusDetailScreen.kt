@@ -45,6 +45,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -63,10 +64,17 @@ import com.bitvolper.yogazzz.utility.Resource
 fun BodyFocusDetailScreen(modifier: Modifier = Modifier, yogaCategoryUIState: Resource<SerenityData> = Resource.Loading) {
     val context = LocalContext.current
 
-    val level = listOf(Pair(0, "All"), Pair(1, "Beginner"), Pair(2, "Intermediate"), Pair(3, "Advanced"))
+    val level = listOf(
+        Pair(0, stringResource(id = R.string.all)),
+        Pair(1, stringResource(id = R.string.beginner)),
+        Pair(2, stringResource(id = R.string.intermediate)),
+        Pair(3, stringResource(id = R.string.advanced)))
     var selectedLevelIndex by remember { mutableIntStateOf(0) }
 
-    val time = listOf(Pair(0, "< 10 mins"), Pair(1, "10 - 20 mins"), Pair(2, "> 20 mins"))
+    val time = listOf(
+        Pair(0, stringResource(id = R.string._10_mins)),
+        Pair(1, stringResource(id = R.string._10_20_mins)),
+        Pair(2, stringResource(id = R.string._20_mins)))
     var selectedTimeIndex by remember { mutableIntStateOf(0) }
 
     val color = MaterialTheme.colorScheme.primary

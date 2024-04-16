@@ -46,7 +46,7 @@ private fun BodyFocusTopAppBar() {
         },
         navigationIcon = {
             IconButton(onClick = { (context as Activity).finish() }) {
-                Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null)
+                Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null, tint = Color.White)
             }
         },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.Transparent)

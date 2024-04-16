@@ -53,6 +53,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -76,13 +77,25 @@ fun CategoryDetailScreen(modifier: Modifier = Modifier, yogaCategoryUIState: Res
 
     val context = LocalContext.current
 
-    val category =  listOf(Pair(0, "All"), Pair(1, "Split"), Pair(2, "Spinal Flexibility"), Pair(3, "Hip Flexibility"))
+    val category =  listOf(
+        Pair(0, stringResource(id = R.string.all)),
+        Pair(1, stringResource(R.string.split)),
+        Pair(2, stringResource(R.string.spinal_flexibility)),
+        Pair(3, stringResource(R.string.hip_flexibility)
+    ))
     var selectedCategoryIndex by remember { mutableIntStateOf(0) }
 
-    val level = listOf(Pair(0, "All"), Pair(1, "Beginner"), Pair(2, "Intermediate"), Pair(3, "Advanced"))
+    val level = listOf(
+        Pair(0, stringResource(id = R.string.all)),
+        Pair(1, stringResource(id = R.string.beginner)),
+        Pair(2, stringResource(id = R.string.intermediate)),
+        Pair(3, stringResource(id = R.string.advanced)))
     var selectedLevelIndex by remember { mutableIntStateOf(0) }
 
-    val time = listOf(Pair(0, "< 10 mins"), Pair(1, "10 - 20 mins"), Pair(2, "> 20 mins"))
+    val time = listOf(
+        Pair(0, stringResource(R.string._10_mins)),
+        Pair(1, stringResource(R.string._10_20_mins)),
+        Pair(2, stringResource(R.string._20_mins)))
     var selectedTimeIndex by remember { mutableIntStateOf(0) }
 
     val color = MaterialTheme.colorScheme.primary
@@ -118,12 +131,12 @@ fun CategoryDetailScreen(modifier: Modifier = Modifier, yogaCategoryUIState: Res
                     .wrapContentSize(align = Alignment.BottomStart)
                     .padding(20.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                    Text(text = ((context as Activity).intent.getStringExtra(CategoryDetailActivity.TITLE)) ?: "Improved Flexibility",
+                    Text(text = ((context as Activity).intent.getStringExtra(CategoryDetailActivity.TITLE)) ?: stringResource(id = R.string.improved_flexibility),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                         color = Color.White)
 
-                    Text(text = "Enhance agility and flexibility with dynamic stretches and flowing sequences.",
+                    Text(text = stringResource(R.string.enhance_agility_and_flexibility_with_dynamic_stretches_and_flowing_sequences),
                         style = MaterialTheme.typography.bodyLarge,
                         color = Color(0xFFf2f2f2))
                 }

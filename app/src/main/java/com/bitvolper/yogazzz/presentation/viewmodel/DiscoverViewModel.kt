@@ -13,19 +13,24 @@ import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import com.bitvolper.yogazzz.domain.model.AdjustYogaLevel
+import com.bitvolper.yogazzz.domain.model.AppLanguagePreference
 import com.bitvolper.yogazzz.domain.model.FlexibilityStrength
 import com.bitvolper.yogazzz.domain.model.Meditation
 import com.bitvolper.yogazzz.domain.model.PopularYoga
 import com.bitvolper.yogazzz.domain.model.PopularYogaWithFlexibility
 import com.bitvolper.yogazzz.domain.model.StressRelief
 import com.bitvolper.yogazzz.domain.model.YogaData
+import com.bitvolper.yogazzz.domain.usecase.AppLanguageUseCase
 import com.bitvolper.yogazzz.domain.usecase.HomeUseCase
 import com.bitvolper.yogazzz.utility.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -34,7 +39,11 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class DiscoverViewModel @Inject constructor(private val homeUseCase: HomeUseCase, val player: Player): ViewModel() {
+class DiscoverViewModel @Inject constructor(
+                                private val homeUseCase: HomeUseCase,
+                                val player: Player,
+                                private val appLanguageUseCase: AppLanguageUseCase
+): ViewModel() {
 
     private companion object {
         const val TAG = "DiscoverViewModel"
@@ -64,11 +73,31 @@ class DiscoverViewModel @Inject constructor(private val homeUseCase: HomeUseCase
     var meditation by mutableStateOf(Meditation.Data())
         private set
 
+
+    val appLanguageIndex: Flow<AppLanguagePreference> = appLanguageUseCase.readLanguagePreference.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000L),
+        initialValue = AppLanguagePreference(0)
+    )
+
     fun getExploreContent() = viewModelScope.launch {
+
         try {
-            Timber.tag(TAG).d("View model called")
-            homeUseCase.getPopularYogaWithFlexibility().collectLatest {
-                _discoverUIState.value = it
+            appLanguageIndex.collectLatest {
+                when (it.language) {
+                    0 -> {
+                        Timber.tag(TAG).d("View model called")
+                        homeUseCase.getPopularYogaWithFlexibility("en").collectLatest { data ->
+                            _discoverUIState.value = data
+                        }
+                    }
+                    else  -> {
+                        Timber.tag(TAG).d("View model called")
+                        homeUseCase.getPopularYogaWithFlexibility("es").collectLatest { data ->
+                            _discoverUIState.value = data
+                        }
+                    }
+                }
             }
         } catch (exception: IOException) {
             Timber.tag(TAG).e(exception)
@@ -76,10 +105,23 @@ class DiscoverViewModel @Inject constructor(private val homeUseCase: HomeUseCase
     }
 
     fun getPopularYoga() = viewModelScope.launch {
+
         try {
-            Timber.tag(TAG).d("View model called")
-            homeUseCase.getPopularYoga().collectLatest {
-                _popularYoga.value = it
+            appLanguageIndex.collectLatest {
+                when (it.language) {
+                    0 -> {
+                        Timber.tag(TAG).d("View model called")
+                        homeUseCase.getPopularYoga("en").collectLatest { data ->
+                            _popularYoga.value = data
+                        }
+                    }
+                    else  -> {
+                        Timber.tag(TAG).d("View model called")
+                        homeUseCase.getPopularYoga("es").collectLatest { data ->
+                            _popularYoga.value = data
+                        }
+                    }
+                }
             }
         } catch (exception: IOException) {
             Timber.tag(TAG).e(exception)
@@ -88,9 +130,21 @@ class DiscoverViewModel @Inject constructor(private val homeUseCase: HomeUseCase
 
     fun getAdjustYogaLevel() = viewModelScope.launch {
         try {
-            Timber.tag(TAG).d("View model called")
-            homeUseCase.getAdjustYogaLevel().collectLatest {
-                _adjustYogaLevel.value = it
+            appLanguageIndex.collectLatest {
+                when (it.language) {
+                    0 -> {
+                        Timber.tag(TAG).d("View model called")
+                        homeUseCase.getAdjustYogaLevel("en").collectLatest { data ->
+                            _adjustYogaLevel.value = data
+                        }
+                    }
+                    else  -> {
+                        Timber.tag(TAG).d("View model called")
+                        homeUseCase.getAdjustYogaLevel("es").collectLatest { data ->
+                            _adjustYogaLevel.value = data
+                        }
+                    }
+                }
             }
         } catch (exception: IOException) {
             Timber.tag(TAG).e(exception)
@@ -98,10 +152,23 @@ class DiscoverViewModel @Inject constructor(private val homeUseCase: HomeUseCase
     }
 
     fun getFlexibilityStrength() = viewModelScope.launch {
+
         try {
-            Timber.tag(TAG).d("View model called")
-            homeUseCase.getFlexibilityStrength().collectLatest {
-                _flexibilityStrength.value = it
+            appLanguageIndex.collectLatest {
+                when (it.language) {
+                    0 -> {
+                        Timber.tag(TAG).d("View model called")
+                        homeUseCase.getFlexibilityStrength("en").collectLatest { data ->
+                            _flexibilityStrength.value = data
+                        }
+                    }
+                    else  -> {
+                        Timber.tag(TAG).d("View model called")
+                        homeUseCase.getFlexibilityStrength("es").collectLatest { data ->
+                            _flexibilityStrength.value = data
+                        }
+                    }
+                }
             }
         } catch (exception: IOException) {
             Timber.tag(TAG).e(exception)
@@ -109,10 +176,23 @@ class DiscoverViewModel @Inject constructor(private val homeUseCase: HomeUseCase
     }
 
     fun getStressRelief() = viewModelScope.launch {
+
         try {
-            Timber.tag(TAG).d("View model called")
-            homeUseCase.getStressRelief().collectLatest {
-                _stressRelief.value = it
+            appLanguageIndex.collectLatest {
+                when (it.language) {
+                    0 -> {
+                        Timber.tag(TAG).d("View model called")
+                        homeUseCase.getStressRelief("en").collectLatest { data ->
+                            _stressRelief.value = data
+                        }
+                    }
+                    else  -> {
+                        Timber.tag(TAG).d("View model called")
+                        homeUseCase.getStressRelief("es").collectLatest { data ->
+                            _stressRelief.value = data
+                        }
+                    }
+                }
             }
         } catch (exception: IOException) {
             Timber.tag(TAG).e(exception)
@@ -120,10 +200,23 @@ class DiscoverViewModel @Inject constructor(private val homeUseCase: HomeUseCase
     }
 
     fun getMeditation() = viewModelScope.launch {
+
         try {
-            Timber.tag(TAG).d("View model called")
-            homeUseCase.getMeditation().collectLatest {
-                _meditationUIState.value = it
+            appLanguageIndex.collectLatest {
+                when (it.language) {
+                    0 -> {
+                        Timber.tag(TAG).d("View model called")
+                        homeUseCase.getMeditation("en").collectLatest { data ->
+                            _meditationUIState.value = data
+                        }
+                    }
+                    else  -> {
+                        Timber.tag(TAG).d("View model called")
+                        homeUseCase.getMeditation("es").collectLatest { data ->
+                            _meditationUIState.value = data
+                        }
+                    }
+                }
             }
         } catch (exception: IOException) {
             Timber.tag(TAG).e(exception)

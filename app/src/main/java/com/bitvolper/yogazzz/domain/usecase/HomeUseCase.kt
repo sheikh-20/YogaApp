@@ -28,25 +28,25 @@ import timber.log.Timber
 interface HomeUseCase {
     fun getYogaCategory(): Flow<Resource<YogaCategory>>
 
-    fun getRecommendation(): Flow<Resource<YogaRecommendation>>
+    fun getRecommendation(language: String): Flow<Resource<YogaRecommendation>>
 
-    fun getYogaCategoryWithRecommendation(): Flow<Resource<YogaCategoryWithRecommendation>>
+    fun getYogaCategoryWithRecommendation(language: String): Flow<Resource<YogaCategoryWithRecommendation>>
 
-    fun getPopularYoga(): Flow<Resource<YogaData>>
+    fun getPopularYoga(language: String): Flow<Resource<YogaData>>
 
-    fun getAdjustYogaLevel(): Flow<Resource<YogaData>>
+    fun getAdjustYogaLevel(language: String): Flow<Resource<YogaData>>
 
-    fun getFlexibilityStrength(): Flow<Resource<YogaData>>
+    fun getFlexibilityStrength(language: String): Flow<Resource<YogaData>>
 
-    fun getStressRelief(): Flow<Resource<YogaData>>
+    fun getStressRelief(language: String): Flow<Resource<YogaData>>
 
-    fun getPopularYogaWithFlexibility(): Flow<Resource<PopularYogaWithFlexibility>>
+    fun getPopularYogaWithFlexibility(language: String): Flow<Resource<PopularYogaWithFlexibility>>
 
     fun getYogaExercise(id: Int): Flow<Resource<YogaExercise>>
 
-    fun getSerenityFlow(id: String): Flow<Resource<SerenityData>>
+    fun getSerenityFlow(id: String, language: String): Flow<Resource<SerenityData>>
 
-    fun getBookmarkYogaExercise(id: List<String>): Flow<Resource<SerenityData>>
+    fun getBookmarkYogaExercise(id: List<String>, language: String): Flow<Resource<SerenityData>>
 
     suspend fun updateBookmarkYogaExercise(bookmark: Boolean)
 
@@ -54,9 +54,9 @@ interface HomeUseCase {
 
     fun getSubscription(): Flow<Resource<Subscription>>
 
-    fun getMeditation(): Flow<Resource<Meditation>>
+    fun getMeditation(language: String): Flow<Resource<Meditation>>
 
-    fun getYogaExerciseByCategory(category: String): Flow<Resource<SerenityData>>
+    fun getYogaExerciseByCategory(category: String, language: String): Flow<Resource<SerenityData>>
 
     suspend fun updateUserInfo(userId: String, accountInfo: AccountInfo)
 
@@ -66,7 +66,7 @@ interface HomeUseCase {
 
     fun getUserInfo(userId: String): Flow<Resource<AccountInfo>>
 
-    fun getHistory(id: List<AccountInfo.HistoryData>): Flow<Resource<History>>
+    fun getHistory(id: List<AccountInfo.HistoryData>, language: String): Flow<Resource<History>>
 
     fun getReports(id: List<AccountInfo.Reports>): Flow<Resource<Reports>>
 }
@@ -82,44 +82,44 @@ class GetHomeUseCaseInteractors(private val repository: HomeRepository): HomeUse
         return repository.getYogaCategory()
     }
 
-    override fun getRecommendation(): Flow<Resource<YogaRecommendation>> {
-        return repository.getYogaRecommendation()
+    override fun getRecommendation(language: String): Flow<Resource<YogaRecommendation>> {
+        return repository.getYogaRecommendation(language)
     }
 
-    override fun getYogaCategoryWithRecommendation(): Flow<Resource<YogaCategoryWithRecommendation>> {
-        return repository.getYogaCategoryWithRecommendation()
+    override fun getYogaCategoryWithRecommendation(language: String): Flow<Resource<YogaCategoryWithRecommendation>> {
+        return repository.getYogaCategoryWithRecommendation(language)
     }
 
-    override fun getPopularYoga(): Flow<Resource<YogaData>> {
-        return repository.getPopularYoga()
+    override fun getPopularYoga(language: String): Flow<Resource<YogaData>> {
+        return repository.getPopularYoga(language)
     }
 
-    override fun getAdjustYogaLevel(): Flow<Resource<YogaData>> {
-        return repository.getYogaAdjustLevel()
+    override fun getAdjustYogaLevel(language: String): Flow<Resource<YogaData>> {
+        return repository.getYogaAdjustLevel(language)
     }
 
-    override fun getFlexibilityStrength(): Flow<Resource<YogaData>> {
-        return repository.getFlexibilityStrength()
+    override fun getFlexibilityStrength(language: String): Flow<Resource<YogaData>> {
+        return repository.getFlexibilityStrength(language)
     }
 
-    override fun getStressRelief(): Flow<Resource<YogaData>> {
-        return repository.getStressRelief()
+    override fun getStressRelief(language: String): Flow<Resource<YogaData>> {
+        return repository.getStressRelief(language)
     }
 
-    override fun getPopularYogaWithFlexibility(): Flow<Resource<PopularYogaWithFlexibility>> {
-        return repository.getPopularYogaWithFlexibility()
+    override fun getPopularYogaWithFlexibility(language: String): Flow<Resource<PopularYogaWithFlexibility>> {
+        return repository.getPopularYogaWithFlexibility(language)
     }
 
     override fun getYogaExercise(id: Int): Flow<Resource<YogaExercise>> {
         return repository.getYogaExercise(id)
     }
 
-    override fun getSerenityFlow(id: String): Flow<Resource<SerenityData>> {
-        return repository.getSerenityFlow(id)
+    override fun getSerenityFlow(id: String, language: String): Flow<Resource<SerenityData>> {
+        return repository.getSerenityFlow(id, language)
     }
 
-    override fun getBookmarkYogaExercise(id: List<String>): Flow<Resource<SerenityData>> {
-        return repository.getBookmarkYogaExercise(id)
+    override fun getBookmarkYogaExercise(id: List<String>, language: String): Flow<Resource<SerenityData>> {
+        return repository.getBookmarkYogaExercise(id, language)
     }
 
     override suspend fun updateBookmarkYogaExercise(bookmark: Boolean) {
@@ -134,12 +134,12 @@ class GetHomeUseCaseInteractors(private val repository: HomeRepository): HomeUse
         return repository.getSubscription()
     }
 
-    override fun getMeditation(): Flow<Resource<Meditation>> {
-        return repository.getMeditation()
+    override fun getMeditation(language: String): Flow<Resource<Meditation>> {
+        return repository.getMeditation(language)
     }
 
-    override fun getYogaExerciseByCategory(category: String): Flow<Resource<SerenityData>> {
-        return repository.getYogaExerciseByCategory(category)
+    override fun getYogaExerciseByCategory(category: String, language: String): Flow<Resource<SerenityData>> {
+        return repository.getYogaExerciseByCategory(category, language)
     }
 
     override suspend fun updateUserInfo(userId: String, accountInfo: AccountInfo) {
@@ -154,8 +154,8 @@ class GetHomeUseCaseInteractors(private val repository: HomeRepository): HomeUse
         return repository.getUserInfo(userId)
     }
 
-    override fun getHistory(id: List<AccountInfo.HistoryData>): Flow<Resource<History>> {
-        return repository.getHistory(id)
+    override fun getHistory(id: List<AccountInfo.HistoryData>, language: String): Flow<Resource<History>> {
+        return repository.getHistory(id, language)
     }
 
     override fun getReports(id: List<AccountInfo.Reports>): Flow<Resource<Reports>> {
