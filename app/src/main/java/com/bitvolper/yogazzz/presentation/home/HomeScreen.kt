@@ -53,12 +53,15 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.ImageLoader
 import coil.compose.AsyncImage
+import coil.decode.VideoFrameDecoder
 import coil.request.ImageRequest
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
 import com.bitvolper.yogazzz.R
 import com.bitvolper.yogazzz.domain.model.YogaCategory
 import com.bitvolper.yogazzz.domain.model.YogaCategoryWithRecommendation
+import com.bitvolper.yogazzz.domain.model.YogaData
 import com.bitvolper.yogazzz.domain.model.YogaRecommendation
 import com.bitvolper.yogazzz.presentation.categorydetail.CategoryDetailActivity
 import com.bitvolper.yogazzz.presentation.home.recommendation.RecommendationActivity
@@ -406,19 +409,25 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
 @Preview(showBackground = true)
 @Composable
 fun RecommendationCard(modifier: Modifier = Modifier,
-                       recommendation: YogaRecommendation.Data = YogaRecommendation.Data(title = "Yoga Exercise", duration = "10", level = "Beginner")) {
+                       recommendation: YogaData.Data = YogaData.Data(title = "Yoga Exercise", duration = "10", level = "Beginner")) {
 
     val context = LocalContext.current
+
+    val imageLoader = ImageLoader.Builder(LocalContext.current)
+        .components {
+            add(VideoFrameDecoder.Factory())
+        }
+        .build()
 
     Row(modifier = modifier
         .fillMaxWidth()
         .clickable(
             onClick = {
-                if (recommendation.vip == true) {
-                    SubscriptionActivity.startActivity(context as Activity)
-                } else {
-                    SerenityDetailActivity.startActivity(context as Activity, null)
-                }
+//                if (recommendation.vip == true) {
+//                    SubscriptionActivity.startActivity(context as Activity)
+//                } else {
+                    SerenityDetailActivity.startActivity(context as Activity, recommendation.id)
+//                }
             },
             interactionSource = remember { MutableInteractionSource() },
             indication = null
@@ -430,27 +439,25 @@ fun RecommendationCard(modifier: Modifier = Modifier,
 
             Box(modifier = modifier.size(height = 100.dp, width = 100.dp)) {
                 AsyncImage(
-                    model = ImageRequest.Builder(context = LocalContext.current)
-                        .data(recommendation.image)
-                        .crossfade(true)
-                        .build(),
+                    model = recommendation.pose?.first()?.file,
+                    imageLoader = imageLoader,
                     error = painterResource(id = R.drawable.ic_broken_image),
                     placeholder = painterResource(id = R.drawable.ic_image_placeholder),
                     contentDescription = null,
                     modifier = modifier.size(height = 100.dp, width = 100.dp),
                     contentScale = ContentScale.Crop)
 
-                if (recommendation.vip == true) {
-                    Icon(
-                        imageVector = Icons.Rounded.Diamond,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primaryContainer,
-                        modifier = modifier
-                            .fillMaxSize()
-                            .wrapContentSize(align = Alignment.TopStart)
-                            .padding(4.dp)
-                    )
-                }
+//                if (recommendation.vip == true) {
+//                    Icon(
+//                        imageVector = Icons.Rounded.Diamond,
+//                        contentDescription = null,
+//                        tint = MaterialTheme.colorScheme.primaryContainer,
+//                        modifier = modifier
+//                            .fillMaxSize()
+//                            .wrapContentSize(align = Alignment.TopStart)
+//                            .padding(4.dp)
+//                    )
+//                }
             }
 
         }
@@ -478,7 +485,7 @@ fun RecommendationCard(modifier: Modifier = Modifier,
 
 @Preview(showBackground = true)
 @Composable
-private fun YogaRecommendationCompose(recommendation: YogaRecommendation = YogaRecommendation(emptyList())) {
+private fun YogaRecommendationCompose(recommendation: YogaData = YogaData(emptyList())) {
 
     val context = LocalContext.current
 

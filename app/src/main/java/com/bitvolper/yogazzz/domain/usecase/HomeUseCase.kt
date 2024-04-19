@@ -28,7 +28,7 @@ import timber.log.Timber
 interface HomeUseCase {
     fun getYogaCategory(): Flow<Resource<YogaCategory>>
 
-    fun getRecommendation(language: String): Flow<Resource<YogaRecommendation>>
+    fun getRecommendation(language: String): Flow<Resource<YogaData>>
 
     fun getYogaCategoryWithRecommendation(language: String): Flow<Resource<YogaCategoryWithRecommendation>>
 
@@ -82,7 +82,7 @@ class GetHomeUseCaseInteractors(private val repository: HomeRepository): HomeUse
         return repository.getYogaCategory()
     }
 
-    override fun getRecommendation(language: String): Flow<Resource<YogaRecommendation>> {
+    override fun getRecommendation(language: String): Flow<Resource<YogaData>> {
         return repository.getYogaRecommendation(language)
     }
 
