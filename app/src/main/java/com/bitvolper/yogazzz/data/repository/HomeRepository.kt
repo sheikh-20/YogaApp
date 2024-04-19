@@ -36,7 +36,7 @@ import javax.inject.Inject
 interface HomeRepository {
     fun getYogaCategory(): Flow<Resource<YogaCategory>>
 
-    fun getYogaRecommendation(language: String): Flow<Resource<YogaRecommendation>>
+    fun getYogaRecommendation(language: String): Flow<Resource<YogaData>>
 
     fun getYogaCategoryWithRecommendation(language: String): Flow<Resource<YogaCategoryWithRecommendation>>
 
@@ -115,7 +115,7 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
             emit(Resource.Failure(it))
         }
 
-    override fun getYogaRecommendation(language: String): Flow<Resource<YogaRecommendation>> = flow {
+    override fun getYogaRecommendation(language: String): Flow<Resource<YogaData>> = flow {
 
         Timber.tag(TAG).d("Called")
         emit(Resource.Loading)
@@ -139,10 +139,10 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
             val json = Gson().toJson(filter)
             Timber.tag(TAG).d("Result -> $json")
 
-            val listType = object : TypeToken<List<YogaRecommendation.Data>>() {}.type
-            val data = Gson().fromJson<List<YogaRecommendation.Data>>(json, listType)
+            val listType = object : TypeToken<List<YogaData.Data>>() {}.type
+            val data = Gson().fromJson<List<YogaData.Data>>(json, listType)
 
-            emit(Resource.Success(YogaRecommendation(data = data)))
+            emit(Resource.Success(YogaData(data = data)))
         } catch (exception: Exception) {
             throw Throwable(exception)
         }
@@ -177,11 +177,11 @@ class HomeRepositoryImpl @Inject constructor(private val database: FirebaseDatab
 
             val jsonRecommendation = Gson().toJson(recommendationResult.documents.map { it.data })
             Timber.tag(TAG).d("Result -> $jsonRecommendation")
-            val listTypeRecommendation = object : TypeToken<List<YogaRecommendation.Data>>() {}.type
-            val recommendation = Gson().fromJson<List<YogaRecommendation.Data>>(jsonRecommendation, listTypeRecommendation)
+            val listTypeRecommendation = object : TypeToken<List<YogaData.Data>>() {}.type
+            val recommendation = Gson().fromJson<List<YogaData.Data>>(jsonRecommendation, listTypeRecommendation)
 
 
-            emit(Resource.Success(YogaCategoryWithRecommendation(category = YogaCategory(category), recommendation = YogaRecommendation(recommendation))))
+            emit(Resource.Success(YogaCategoryWithRecommendation(category = YogaCategory(category), recommendation = YogaData(recommendation))))
         } catch (exception: Exception) {
             throw Throwable(exception)
         }

@@ -49,8 +49,8 @@ class HomeViewModel @Inject constructor(private val homeUseCase: HomeUseCase,
     private var _homeUIState = MutableStateFlow<Resource<YogaCategoryWithRecommendation>>(Resource.Loading)
     val homeUIState: StateFlow<Resource<YogaCategoryWithRecommendation>> get() = _homeUIState
 
-    private var _recommendationUIState = MutableStateFlow<Resource<YogaRecommendation>>(Resource.Loading)
-    val recommendationUIState: StateFlow<Resource<YogaRecommendation>> get() = _recommendationUIState
+    private var _recommendationUIState = MutableStateFlow<Resource<YogaData>>(Resource.Loading)
+    val recommendationUIState: StateFlow<Resource<YogaData>> get() = _recommendationUIState
 
     private var _yogaExerciseUIState = MutableStateFlow<Resource<YogaExercise>>(Resource.Loading)
     val yogaExerciseUIState: StateFlow<Resource<YogaExercise>> get() = _yogaExerciseUIState
