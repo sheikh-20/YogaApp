@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bitvolper.yogazzz.domain.model.YogaData
 import com.bitvolper.yogazzz.domain.model.YogaRecommendation
 import com.bitvolper.yogazzz.presentation.home.RecommendationCard
 import com.bitvolper.yogazzz.presentation.theme.YogaAppTheme
@@ -24,7 +25,7 @@ import com.bitvolper.yogazzz.utility.Resource
 @Composable
 fun RecommendationScreen(modifier: Modifier = Modifier,
                          paddingValues: PaddingValues = PaddingValues(),
-                         recommendationUIState: Resource<YogaRecommendation> = Resource.Loading) {
+                         recommendationUIState: Resource<YogaData> = Resource.Loading) {
 
     val context = LocalContext.current
 
