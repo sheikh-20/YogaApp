@@ -521,7 +521,7 @@ private fun YogaRecommendationCompose(recommendation: YogaData = YogaData(emptyL
         }
 
         Column {
-            recommendation.data?.forEach {
+            recommendation.data?.take(3)?.forEach {
                 RecommendationCard(recommendation = it ?: return)
             }
         }
