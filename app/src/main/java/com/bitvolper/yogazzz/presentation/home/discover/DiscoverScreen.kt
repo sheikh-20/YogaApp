@@ -6,6 +6,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,8 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Chip
 import androidx.compose.material.ChipDefaults
@@ -46,6 +49,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -55,9 +59,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -83,6 +89,10 @@ fun DiscoverScreen(modifier: Modifier = Modifier,
                    paddingValues: PaddingValues = PaddingValues(),
                    discoverUIState: Resource<PopularYogaWithFlexibility> = Resource.Loading) {
 
+    var search by remember { mutableStateOf("") }
+    val focusManager = LocalFocusManager.current
+    val searchMutableInteractionSource = remember { MutableInteractionSource() }
+
     Column(modifier = modifier
         .fillMaxSize()
         .wrapContentSize(align = Alignment.Center)) {
@@ -105,9 +115,13 @@ fun DiscoverScreen(modifier: Modifier = Modifier,
                     .verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(16.dp)) {
 
                     OutlinedTextField(
-                        value = "",
-                        onValueChange = { },
-                        label = { Text(text = stringResource(R.string.search)) },
+                        value = search,
+                        onValueChange = { search = it },
+                        label = {
+                            if (search.isEmpty() && searchMutableInteractionSource.collectIsFocusedAsState().value.not()) {
+                                Text(text = stringResource(R.string.search))
+                            }
+                        },
                         shape = RoundedCornerShape(20),
                         modifier = modifier.fillMaxWidth(),
                         leadingIcon = { Icon(imageVector = Icons.Rounded.Search, contentDescription = null) },
@@ -116,6 +130,13 @@ fun DiscoverScreen(modifier: Modifier = Modifier,
                             focusedBorderColor = Color.Transparent,
                             containerColor = MaterialTheme.colorScheme.secondaryContainer,
                         ),
+                        maxLines = 1,
+                        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
+                        keyboardActions = KeyboardActions(
+                            onSearch = {
+                                focusManager.clearFocus() 
+                            }),
+                        interactionSource = searchMutableInteractionSource,
                     )
 
                     PopularYogaCompose(popularYoga = discoverUIState.data.popularYoga)
