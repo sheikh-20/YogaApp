@@ -351,7 +351,7 @@ private fun YogaCategoryCompose(modifier: Modifier = Modifier,
             Card(onClick = {
                 CategoryDetailActivity.startActivity(
                     activity = context as Activity,
-                    category = "sleepQuality",
+                    category = "enhancedSleepQuality",
                     title = context.getString(R.string.enhanced_sleep_quality),
                     image = R.drawable.ic_category8,
                     color = R.color.category8)
